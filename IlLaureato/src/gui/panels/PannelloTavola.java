@@ -62,30 +62,6 @@ public class PannelloTavola extends GridPane  implements PaneSwitcher{
 	private Thread t;
 
 
-//	public void animazioneRicevimento(){
-//
-//		System.out.println("Sono entrato nell'animazione ricevimento");
-//
-//		this.add(ricevimento, 0, 0);
-//		Path path = new Path();
-//
-//		path.getElements().add(new MoveTo(300,0));
-//		path.getElements().add(new LineTo(300,200));
-//
-//		PathTransition pathTransition = new PathTransition(Duration.millis(3000), path, ricevimento);
-//		pathTransition.setAutoReverse(true);
-//		pathTransition.play();
-//		pathTransition.setOnFinished(new EventHandler<ActionEvent>() {
-//
-//			@Override
-//			public void handle(ActionEvent event) {
-//
-//				getChildren().remove(ricevimento);
-//
-//			}
-//		});
-//
-//	}
 
 	/*
 	 * OVERRIDING MAKE_PANEL
@@ -354,10 +330,7 @@ public class PannelloTavola extends GridPane  implements PaneSwitcher{
 
 			Casella casellaCorrente = null;
 			if(nomeCasella.equals("esame"))
-
 				casellaCorrente = tdg.getCasella(g.getPos().getX(), g.getPos().getY());
-
-
 
 			switch(nomeCasella){
 
@@ -383,20 +356,10 @@ public class PannelloTavola extends GridPane  implements PaneSwitcher{
 
 			case "esame":
 				AzioneDomanda tmp = (AzioneDomanda) casellaCorrente.getAzione();
-				paneDomande.settaTesti(tmp);
+				paneDomande.setTestiLabel(tmp,g);
 				esame();
-
 				paneDomande.avviaAnimazione();
-
-
-				rispostaUtente = paneDomande.getRispostaUtente();
-
-				System.out.println("Risposta utente: " + rispostaUtente);
-				tmp.controllaEsitoEsame(rispostaUtente, g);
 				break;
-
-
-
 
 			}
 		});
@@ -746,6 +709,7 @@ public class PannelloTavola extends GridPane  implements PaneSwitcher{
         paneLogo = new PaneLogo();
 		paneBiblioteca = new PaneBiblioteca();
 		paneDomande = new PaneDomande();
+
 		SchermataTavolaDiGioco.switchTo(paneLogo);
 
         //disegno le cornici

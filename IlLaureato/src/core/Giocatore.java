@@ -2,12 +2,15 @@ package core;
 
 import java.io.Serializable;
 
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+
 public class Giocatore implements Comparable < Object >, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	private String nome;
-	private int crediti;
+	private SimpleStringProperty crediti;
 	private Posizione pos;
 	private int anniAccademici;
 	private int casellePercorseInAnnoAccademico;
@@ -20,7 +23,7 @@ public class Giocatore implements Comparable < Object >, Serializable {
 	public Giocatore( String nome ){
 
 		this.nome = nome;
-		this.crediti = 0;
+		this.crediti = new SimpleStringProperty(String.valueOf(0));
 		this.pos = new Posizione(0,0);
 		this.anniAccademici = 1;
 		this.casellePercorseInAnnoAccademico = 0;
@@ -83,14 +86,17 @@ public class Giocatore implements Comparable < Object >, Serializable {
 		this.nome = nome;
 	}
 
+	public SimpleStringProperty creditiProperty() {
+		return crediti;
+	}
 	public int getCrediti() {
 
-		return crediti;
+		return Integer.parseInt(crediti.get());
 	}
 
 	public void aggiornaCrediti(int crediti) {
 
-		this.crediti += crediti;
+		this.crediti.set(String.valueOf(Integer.parseInt(this.crediti.get())+crediti));
 	}
 
 	public int getAnniAccademici() {

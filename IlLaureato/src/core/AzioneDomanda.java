@@ -72,13 +72,18 @@ public class AzioneDomanda extends AzioneAstratta {
 
 		String rispostaGiocatore = risposta;
 
+		if ( rispostaGiocatore.equals("")){
+			OutputMediator.println( "Hai finito il tempo!! crediti aggiornati");
+			g.aggiornaCrediti(crediti);
+			return;
+		}
+
 		if( rispostaGiocatore.equals( rispostaEsatta ) ){
 				OutputMediator.println( "Risposta corretta! ");
 				g.aggiornaCrediti( crediti );
 				return;
-			}
-			OutputMediator.println( "Risposta errata! " );
-			return;
 		}
+		OutputMediator.println( "Risposta errata! " );
+	}
 
 }

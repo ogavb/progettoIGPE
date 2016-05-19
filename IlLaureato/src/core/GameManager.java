@@ -23,14 +23,6 @@ public class GameManager extends Observable{
 
 	public GameManager(){}
 
-	//Funzione getIstance proprio del Pattern Singleton
-//	public static GameManager getIstance(){
-//		if( istance == null ){
-//			istance = new GameManager();
-//		}
-//		return istance;
-//	}
-
 	public String getNomeConfigurazione(){
 		return this.nomeConfigurazione;
 	}
@@ -48,9 +40,7 @@ public class GameManager extends Observable{
 	}
 
 	public int getNumeroGiocatori(){
-
 		return gestore.size();
-
 	}
 
 	public String getNomeGiocatore( int i ){
@@ -97,7 +87,6 @@ public class GameManager extends Observable{
 
 		//Dopo che il giocatore lancia i dadi la sua posizione viene aggiornata e vengono attivati gli effetti della casella dove si verrà a posizionare
 	   	if(direzione){
-	   		//OutputMediator.println( corrente.getNome() +" si deve muovere avanti di "+ corrente.getRisultatoDado() );
 	   		updatePosizioneGiocatore(corrente);
 	   		if(corrente.getAnniAccademici() > anniAccademici ){
 	   			System.out.println("il giocatore "+corrente.getOrdineDiPartenza() + " ha "+corrente.getAnniAccademici());

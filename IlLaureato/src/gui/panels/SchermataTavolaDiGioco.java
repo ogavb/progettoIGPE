@@ -11,12 +11,15 @@ import java.util.Optional;
 import core.GameManager;
 import core.Giocatore;
 import core.Stato;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -33,6 +36,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -45,7 +49,7 @@ public class SchermataTavolaDiGioco implements Observer {
 
 	private ToolBar toolBar;
 
-	private static Pane centro;
+	private Pane centro;
 
 	private String iconaNuova = "file:icone/nuovaj.png";
 	private String iconaSalva= "file:icone/salva.png";
@@ -68,6 +72,8 @@ public class SchermataTavolaDiGioco implements Observer {
 	private GameManager gm;
 	private int schermoGrande = 1;
 	private boolean schermoIntero = true;
+	private Image image;
+	private static StackPane group;
 
 
 	public SchermataTavolaDiGioco(GameManager gm) throws Exception {
@@ -90,6 +96,13 @@ public class SchermataTavolaDiGioco implements Observer {
 		vb.getChildren().add(createToolBar());
 
 		centro = new Pane();
+		image = new Image("file:icone/ilLaureato.png");
+
+		group = new StackPane(new ImageView(image));
+		group.setAlignment(Pos.CENTER);
+
+		centro.getChildren().add(new ImageView(image));
+		centro.getChildren().add(group);
 		centro.setTranslateX(90);
         centro.setTranslateY(110);
 
@@ -101,7 +114,9 @@ public class SchermataTavolaDiGioco implements Observer {
 
 		for(int i = 0; i < gm.getNumeroGiocatori(); i++){
 			labelAnniAccademici[i] = new Label();
-			labelCrediti[i] = new Label();
+			labelCrediti[i] = new Label("0");
+			//labelCrediti[i].textProperty().bind(gm.getGestore().getGiocatore(i).creditiProperty());
+			//gm.getGestore().getGiocatore(i).creditiProperty().bind(labelCrediti[i].textProperty());
 		}
 
 		statistiche = new VBox[gm.getNumeroGiocatori()];
@@ -425,6 +440,7 @@ public class SchermataTavolaDiGioco implements Observer {
 
 		case 2:
 			pannelloTavola.spostaGiocatore(ogg.getGiocatore());
+			group.getChildren().clear();
 			break;
 
 		case 3:
@@ -438,10 +454,7 @@ public class SchermataTavolaDiGioco implements Observer {
 	}
 
 	protected static void switchTo(Pane currentPane){
-
-		centro.getChildren().clear();
-		centro.getChildren().add(currentPane);
-
+		group.getChildren().add(currentPane);
 	}
 
 }
