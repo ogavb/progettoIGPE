@@ -1,0 +1,30 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+Rectangle{
+	-fx-fill: #a4a4a487;
+	-fx-stroke: "BLACK";
+	-fx-stroke-width: 0.0;
+}
+
+#menuVBox{
+	-fx-fill: #a4a4a487;
+}
+
+.testoLabel {
+		-fx-padding: 5;
+		-fx-background-color: #0076a3;
+		-fx-border-style: solid inside;
+		-fx-font-size: 16;
+		-fx-font-family: sans-serif;
+		-fx-font-weight: bold;
+		-fx-border-width: 2;
+		-fx-border-radius: 15;
+		-fx-border-color: white;
+}
+
+.testo {
+		-fx-padding: 5;
+		-fx-font-size: 16;
+		-fx-font-family: sans-serif;
+		-fx-font-weight: bold;
+}
