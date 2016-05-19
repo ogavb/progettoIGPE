@@ -22,6 +22,8 @@ public class PannelloDado extends GridPane {
 	private int numGiocatori;
 	private static String primo;
 
+	private DadiListener eventoDado;
+
 
 	public PannelloDado(Integer i1,GameManager gm) {
 
@@ -44,11 +46,10 @@ public class PannelloDado extends GridPane {
 	    column1.setPercentWidth(25);
 	    getColumnConstraints().addAll(column1);
 
-
 		add(imageViewUno, 1, 0);
 		imageViewUno.setTranslateZ(-1);
-
-		imageViewUno.addEventHandler(MouseEvent.MOUSE_RELEASED, new DadiListener());
+		eventoDado = new DadiListener();
+		imageViewUno.addEventHandler(MouseEvent.MOUSE_RELEASED, eventoDado);
 	}
 
 
@@ -59,10 +60,10 @@ public class PannelloDado extends GridPane {
 	void setPrimo(int risultato) {
 		imgDadoUno = new Image("file:dadi/" + risultato + ".gif");
 		imageViewUno = new ImageView(imgDadoUno);
+		imageViewUno.addEventHandler(MouseEvent.MOUSE_RELEASED, eventoDado);
 		imageViewUno.setTranslateZ(-1);
 		this.getChildren().clear();
 		add(imageViewUno, 1, 0);
-		imageViewUno.addEventHandler(MouseEvent.MOUSE_RELEASED, new DadiListener());
 	}
 
 	private class DadiListener implements EventHandler<MouseEvent>{
@@ -168,8 +169,9 @@ public class PannelloDado extends GridPane {
 															@Override
 															public void handle(ActionEvent event) {
 																numGiocatori = gm.turnoSuccessivo(numGiocatori);
-																if(numGiocatori == 1)
-																	gm.finePartita();
+//																if(numGiocatori == 1)
+//																	gm.finePartita();
+																//imageViewUno.removeEventHandler(MouseEvent.MOUSE_RELEASED, eventoDado);
 
 															}
 														});

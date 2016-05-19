@@ -59,13 +59,10 @@ public class PannelloTavola extends GridPane  implements PaneSwitcher{
 
 	private PathTransition pathTransition[];
 	private int numPathTransition = 0;
-	private Thread t;
-
-
 
 	/*
 	 * OVERRIDING MAKE_PANEL
-	 * Costruisce il singolo MyPane della tavola da gioco indicizzato dalla riga e dalla
+   	 * Costruisce il singolo MyPane della tavola da gioco indicizzato dalla riga e dalla
 	 * colonna corrente e viene ritornato
 	 */
 

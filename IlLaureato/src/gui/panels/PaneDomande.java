@@ -98,13 +98,19 @@ public class PaneDomande  extends Pane{
 		});
 
 		risposta1.setOnMouseReleased(event -> {
-			azione.controllaEsitoEsame(risposta1.getText(), giocatore);
+			if (azione.controllaEsitoEsame(risposta1.getText(), giocatore)) {
+		       risposta1.setStyle("-fx-background-color: green;");
+		       risposta2.setStyle("-fx-background-color: red;");
+			}
 			animazione.stop();
 
 		});
 
 		risposta2.setOnMouseReleased(event -> {
-			azione.controllaEsitoEsame(risposta2.getText(), giocatore);
+			if (azione.controllaEsitoEsame(risposta2.getText(), giocatore)) {
+			   risposta2.setStyle("-fx-background-color: green;");
+		       risposta1.setStyle("-fx-background-color: red;");
+			}
 			animazione.stop();
 		});
 

@@ -13,8 +13,6 @@ import java.util.Observable;
 import gui.panels.OutputMediator;
 
 public class GameManager extends Observable{
-	//Istance serve a verificare che sia questa l'unica istanza di GameManager
-	//protected static GameManager istance;
 
 	private TavolaDiGioco tdg;
 	private GestoreTurni gestore;
@@ -47,10 +45,10 @@ public class GameManager extends Observable{
 		return gestore.getGiocatore(i).getNome();
 	}
 
-	public void notifica(int azione){
-		System.out.println("Sono in notifica");
+	public void notificaAlgiocatore(int azione, Giocatore g){
+		System.out.println("Sono in notifica al giocatore");
 		setChanged();
-		notifyObservers(new Stato(azione));
+		notifyObservers(new Stato(g,azione));
 	}
 
 	public GameManager init( Giocatore[] nomiGiocatori, int numGiocatori, String nomeConfigurazione ) throws SQLException {

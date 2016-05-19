@@ -1,9 +1,5 @@
 package core;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 import gui.panels.OutputMediator;
 import jdbc.PrelevatoreDomanda;
 import model.Risposta;
@@ -68,22 +64,27 @@ public class AzioneDomanda extends AzioneAstratta {
 		database.query();
 	}
 
-	public void controllaEsitoEsame( String risposta, Giocatore g ) {
-
+	public boolean controllaEsitoEsame( String risposta, Giocatore g ) {
 		String rispostaGiocatore = risposta;
 
 		if ( rispostaGiocatore.equals("")){
 			OutputMediator.println( "Hai finito il tempo!! crediti aggiornati");
 			g.aggiornaCrediti(crediti);
-			return;
+			gm.notificaAlgiocatore(5, g);
+			return false;
 		}
 
 		if( rispostaGiocatore.equals( rispostaEsatta ) ){
 				OutputMediator.println( "Risposta corretta! ");
 				g.aggiornaCrediti( crediti );
-				return;
+				gm.notificaAlgiocatore(5, g);
+				return true;
 		}
 		OutputMediator.println( "Risposta errata! " );
+
+		return false;
+
+
 	}
 
 }

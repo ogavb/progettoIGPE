@@ -10,7 +10,7 @@ public class Giocatore implements Comparable < Object >, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String nome;
-	private SimpleStringProperty crediti;
+	private int crediti;
 	private Posizione pos;
 	private int anniAccademici;
 	private int casellePercorseInAnnoAccademico;
@@ -23,7 +23,7 @@ public class Giocatore implements Comparable < Object >, Serializable {
 	public Giocatore( String nome ){
 
 		this.nome = nome;
-		this.crediti = new SimpleStringProperty(String.valueOf(0));
+		this.crediti = 0;
 		this.pos = new Posizione(0,0);
 		this.anniAccademici = 1;
 		this.casellePercorseInAnnoAccademico = 0;
@@ -86,17 +86,13 @@ public class Giocatore implements Comparable < Object >, Serializable {
 		this.nome = nome;
 	}
 
-	public SimpleStringProperty creditiProperty() {
-		return crediti;
-	}
 	public int getCrediti() {
 
-		return Integer.parseInt(crediti.get());
+		return crediti;
 	}
 
 	public void aggiornaCrediti(int crediti) {
-
-		this.crediti.set(String.valueOf(Integer.parseInt(this.crediti.get())+crediti));
+		this.crediti = crediti;
 	}
 
 	public int getAnniAccademici() {
