@@ -13,11 +13,9 @@ public class CreatoreTavolaDiGioco extends Database {
 	public CreatoreTavolaDiGioco() throws SQLException{
 
 		super();
-
 		File database = new File("illaureato.db");
 
 		if(database.length() == 0) {
-
 			stat.executeUpdate("create table tavoladigioco (codice, nome, configurazione)");
 			stat.executeUpdate("create table esame (codice, nome, crediti, domanda, rispostaEsatta, rispostaSbagliata)");
 			stat.executeUpdate("insert into tavoladigioco (codice, nome, configurazione) VALUES (1,'Default','Semplice Esame Biblioteca Semplice Semplice BookCafe Semplice Ricevimento Esame Semplice Semplice Biblioteca Semplice Ricevimento CentroResidenziale Semplice BookCafe Cus Semplice Esame Semplice Biblioteca Semplice Semplice BookCafe Ricevimento Semplice Mensa Semplice Cus Semplice BookCafe Semplice Semplice Semplice Ricevimento Semplice Mensa Semplice Semplice')");
@@ -32,7 +30,6 @@ public class CreatoreTavolaDiGioco extends Database {
 	public ObservableList<String> prelevaNomiConfigurazioni() {
 		ObservableList<String> configurazioni = FXCollections.observableArrayList();
 		try {
-
 			this.resultset = this.stat.executeQuery(
 					 "select nome "
 					 + "from tavoladigioco "
@@ -40,11 +37,9 @@ public class CreatoreTavolaDiGioco extends Database {
 
 			while(this.resultset.next()) {
 				configurazioni.add(resultset.getString("nome"));
-
 			}
 
 		 } catch (SQLException e) {
-			 // In caso di errore...
 		 } finally {
 			 if (conn!= null) {
 				 try {
@@ -59,7 +54,6 @@ public class CreatoreTavolaDiGioco extends Database {
 
 	@Override
 	public void query() {
-		System.out.println("il nome della configurazione è : "+nomeConfigurazione);
 		if (nomeConfigurazione == null)
 			nomeConfigurazione = "Default";
 		try {
