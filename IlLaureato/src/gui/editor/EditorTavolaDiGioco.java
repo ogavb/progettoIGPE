@@ -4,21 +4,14 @@ import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.Optional;
 
-import gui.panels.SchermataNuovaPartita;
-import gui.panels.SchermataTavolaDiGioco;
-import gui.panels.StartGame;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import gui.panels.SceltaEditor;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextInputDialog;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -31,46 +24,35 @@ import jdbc.ScrittoreConfigurazione;
 public class EditorTavolaDiGioco extends TavolaGridPane{
 
 	private Stage stage;
+	private Scene scene;
 
 	private BorderPane mainPane;
 	private VBox paletteCaselle;
 
+	//il salva e annulla sono
 	private Button salva;
 	private Button annulla;
+	private Button indietro;
 
 
-	public EditorTavolaDiGioco() throws SQLException {
+	public EditorTavolaDiGioco(Stage stage) throws SQLException {
 		super(11,11);
 
+		this.stage = stage;
 
-	    salva   = new Button("SALVA");
-	    annulla = new Button("ANNULLA");
-	    String style   = "-fx-background-color: linear-gradient(rgb(22, 179, 184) 5%, rgb(189, 51, 42) 100%) rgb(22, 179, 184);-fx-background-radius: 30;-fx-background-insets: 0; -fx-text-fill: white;-fx-font-size: 11;";
-	    String styleOn = "-fx-background-color: linear-gradient(rgb(30,140,150) 10%, rgb(189, 51, 42) 100%) rgb(22, 179, 184);-fx-background-radius: 30;-fx-background-insets: 0; -fx-text-fill: white;-fx-font-size: 13;";
+	    salva   = new Button("Salva");
+	    annulla = new Button("Annulla");
+	    indietro = new Button("Menu");
 
-	    salva.setStyle(style);
-	    annulla.setStyle(style);
+	    salva.setId("btn_etg");
+	    annulla.setId("btn_etg");
+	    indietro.setId("btn_etg");
 
-	    salva.setPrefSize(80, 40);
-	    annulla.setPrefSize(80,40);
-
+	    //all'inizio li disabilito
 	    salva.setDisable(true);
 	    annulla.setDisable(true);
 
-	    salva.setOnMouseEntered(event -> {
-	    	salva.setStyle(styleOn);
-	    });
-	    salva.setOnMouseExited(event -> {
-	    	salva.setStyle(style);
-	    });
-
-	    annulla.setOnMouseEntered(event -> {
-	    	annulla.setStyle(styleOn);
-	    });
-	    annulla.setOnMouseExited(event -> {
-	    	annulla.setStyle(style);
-	    });
-
+	    //EVENTI BOTTONI
 	    salva.setOnMouseReleased(event -> {
 
 	    	TextInputDialog dialog = new TextInputDialog("");
@@ -95,6 +77,11 @@ public class EditorTavolaDiGioco extends TavolaGridPane{
 			}
 		});
 
+	    indietro.setOnMouseReleased(e-> {
+	    	this.stage = (Stage) ((Button) e.getSource()).getScene().getWindow();
+	    	new SceltaEditor(stage);
+	    });
+	    // FINE EVENTI BOTTONI
 
 		this.mainPane = new BorderPane();
 		this.paletteCaselle = new VBox();
@@ -102,28 +89,24 @@ public class EditorTavolaDiGioco extends TavolaGridPane{
 		mainPane.setPrefWidth(1200);
 		mainPane.setPrefHeight(720);
 
-		mainPane.setStyle("-fx-background-color: A2382B;");
 		setStyle("-fx-background-color: DAE6F3;");
-
 
 		mainPane.setTop(new ImageView(new Image("file:icone/editor.png")));
 		BorderPane.setAlignment(mainPane.getTop(), Pos.CENTER);
 
-		ImageView indietro = new ImageView(new Image("file:icone/tornaAlmenu.png"));
-		indietro.setTranslateX(20);
-		indietro.setTranslateY(6);
-
-		mainPane.getChildren().add(indietro);
 		mainPane.setCenter(this);
 
 		paletteCaselle.getChildren().add(new ImageView(new Image("file:icone/scegli.png")));
 		paletteCaselle.getChildren().add(addFlowPane());
 		mainPane.setRight(paletteCaselle);
 
-		Scene scene = new Scene(mainPane);
-		stage = new Stage();
-		stage.setScene(scene);
-		stage.show();
+	    scene = new Scene(mainPane);
+	    scene.getStylesheets().add("css/mainCss.css");
+
+		this.stage.setScene(scene);
+	    this.stage.centerOnScreen();
+		this.stage.setResizable(true);
+		this.stage.show();
 
 	}
 
@@ -183,7 +166,7 @@ public class EditorTavolaDiGioco extends TavolaGridPane{
 			});
 	    }
 	    flow.getChildren().add(salva);
-        flow.getChildren().add(annulla);
+        flow.getChildren().add(indietro);
 
 	    return flow;
 	}

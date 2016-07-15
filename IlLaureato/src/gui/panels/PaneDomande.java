@@ -33,11 +33,18 @@ public class PaneDomande  extends Pane{
 	private Giocatore giocatore;
 	private AzioneDomanda azione;
 
+	private final double width = 500.0;
+
+	private final double height = 300.0;
+
 	public PaneDomande() {
+
+		this.setWidth(width);
+		this.setHeight(height);
 
 		setTranslateZ(-1);
 		this.setStyle("-fx-background-color : #0076a3;");
-		this.getStylesheets().add(this.getClass().getResource("/css/mainCss.css").toExternalForm());
+		this.getStylesheets().add(this.getClass().getResource("/css/domandeCss.css").toExternalForm());
 
 		timer = new ProgressIndicator(1);
 
@@ -93,27 +100,47 @@ public class PaneDomande  extends Pane{
 
 	    animazione = new Timeline(initFrame,endFrame);
 
-		animazione.setOnFinished(event -> {
+	    animazione.setOnFinished(event -> {
 			azione.controllaEsitoEsame("", giocatore);
 		});
 
+		//se rispondo la 1
 		risposta1.setOnMouseReleased(event -> {
 			if (azione.controllaEsitoEsame(risposta1.getText(), giocatore)) {
 		       risposta1.setStyle("-fx-background-color: green;");
 		       risposta2.setStyle("-fx-background-color: red;");
 			}
+			else {
+				 risposta1.setStyle("-fx-background-color: red;");
+			     risposta2.setStyle("-fx-background-color: green;");
+				}
 			animazione.stop();
-
+			risposta1.setDisable(true);
+			risposta2.setDisable(true);
 		});
-
+		//se rispondo la 2
 		risposta2.setOnMouseReleased(event -> {
 			if (azione.controllaEsitoEsame(risposta2.getText(), giocatore)) {
 			   risposta2.setStyle("-fx-background-color: green;");
 		       risposta1.setStyle("-fx-background-color: red;");
 			}
+			else {
+				 risposta2.setStyle("-fx-background-color: red;");
+			     risposta1.setStyle("-fx-background-color: green;");
+				}
 			animazione.stop();
+			risposta1.setDisable(true);
+			risposta2.setDisable(true);
 		});
+	}
 
+
+	public void resetta() {
+		risposta1.setDisable(false);
+		risposta2.setDisable(false);
+
+		 risposta2.setStyle("-fx-background-color: #0076a3;");
+	     risposta1.setStyle("-fx-background-color: #0076a3;");
 	}
 
 	public void avviaAnimazione() {

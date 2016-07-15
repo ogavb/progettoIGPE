@@ -28,6 +28,7 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
@@ -35,15 +36,15 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import jdbc.CreatoreTavolaDiGioco;
 
+//SCHERMATA IN CUI SI SCELGONO NOMI GIOCATORI QUANTI CHE TAVOLA ECC
 public class SchermataNuovaPartita {
 
 	private Stage stage;
 	private Scene scene;
 	private BorderPane mainPane;
 
-
 	private GridPane paneCenter;
-	private BorderPane paneTop;
+	private VBox boxTop;
 	private HBox paneBottom;
 
 	private Button conferma;
@@ -52,25 +53,27 @@ public class SchermataNuovaPartita {
 	{"blue", "cyan", "green", "purple", "red", "yellow"};
 
 	private GameManager gm;
-	private String path;
-	private Media media;
-	private MediaPlayer mediaPlayer;
-	private MediaView mediaView;
+
+	//variabili per la musica
+//	private String path;
+//	private Media media;
+//	private MediaPlayer mediaPlayer;
+//	private MediaView mediaView;
 
 	public SchermataNuovaPartita(Stage stage) {
 
 		this.stage = stage;
 		stage.setTitle("Nuova Partita");
 
-		path = "C:/Users/Cosimo/Desktop/MUSICA/ragazzi.mp3";
-		media = new Media(new File(path).toURI().toString());
-		mediaPlayer = new MediaPlayer(media);
-	    mediaPlayer.setAutoPlay(true);
-		mediaView = new MediaView(mediaPlayer);
+//		path = "C:/Users/Cosimo/Desktop/MUSICA/ragazzi.mp3";
+//		media = new Media(new File(path).toURI().toString());
+//		mediaPlayer = new MediaPlayer(media);
+//	    mediaPlayer.setAutoPlay(true);
+//		mediaView = new MediaView(mediaPlayer);
 
 		mainPane = new BorderPane();
-		mainPane.setPrefWidth(400);
-		mainPane.setPrefHeight(400);
+		mainPane.setPrefWidth(600);
+		mainPane.setPrefHeight(500);
 		mainPane.setMinWidth(BorderPane.USE_PREF_SIZE);
 		mainPane.setMinHeight(BorderPane.USE_PREF_SIZE);
 		mainPane.setMaxWidth(BorderPane.USE_PREF_SIZE);
@@ -81,16 +84,17 @@ public class SchermataNuovaPartita {
 				"-fx-border-width: 2;" +
 				"-fx-border-insets: 5;" +
 				"-fx-border-radius: 5;" +
-				"-fx-border-color: blue;");
+				"-fx-border-color: rgb(0,128,192);");
 
 		drawSelectPlayer();
 
 
-		mainPane.setTop(paneTop);
+		mainPane.setTop(boxTop);
 		mainPane.setCenter(paneCenter);
 		mainPane.setBottom(paneBottom);
 
 		scene = new Scene(mainPane);
+		scene.getStylesheets().add("css/nuovaPartita.css");
 		this.stage.setScene(scene);
 		this.stage.centerOnScreen();
 		this.stage.show();
@@ -100,9 +104,7 @@ public class SchermataNuovaPartita {
 	private void drawSelectPlayer() {
 
 		final int nGioc=6;
-		Label labelInserire = new Label("Inserire numero giocatori: ");
 		Label labelNumero = new Label("Numero giocatori: ");
-		labelInserire.setFont(new Font(18));
 		labelNumero.setFont(new Font(16));
 		ObservableList<Integer> items = FXCollections.observableArrayList();
 		items.add(2); items.add(3); items.add(4); items.add(5); items.add(6);
@@ -111,13 +113,11 @@ public class SchermataNuovaPartita {
 
 		nGiocatori.setPrefSize(50, 20);
 
-		paneTop = new BorderPane();
+		boxTop = new VBox(10.0);
+		HBox hBoxTop = new HBox(260.0);
+		hBoxTop.getChildren().addAll(labelNumero,nGiocatori);
 
-		paneTop.setTop(labelInserire);
-		paneTop.setLeft(labelNumero);
-		paneTop.setRight(nGiocatori);
-		paneTop.setBottom(new Separator(Orientation.HORIZONTAL));
-
+		boxTop.getChildren().addAll(hBoxTop, new Separator(Orientation.HORIZONTAL));
 
 		final Label[] lblNomeGiocatore = new Label[nGioc];
         final TextField[] txtNomeGiocatore = new TextField[nGioc];
@@ -133,7 +133,7 @@ public class SchermataNuovaPartita {
         paneCenter.getColumnConstraints().addAll(column1, column2);
 
         for (int j=0; j < nGioc; j++){
-        	lblNomeGiocatore[j] = new Label("Giocatore n." + (j+1) + ":", new ImageView(new Image("file:giocatori/" + ColorPlayer[j] + ".gif")));
+        	lblNomeGiocatore[j] = new Label("Giocatore " + (j+1) , new ImageView(new Image("file:giocatori/" + ColorPlayer[j] + ".gif")));
         	txtNomeGiocatore[j] = new TextField();
         	txtNomeGiocatore[j].setText("nome"+j);
         	GridPane.setConstraints(lblNomeGiocatore[j], 0, j);
@@ -197,7 +197,6 @@ public class SchermataNuovaPartita {
     			{
     				// il metodo trim() di String ritorna una stringa rimuovendo
     				// gli spazi ( se presenti ), all'inizio e alla fine della stringa
-
     				if (txtNomeGiocatore[k].getText().trim().equalsIgnoreCase(""))
     					errorFlag = true;
     				giocatori[k] = new Giocatore(txtNomeGiocatore[k].getText());

@@ -5,6 +5,7 @@ import util.TabellaEsameUtil;
 
 import java.util.Arrays;
 
+import gui.panels.SceltaEditor;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -30,9 +31,9 @@ import jdbc.PrelevatoreDomanda;
 public class EditorDomande {
 
 	private Stage stage;
+	private Scene scene;
 	private Pane mainPane;
 
-	private ImageView indietro = new ImageView(new Image("file:icone/tornaAlmenu.png"));
 	private ImageView editorDomande = new ImageView(new Image("file:icone/editorDomande.png"));
 	private ImageView nomeEsame = new ImageView(new Image("file:icone/nomeEsame.png"));
 	private ImageView crediti = new ImageView(new Image("file:icone/crediti.png"));
@@ -40,6 +41,7 @@ public class EditorDomande {
 	private ImageView rispostaEsatta = new ImageView(new Image("file:icone/rispostaEsatta.png"));
 	private ImageView rispostaSbagliata = new ImageView(new Image("file:icone/rispostaSbagliata.png"));
 
+	private Button indietro;
 	private Button aggiungi;
 	private Button rimuovi;
 	private Button annulla;
@@ -57,17 +59,20 @@ public class EditorDomande {
 	private TableColumn<Esame, String> rispostaEsattaEsameTc;
 	private TableColumn<Esame, String> rispostaSbagliataEsameTc;
 
-	public EditorDomande() {
+	public EditorDomande(Stage stage) {
+		this.stage = stage;
 
 		mainPane = new Pane();
 		mainPane.setPrefWidth(1200);
 		mainPane.setPrefHeight(720);
 
-		mainPane.setStyle("-fx-background-color: A2382B;");
+		indietro = new Button("Torna al menu");
+		aggiungi = new Button("Aggiungi");
+		rimuovi = new Button("Rimuovi");
+	    annulla = new Button("Annulla");
 
-		String style   = "-fx-background-color: linear-gradient(rgb(22, 179, 184) 5%, rgb(189, 51, 42) 100%) rgb(22, 179, 184);-fx-background-radius: 30;-fx-background-insets: 0; -fx-text-fill: white;-fx-font-size: 11;";
-	    String styleOn = "-fx-background-color: linear-gradient(rgb(30,140,150) 10%, rgb(189, 51, 42) 100%) rgb(22, 179, 184);-fx-background-radius: 30;-fx-background-insets: 0; -fx-text-fill: white;-fx-font-size: 13;";
-
+		//applico effetto a tutti i componenti
+		//e setto le posizioni a mano ( x,y)
 		applicaEffetto(indietro);
 		indietro.setTranslateX(20);
 		indietro.setTranslateY(6);
@@ -96,6 +101,7 @@ public class EditorDomande {
 		rispostaSbagliata.setTranslateX(20);
 		rispostaSbagliata.setTranslateY(570);
 
+		//TEXTFIELD
 		nomeEsameTf = new TextField();
 		nomeEsameTf.setPromptText("nome esame");
 		applicaEffetto(nomeEsameTf);
@@ -125,43 +131,20 @@ public class EditorDomande {
 		applicaEffetto(rispostaSbagliataTf);
 		rispostaSbagliataTf.setTranslateX(500);
 		rispostaSbagliataTf.setTranslateY(580);
-
-		aggiungi = new Button("AGGIUNGI");
-		rimuovi = new Button("RIMUOVI");
-	    annulla = new Button("ANNULLA");
-
-	    aggiungi.setStyle(style);
-	    rimuovi.setStyle(style);
-	    annulla.setStyle(style);
-
-	    aggiungi.setPrefSize(80, 40);
-	    rimuovi.setPrefSize(80, 40);
-	    annulla.setPrefSize(80,40);
+		//FINE TEXTFIELD
 
 	    applicaEffetto(aggiungi);
 	    applicaEffetto(rimuovi);
 	    applicaEffetto(annulla);
 
-	    aggiungi.setOnMouseEntered(event -> {
-	    	aggiungi.setStyle(styleOn);
-	    });
-	    aggiungi.setOnMouseExited(event -> {
-	    	aggiungi.setStyle(style);
-	    });
+	    // fine applico effetto componenti
 
-	    rimuovi.setOnMouseEntered(event -> {
-	    	rimuovi.setStyle(styleOn);
-	    });
-	    rimuovi.setOnMouseExited(event -> {
-	    	rimuovi.setStyle(style);
-	    });
 
-	    annulla.setOnMouseEntered(event -> {
-	    	annulla.setStyle(styleOn);
-	    });
-	    annulla.setOnMouseExited(event -> {
-	    	annulla.setStyle(style);
-	    });
+	    //AGGIUNGO GLI EVENTI AI BOTTONI
+	    indietro.setOnMouseReleased(e-> {
+			this.stage = (Stage) ((Button) e.getSource()).getScene().getWindow();
+			new SceltaEditor(stage);
+		});
 
 	    aggiungi.setOnMouseReleased(event -> {
 	    	String nome = nomeEsameTf.getText();
@@ -216,13 +199,15 @@ public class EditorDomande {
 	    	rispostaSbagliataTf.setText("");
 	    });
 
-	    aggiungi.setTranslateX(500);
+	    //FINE EVENTI BOTTONI
+
+	    aggiungi.setTranslateX(375);
 	    aggiungi.setTranslateY(670);
 
-	    rimuovi.setTranslateX(600);
+	    rimuovi.setTranslateX(535);
 	    rimuovi.setTranslateY(670);
 
-	    annulla.setTranslateX(700);
+	    annulla.setTranslateX(695);
 	    annulla.setTranslateY(670);
 
 	    createTableView();
@@ -244,19 +229,21 @@ public class EditorDomande {
 		mainPane.getChildren().add(domandaTf);
 		mainPane.getChildren().add(rispostaEsattaTf);
 		mainPane.getChildren().add(rispostaSbagliataTf);
-
 	    mainPane.getChildren().add(aggiungi);
 	    mainPane.getChildren().add(rimuovi);
 	    mainPane.getChildren().add(annulla);
-
 	    mainPane.getChildren().add(tableView);
 
-		Scene scene = new Scene(mainPane);
-		stage = new Stage();
-		stage.setScene(scene);
-		stage.show();
+	    scene = new Scene(mainPane);
+		scene.getStylesheets().add("css/mainCss.css");
+		this.stage.setScene(scene);
+		this.stage.setResizable(false);
+		this.stage.centerOnScreen();
+
+		this.stage.show();
 
 	}
+
 
 	@SuppressWarnings("unchecked")
 	private void createTableView(){

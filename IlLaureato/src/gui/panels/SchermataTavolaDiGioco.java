@@ -42,6 +42,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
+//CLASSE DEL GIOCO VERO E PROPRIO
 public class SchermataTavolaDiGioco implements Observer {
 
 	private Stage stage;
@@ -50,6 +51,9 @@ public class SchermataTavolaDiGioco implements Observer {
 	private ToolBar toolBar;
 
 	private Pane centro;
+
+	private final static double centroX = 360.0;
+	private final static double centroY = 270.0;
 
 	private String iconaNuova = "file:icone/nuovaj.png";
 	private String iconaSalva= "file:icone/salva.png";
@@ -73,7 +77,7 @@ public class SchermataTavolaDiGioco implements Observer {
 	private int schermoGrande = 1;
 	private boolean schermoIntero = true;
 	private Image image;
-	private static StackPane group;
+	private static Pane group = new Pane();
 
 
 	public SchermataTavolaDiGioco(GameManager gm) throws Exception {
@@ -98,8 +102,8 @@ public class SchermataTavolaDiGioco implements Observer {
 		centro = new Pane();
 		image = new Image("file:icone/ilLaureato.png");
 
-		group = new StackPane(new ImageView(image));
-		group.setAlignment(Pos.CENTER);
+		group.setTranslateX(centroX);
+		group.setTranslateY(centroY);
 
 		centro.getChildren().add(new ImageView(image));
 		centro.getChildren().add(group);
@@ -115,8 +119,6 @@ public class SchermataTavolaDiGioco implements Observer {
 		for(int i = 0; i < gm.getNumeroGiocatori(); i++){
 			labelAnniAccademici[i] = new Label();
 			labelCrediti[i] = new Label("0");
-			//labelCrediti[i].textProperty().bind(gm.getGestore().getGiocatore(i).creditiProperty());
-			//gm.getGestore().getGiocatore(i).creditiProperty().bind(labelCrediti[i].textProperty());
 		}
 
 		statistiche = new VBox[gm.getNumeroGiocatori()];
@@ -454,7 +456,10 @@ public class SchermataTavolaDiGioco implements Observer {
 	}
 
 	protected static void switchTo(Pane currentPane){
+		group.setTranslateX(centroX-(currentPane.getWidth()/2));
+		group.setTranslateY(centroY-(currentPane.getHeight()/2));
 		group.getChildren().add(currentPane);
+
 	}
 
 }

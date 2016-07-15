@@ -1,6 +1,9 @@
 /controller/
-/core/
 /gui/
-/jdbc/
-/model/
+/css/
+/core/
+/view/
 /util/
+/networking/
+/concurrent/
+/model/

@@ -46,7 +46,7 @@
 					</image>
 				</ImageView>
 			</HBox>
-			<HBox onMouseEntered="#enterMouse" onMouseExited="#exitMouse">
+			<HBox onMouseReleased="#onlineGame" onMouseEntered="#enterMouse" onMouseExited="#exitMouse">
 				<ImageView fx:id="onlineGameContainer">
 					<image>
 						<Image url="@../img/Partita%20Online.png" />

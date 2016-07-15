@@ -707,7 +707,6 @@ public class PannelloTavola extends GridPane  implements PaneSwitcher{
 		paneBiblioteca = new PaneBiblioteca();
 		paneDomande = new PaneDomande();
 
-		SchermataTavolaDiGioco.switchTo(paneLogo);
 
         //disegno le cornici
         disegnaCornici(NUM_COLS);
@@ -815,6 +814,7 @@ public class PannelloTavola extends GridPane  implements PaneSwitcher{
 
 	@Override
 	public void esame() {
+		paneDomande.resetta();
 		SchermataTavolaDiGioco.switchTo(paneDomande);
 	}
 

@@ -10,18 +10,19 @@ import jdbc.CreatoreTavolaDiGioco;
 
 public class StartGame extends Application {
 
+	//questo primaryStage deve essere l'unico Stage dell'applicazione
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+
 		MainController mc = new MainController(primaryStage);
+
+		//avvio database cosi non ho problemi
 		new CreatoreTavolaDiGioco();
-		Scene scene = new Scene(mc);
-		scene.getStylesheets().add(getClass().getResource("/css/mainCss.css").toExternalForm());
+
 		primaryStage.setTitle("Il Laureato");
 		primaryStage.getIcons().add(new Image("data/icon.png"));
-		primaryStage.setScene(scene);
+		primaryStage.setScene(mc.getScena());
 		primaryStage.show();
-
-		ImageView iv = new ImageView(new Image("data/unical.jpg"));
 	}
 
 

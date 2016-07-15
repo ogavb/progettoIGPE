@@ -1,9 +1,12 @@
 package gui.panels;
 
+import controller.MainController;
+import gui.editor.EditorDomande;
+import gui.editor.EditorTavolaDiGioco;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class SceltaEditor {
@@ -12,40 +15,64 @@ public class SceltaEditor {
 	private Scene scene;
 
 	private Pane pane;
-	private ImageView editorDomande;
-	private ImageView editorTavola;
-	private ImageView indietro;
+	private VBox box;
+	private Button editorDomande;
+	private Button editorTavola;
+	private Button indietro;
 
-	public SceltaEditor(Stage stage) {
-
+	public SceltaEditor(Stage stage){
 		this.stage = stage;
 
 		pane = new Pane();
-		pane.setPrefSize(640,400);
+		pane.setPrefSize(450,210);
 
-		editorDomande = new ImageView(new Image("file:icone/editorDomande.png"));
-		editorTavola = new ImageView(new Image("file:icone/editor.png"));
-		indietro = new ImageView(new Image("file:icone/tornaAlmenu.png"));
+		this.box = new VBox(30.0);
 
-		indietro.setTranslateX(20);
-		indietro.setTranslateY(6);
+		editorDomande = new Button("editor Domande");
+		editorTavola = new Button("editor Tavola");
+		indietro = new Button("Torna al menu");
 
-		editorDomande.setTranslateX(10);
-		editorDomande.setTranslateY(20);
+		// EVENTI DEI BOTTONI
+		editorDomande.setOnMouseReleased(e -> {
+			this.stage = (Stage) ((Button) e.getSource()).getScene().getWindow();
+			new EditorDomande(stage);
+		});
 
-		editorTavola.setTranslateX(30);
-		editorTavola.setTranslateY(120);
+		indietro.setOnMouseReleased(e-> {
+			this.stage = (Stage) ((Button) e.getSource()).getScene().getWindow();
+			try {
+				new MainController(stage);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
 
-		pane.getChildren().add(indietro);
-		pane.getChildren().add(editorDomande);
-		pane.getChildren().add(editorTavola);
+		editorTavola.setOnMouseReleased(e -> {
+			this.stage = (Stage) ((Button) e.getSource()).getScene().getWindow();
+			try {
+				new EditorTavolaDiGioco(stage);
+			} catch (Exception e1) {
+				System.err.println("eccezione");
+			}
+		});
+		//FINE EVENTI BOTTONI
+
+		box.getChildren().add(editorDomande);
+		box.getChildren().add(editorTavola);
+		box.getChildren().add(indietro);
+
+		box.setTranslateX(150.0);
+		box.setTranslateY(30.0);
+		pane.getChildren().add(box);
+
 
 		scene = new Scene(pane);
-		stage.setScene(scene);
-		stage.centerOnScreen();
-		stage.show();
+		//applico i css
+		scene.getStylesheets().add("css/mainCss.css");
 
+		this.stage.setScene(scene);
+		this.stage.setResizable(false);
+		this.stage.show();
 	}
-
-
 }

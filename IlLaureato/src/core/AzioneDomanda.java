@@ -69,7 +69,9 @@ public class AzioneDomanda extends AzioneAstratta {
 
 		if ( rispostaGiocatore.equals("")){
 			OutputMediator.println( "Hai finito il tempo!! crediti aggiornati");
+			//aggiorna i crediti dal punto di vista logico
 			g.aggiornaCrediti(crediti);
+			//aggiorna i crediti dal punto di vista grafico
 			gm.notificaAlgiocatore(5, g);
 			return false;
 		}
