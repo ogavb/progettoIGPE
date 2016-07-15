@@ -92,7 +92,7 @@ public class Giocatore implements Comparable < Object >, Serializable {
 	}
 
 	public void aggiornaCrediti(int crediti) {
-		this.crediti = crediti;
+		this.crediti += crediti;
 	}
 
 	public int getAnniAccademici() {

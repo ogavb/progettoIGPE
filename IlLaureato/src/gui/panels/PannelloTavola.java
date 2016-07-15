@@ -53,12 +53,16 @@ public class PannelloTavola extends GridPane  implements PaneSwitcher{
 
 	private ImageView n = null;
 
+	//TUTTI I PANNELLI PER FARE LO SWITCHPANE
 	private PaneLogo paneLogo;
 	private PaneBiblioteca paneBiblioteca;
 	private PaneDomande paneDomande;
+	private PaneRicevimento paneRicevimento;
+	private PaneCR paneCentroR;
 
 	private PathTransition pathTransition[];
 	private int numPathTransition = 0;
+
 
 	/*
 	 * OVERRIDING MAKE_PANEL
@@ -706,7 +710,8 @@ public class PannelloTavola extends GridPane  implements PaneSwitcher{
         paneLogo = new PaneLogo();
 		paneBiblioteca = new PaneBiblioteca();
 		paneDomande = new PaneDomande();
-
+		paneRicevimento = new PaneRicevimento();
+		paneCentroR = new PaneCR();
 
         //disegno le cornici
         disegnaCornici(NUM_COLS);
@@ -784,7 +789,7 @@ public class PannelloTavola extends GridPane  implements PaneSwitcher{
 
 	@Override
 	public void ricevimento() {
-		SchermataTavolaDiGioco.switchTo(paneBiblioteca);
+		SchermataTavolaDiGioco.switchTo(paneRicevimento);
 	}
 
 	@Override

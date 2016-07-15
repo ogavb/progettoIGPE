@@ -411,6 +411,7 @@ public class SchermataTavolaDiGioco implements Observer {
 	}
 
 	private void mostraStatistiche(VBox vb, Giocatore g, int crediti, int anniAccademici) {
+		System.err.println("crediti del giocatore" +crediti);
 		labelCrediti[g.getOrdineDiPartenza()].setText("Crediti: " + crediti);
 		labelAnniAccademici[g.getOrdineDiPartenza()].setText("Anni accademici: " + anniAccademici);
 	}

@@ -169,30 +169,21 @@ public class PrelevatoreDomanda extends Database{
 			 while (resultset.next()) {
 
 				 Risposta ris = new Risposta();
-				// System.out.println("la risposta è "+ ris.getRisposte()[0]);
 				 String domanda = this.resultset.getString("domanda");
-				 //System.out.println("la domanda è "+domanda);
 
 				 this.crediti = this.resultset.getInt("crediti");
-				// System.out.println("i crediti della domanda sono "+crediti);
-				 //String nomeEsame = this.resultset.getString("nome");
-				 //String stringaCrediti = this.resultset.getString("crediti");
-				 //int crediti = Integer.parseInt(stringaCrediti);
+
 				 azioneDomanda.setRispostaEsatta(this.resultset.getString("rispostaEsatta"));
 				 azioneDomanda.setCrediti(this.crediti);
+
 				 if( this.ordineRisposta == 0 ){
 					 ris.getRisposte()[0] = this.resultset.getString("rispostaEsatta");
 				 	 ris.getRisposte()[1] = this.resultset.getString("rispostaSbagliata");
-
-//				 	System.out.println("le risposte sono "+ris.getRisposte()[0] );
-//					System.out.println("le risposte sono "+ris.getRisposte()[1] );
 				 }
 				 else{
 					 ris.getRisposte()[1] = this.resultset.getString("rispostaEsatta");
 				 	 ris.getRisposte()[0] = this.resultset.getString("rispostaSbagliata");
 
-//				 	System.out.println("le risposte sono "+ris.getRisposte()[0] );
-//					System.out.println("le risposte sono "+ris.getRisposte()[1] );
 				 }
 				 this.azioneDomanda.setRisposte(ris);
 				 this.azioneDomanda.setDomanda(domanda);
