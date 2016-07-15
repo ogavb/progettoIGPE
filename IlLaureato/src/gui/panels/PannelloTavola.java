@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 import core.AzioneDomanda;
 import core.Casella;
-import core.GameManager;
+import core.GameManagerAstratta;
 import core.Giocatore;
 import core.Posizione;
 import core.TavolaDiGioco;
@@ -33,7 +33,7 @@ public class PannelloTavola extends GridPane  implements PaneSwitcher{
 	protected int riga;
 	protected int colonna;
 
-	private GameManager gm;
+	private GameManagerAstratta gm;
 	private TavolaDiGioco tdg;
 
 	private String rispostaUtente;
@@ -668,7 +668,7 @@ public class PannelloTavola extends GridPane  implements PaneSwitcher{
 	/*
 	 * Costruisce la tavola da gioco
 	 */
-	public PannelloTavola(GameManager gm) throws SQLException {
+	public PannelloTavola(GameManagerAstratta gm) throws SQLException {
 
 		super();
 

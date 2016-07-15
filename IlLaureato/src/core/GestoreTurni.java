@@ -171,28 +171,10 @@ public class GestoreTurni extends Observable implements Serializable{
 
 	public void ordinaGiocatori(){
 
-	/*
-		int size = this.giocatori.size();
-		Giocatore[] players = new Giocatore[size];
-
-		Iterator < Giocatore > ig = this.giocatori.iterator();
-
-		int i = 0;
-		while( ig.hasNext() ){
-
-			players[i] = ig.next();
-			i++;
-
-		}
-
-		this.giocatori.clear();
-*/
 		for( int j = 0; j < players.length; j++ ){
 
 			count++;
 			players[count-1].lanciaPerOrdine();
-			//setChanged();
-			//notifyObservers(new OggettoFittizzio(players[count-1], new Integer(1)));
 			this.giocatori.add( players[count-1] );
 
 		}

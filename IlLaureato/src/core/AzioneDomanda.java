@@ -11,7 +11,7 @@ public class AzioneDomanda extends AzioneAstratta {
 	private String rispostaEsatta;
 	private int crediti;
 
-	public AzioneDomanda(GameManager gm) {
+	public AzioneDomanda(GameManagerAstratta gm) {
 
 		super(gm);
 

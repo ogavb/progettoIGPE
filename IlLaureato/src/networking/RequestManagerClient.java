@@ -9,6 +9,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import concurrent.LockManager;
 import core.GameManager;
+import core.GameManagerAstratta;
 import core.Giocatore;
 import gui.panels.SchermataTavolaDiGioco;
 import javafx.application.Platform;
@@ -28,7 +29,7 @@ public class RequestManagerClient extends Thread{
 
 	private LockManager lockManager;
 
-	private GameManager gm;
+	private GameManagerAstratta gm;
 	private String nomeConfigurazione;
 
 	protected static Lock lock;
@@ -284,7 +285,7 @@ public class RequestManagerClient extends Thread{
 
 						@Override
 						public void run() {
-							gm = new GameManager();
+							gm = new GameManagerNetwork();
 
 							String r1[] = r[1].split("/");
 							String r2[] = r1[1].split(",");

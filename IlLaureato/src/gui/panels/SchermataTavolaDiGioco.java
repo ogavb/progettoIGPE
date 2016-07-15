@@ -9,6 +9,7 @@ import java.util.Observer;
 import java.util.Optional;
 
 import core.GameManager;
+import core.GameManagerAstratta;
 import core.Giocatore;
 import core.Stato;
 import javafx.beans.property.SimpleStringProperty;
@@ -73,14 +74,14 @@ public class SchermataTavolaDiGioco implements Observer {
 	private Label[] labelAnniAccademici;
 	private VBox[] statistiche;
 
-	private GameManager gm;
+	private GameManagerAstratta gm;
 	private int schermoGrande = 1;
 	private boolean schermoIntero = true;
 	private Image image;
 	private static Pane group = new Pane();
 
 
-	public SchermataTavolaDiGioco(GameManager gm) throws Exception {
+	public SchermataTavolaDiGioco(GameManagerAstratta gm) throws Exception {
 
 		this.gm = gm;
 		this.stage = new Stage();

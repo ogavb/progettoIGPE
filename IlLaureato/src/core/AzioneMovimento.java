@@ -8,7 +8,7 @@ public class AzioneMovimento extends AzioneAstratta {
 	//		false	== indietro
 	private Boolean direzione;
 
-	public AzioneMovimento( GameManager gm, Boolean direzione ){
+	public AzioneMovimento( GameManagerAstratta gm, Boolean direzione ){
 
 		super(gm);
 		//ATTENZIONE bisogna mettere non "true" ma "direzione"

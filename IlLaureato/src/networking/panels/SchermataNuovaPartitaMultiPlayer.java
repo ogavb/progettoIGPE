@@ -5,10 +5,8 @@ import java.sql.SQLException;
 import javax.activity.InvalidActivityException;
 
 import concurrent.LockManager;
-import core.GameManager;
 import core.Giocatore;
-import gui.panels.SchermataTavolaDiGioco;
-import javafx.application.Platform;
+import core.InterfacciaGameManager;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -29,9 +27,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
-import javafx.scene.Node;
 import jdbc.CreatoreTavolaDiGioco;
 import networking.Client;
+import networking.GameManagerNetwork;
 import networking.MultiThreadedServer;
 import networking.RequestManagerClient;
 
@@ -64,7 +62,7 @@ public class SchermataNuovaPartitaMultiPlayer {
 
 	private String nomeGiocatore;
 
-	private GameManager gm;
+	private InterfacciaGameManager gm;
 	private Giocatore[] giocatori;
 
 
@@ -82,7 +80,7 @@ public class SchermataNuovaPartitaMultiPlayer {
 		return this.giocatori;
 	}
 
-	public GameManager getGameManager(){
+	public InterfacciaGameManager getGameManager(){
 		return this.gm;
 	}
 
@@ -249,6 +247,82 @@ public class SchermataNuovaPartitaMultiPlayer {
         paneBottom.getChildren().add(conferma);
         paneBottom.getChildren().add(esci);
 
+        primaryStage.setOnCloseRequest(event -> {
+
+        	//client partecipante
+			if(isClient && rmc.getFinestraMultiPlayer()!=null){
+				client.addRequest("6##"+nomeGiocatore);
+
+				try {
+					lockManager.attendiSei();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				client.addRequest("7##aggiorna rimozione giocatore finestra dei match");
+
+				try {
+					lockManager.attendiSette();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				client.addRequest("4##mostraPartite");
+
+				try {
+					lockManager.attendiQuattro();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				primaryStage = ((Stage)((Button)event.getSource()).getScene().getWindow());
+				System.err.println("Stmp "+primaryStage.getTitle());
+				for(int i = 0; i < rmc.getMatchs().length; i++){
+					System.err.println("Cosimo: " + rmc.getMatchs()[i]);
+				}
+
+				Parent root = rmc.getFinestraMultiPlayer().show(primaryStage,rmc.getMatchs());
+				Scene scene = new Scene(root);
+		    	primaryStage.setScene(scene);
+		    	primaryStage.show();
+			}
+				//CLIENT CHE HA CREATO LA PARTITA SU UN SERVER PRESENTE
+			else if(isClient){
+				System.err.println("CLIENT CHE HA CREATO LA PARTITA SU UN SERVER PRESENTE");
+				client.addRequest("9##");
+
+				try {
+					lockManager.attendiEndMatch();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+			else{
+
+					System.err.println("ENTRATO NELL' ELSE NON e' UN CLIENT");
+					client.addRequest("#END_ALL#");
+
+					try {
+						lockManager.attendiEndAll();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					System.err.println("MI SONO SBLOCCATO DAL LOCK");
+
+					if(server != null){
+						server.stop();
+					}
+
+				}
+
+        });
+
         esci.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -385,24 +459,6 @@ public class SchermataNuovaPartitaMultiPlayer {
     					e.printStackTrace();
     				}
 
-//    				try {
-//
-//    					initGameManager(giocatori, giocatori.length);
-//					} catch (SQLException e) {
-//						e.printStackTrace();
-//					}
-//
-//    				gm.decidiOrdine();
-//
-//    				try {
-//    					((Node)event.getSource()).getScene().getWindow().hide();
-//						new SchermataTavolaDiGioco(gm);
-//					} catch (Exception e) {
-//						e.printStackTrace();
-//					}
-//
-//    				gm.start();
-
     			}
 			}
 
@@ -412,7 +468,7 @@ public class SchermataNuovaPartitaMultiPlayer {
 
 	public void initGameManager(Giocatore[] nomiGiocatori, int numeroGiocatori) throws SQLException{
 
-		this.gm = new GameManager();
+		this.gm = new GameManagerNetwork();
 		String nomeConfigurazione = (String)configurazioni.getSelectionModel().getSelectedItem();
 		gm.init(nomiGiocatori, numeroGiocatori, nomeConfigurazione);
 

@@ -4,9 +4,9 @@ import core.Giocatore;
 
 public abstract class AzioneAstratta implements Azione{
 
-	protected GameManager gm;
+	protected GameManagerAstratta gm;
 
-	public AzioneAstratta(GameManager gm){
+	public AzioneAstratta(GameManagerAstratta gm){
 
 		super();
 
