@@ -108,6 +108,14 @@ public class GestoreTurni extends Observable implements Serializable{
 
 	}
 
+	public void setOrdinaGiocatori(Giocatore[] g){
+
+		for(int i = 0; i < g.length; i++){
+			giocatori.add(g[i]);
+		}
+
+	}
+
 	public void setNumeroGiocatori(int numGiocatori){
 		this.numGiocatori = numGiocatori;
 	}
@@ -171,6 +179,7 @@ public class GestoreTurni extends Observable implements Serializable{
 
 	public void ordinaGiocatori(){
 
+		System.err.println("players.length " + players.length);
 		for( int j = 0; j < players.length; j++ ){
 
 			count++;

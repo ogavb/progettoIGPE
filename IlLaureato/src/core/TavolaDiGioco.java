@@ -52,7 +52,7 @@ public class TavolaDiGioco {
 					break;
 
 				case "Mensa":
-					this.tavola[i][j] = new CasellaMensa(new AzioneNulla(gm),"mensa");
+					this.tavola[i][j] = new CasellaMensa(new AzioneFermaTurno(gm,1),"mensa");
 					break;
 
 				case "Ricevimento":

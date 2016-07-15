@@ -134,8 +134,9 @@ public class Giocatore implements Comparable < Object >, Serializable {
 	public String toString(){
 
 		StringBuffer sb = new StringBuffer();
-//
-//		sb.append("Nome giocatore: " + this.nome + "\n" );
+
+		sb.append("Nome giocatore: " + this.nome + "  ");
+		sb.append("Ordine di partenza: " + this.ordineDiPartenza + "  " );
 //		sb.append("Numero crediti: " + this.crediti + "\n");
 //		sb.append("Posizione X: " + this.pos.getX() + " Posizione Y: " + this.pos.getY() + "\n");
 //		sb.append("Anno accademico: " + this.anniAccademici + "\n");

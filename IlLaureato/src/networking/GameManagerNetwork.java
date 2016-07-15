@@ -6,9 +6,9 @@ import core.Casella;
 import core.GameManagerAstratta;
 import core.GestoreTurni;
 import core.Giocatore;
-import core.InterfacciaGameManager;
 import core.TavolaDiGioco;
 import gui.panels.OutputMediator;
+import javafx.collections.ObservableList;
 
 public class GameManagerNetwork extends GameManagerAstratta {
 
@@ -44,6 +44,14 @@ public class GameManagerNetwork extends GameManagerAstratta {
 		return gestore.size();
 	}
 
+	public ObservableList < Giocatore > getGiocatori(){
+		return gestore.getGiocatori();
+	}
+
+	public Giocatore getGiocatore(int i){
+		return gestore.getGiocatore(i);
+	}
+
 	@Override
 	public String getNomeGiocatore(int i) {
 		return gestore.getGiocatore(i).getNome();
@@ -54,8 +62,12 @@ public class GameManagerNetwork extends GameManagerAstratta {
 
 	}
 
+	public void setOrdinaGiocatori(Giocatore[] g){
+		gestore.setOrdinaGiocatori(g);
+	}
+
 	@Override
-	public InterfacciaGameManager init(Giocatore[] nomiGiocatori, int numGiocatori, String nomeConfigurazione)
+	public GameManagerAstratta init(Giocatore[] nomiGiocatori, int numGiocatori, String nomeConfigurazione)
 			throws SQLException {
 
 		this.nomeConfigurazione = nomeConfigurazione;

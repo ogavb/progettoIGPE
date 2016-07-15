@@ -1,12 +1,13 @@
 package networking.panels;
 
 import java.sql.SQLException;
+import java.util.Iterator;
 
 import javax.activity.InvalidActivityException;
 
 import concurrent.LockManager;
+import core.GameManagerAstratta;
 import core.Giocatore;
-import core.InterfacciaGameManager;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -62,7 +63,7 @@ public class SchermataNuovaPartitaMultiPlayer {
 
 	private String nomeGiocatore;
 
-	private InterfacciaGameManager gm;
+	private GameManagerAstratta gm;
 	private Giocatore[] giocatori;
 
 
@@ -80,7 +81,7 @@ public class SchermataNuovaPartitaMultiPlayer {
 		return this.giocatori;
 	}
 
-	public InterfacciaGameManager getGameManager(){
+	public GameManagerAstratta getGameManager(){
 		return this.gm;
 	}
 
@@ -443,12 +444,32 @@ public class SchermataNuovaPartitaMultiPlayer {
     				String numeroGiocatori = String.valueOf(giocatori.length);
     				StringBuilder nomiGiocatori = new StringBuilder();
 
-    				for(int i = 0; i < giocatori.length; i++){
-    					if(i == giocatori.length - 1)
-    						nomiGiocatori.append(giocatori[i].getNome() + "(" + giocatori[i].getColor());
-    					else
-    						nomiGiocatori.append(giocatori[i].getNome() + "(" + giocatori[i].getColor() + ",");
+    				try {
+						initGameManager(giocatori, giocatori.length, nomeConfigurazione);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+
+    				gm.decidiOrdine();
+
+    				for(Giocatore g :  gm.getGiocatori()){
+    					System.err.println("Ordine giocatore " + g.getOrdineDiPartenza());
     				}
+
+
+    				for(int i = 0; i < giocatori.length; i++){
+    					if(i == giocatori.length - 1){
+    						giocatori[i] = gm.getGiocatore(i);
+    						nomiGiocatori.append(giocatori[i].getNome() + "(" + giocatori[i].getColor() + "(" + giocatori[i].getOrdineDiPartenza());
+    					}
+    					else{
+    						giocatori[i] = gm.getGiocatore(i);
+    						nomiGiocatori.append(giocatori[i].getNome() + "(" + giocatori[i].getColor() + "(" + giocatori[i].getOrdineDiPartenza() + ",");
+    					}
+    				}
+
+    				System.err.println("GIOCATORI: " + nomiGiocatori.toString());
 
     				client.addRequest("5##" + nomeConfigurazione + "/" + nomiGiocatori.toString() + "/" + numeroGiocatori);
 
@@ -466,11 +487,10 @@ public class SchermataNuovaPartitaMultiPlayer {
 
 	}
 
-	public void initGameManager(Giocatore[] nomiGiocatori, int numeroGiocatori) throws SQLException{
+	public void initGameManager(Giocatore[] nomiGiocatori, int numeroGiocatori, String nomeConfigurazione) throws SQLException{
 
 		this.gm = new GameManagerNetwork();
-		String nomeConfigurazione = (String)configurazioni.getSelectionModel().getSelectedItem();
-		gm.init(nomiGiocatori, numeroGiocatori, nomeConfigurazione);
+		this.gm = gm.init(nomiGiocatori, numeroGiocatori, nomeConfigurazione);
 
 	}
 

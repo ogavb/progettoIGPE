@@ -285,7 +285,7 @@ public class RequestManagerClient extends Thread{
 
 						@Override
 						public void run() {
-							gm = new GameManagerNetwork();
+							//gm = new GameManagerNetwork();
 
 							String r1[] = r[1].split("/");
 							String r2[] = r1[1].split(",");
@@ -306,25 +306,27 @@ public class RequestManagerClient extends Thread{
 								}
 								giocatori[i] = new Giocatore(r3[0]);
 								giocatori[i].setColor(Integer.parseInt(r3[1]));
+								giocatori[i].setOrdineDiPartenza(Integer.parseInt(r3[2]));
 							}
 
 							try {
-								gm.init(giocatori, numeroGiocatori, r1[0]);
+								sm.initGameManager(giocatori, numeroGiocatori, r1[0]);
 							} catch (SQLException e1) {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();
 							}
 
-	    				gm.decidiOrdine();
+						sm.getGameManager().setOrdinaGiocatori(giocatori);
+	    				//gm.decidiOrdine();
 
 	    				try {
 	    					//((Node)event.getSource()).getScene().getWindow().hide();
-							new SchermataTavolaDiGioco(gm);
+							new SchermataTavolaDiGioco(sm.getGameManager());
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
 
-	    				gm.start();
+	    				sm.getGameManager().start();
 						}
 					});
 

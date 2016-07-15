@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import gui.panels.OutputMediator;
+import javafx.collections.ObservableList;
 
 public class GameManager extends GameManagerAstratta{
 
@@ -62,6 +63,14 @@ public class GameManager extends GameManagerAstratta{
 		return gestore.getGiocatore(i).getNome();
 	}
 
+	public ObservableList < Giocatore > getGiocatori(){
+		return null;
+	}
+
+	public Giocatore getGiocatore(int i){
+		return null;
+	}
+
 	/* (non-Javadoc)
 	 * @see core.InterfacciaGameManager#notificaAlgiocatore(int, core.Giocatore)
 	 */
@@ -74,7 +83,7 @@ public class GameManager extends GameManagerAstratta{
 	/* (non-Javadoc)
 	 * @see core.InterfacciaGameManager#init(core.Giocatore[], int, java.lang.String)
 	 */
-	public InterfacciaGameManager init( Giocatore[] nomiGiocatori, int numGiocatori, String nomeConfigurazione ) throws SQLException {
+	public GameManagerAstratta init( Giocatore[] nomiGiocatori, int numGiocatori, String nomeConfigurazione ) throws SQLException {
 			this.nomeConfigurazione = nomeConfigurazione;
 			tdg = new TavolaDiGioco(this,nomeConfigurazione);
 			gestore = new GestoreTurni( nomiGiocatori, numGiocatori );
