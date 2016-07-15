@@ -167,6 +167,11 @@ public class FinestraMultiPlayer {
 			}
 		});
 
+		primaryStage.setOnCloseRequest(event -> {
+			client.addRequest("#END#");
+			stage.close();
+		});
+
 		annulla.setOnMouseReleased(event -> {
 
 			client.addRequest("#END#");

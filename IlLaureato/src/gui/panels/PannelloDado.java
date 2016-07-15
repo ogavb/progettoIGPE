@@ -1,6 +1,6 @@
 package gui.panels;
 
-import core.GameManager;
+import core.GameManagerAstratta;
 import javafx.animation.RotateTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -14,7 +14,7 @@ import javafx.util.Duration;
 
 public class PannelloDado extends GridPane {
 
-	private GameManager gm;
+	private GameManagerAstratta gm;
 
 	private Image imgDadoUno;
 	private ImageView imageViewUno;
@@ -25,7 +25,7 @@ public class PannelloDado extends GridPane {
 	private DadiListener eventoDado;
 
 
-	public PannelloDado(Integer i1,GameManager gm) {
+	public PannelloDado(Integer i1,GameManagerAstratta gm) {
 
 		this.gm = gm;
 		numGiocatori = 0;

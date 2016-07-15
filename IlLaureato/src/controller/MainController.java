@@ -74,6 +74,7 @@ public class MainController extends Pane implements Initializable {
 	public MainController(Stage stage) throws IOException {
 		this.stage = stage;
 
+		System.out.println("ciao");
 		URL location = getClass().getResource("/view/MainView.fxml");
 
 	    FXMLLoader fxmlLoader = new FXMLLoader(location);

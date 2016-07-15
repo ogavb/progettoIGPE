@@ -4,7 +4,7 @@ public class AzioneFermaTurno extends AzioneAstratta {
 
 	private int numTurni;
 
-	public AzioneFermaTurno( GameManager gm, int numTurni ) {
+	public AzioneFermaTurno( GameManagerAstratta gm, int numTurni ) {
 
 		super(gm);
 

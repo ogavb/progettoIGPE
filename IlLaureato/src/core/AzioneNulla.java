@@ -2,7 +2,7 @@ package core;
 
 public class AzioneNulla extends AzioneAstratta {
 
-	public AzioneNulla(GameManager gm) {
+	public AzioneNulla(GameManagerAstratta gm) {
 
 		super(gm);
 	}

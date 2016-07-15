@@ -4,7 +4,7 @@ import gui.panels.OutputMediator;
 
 public class AzioneRilanciaDado extends AzioneAstratta {
 
-	public AzioneRilanciaDado(GameManager gm){
+	public AzioneRilanciaDado(GameManagerAstratta gm){
 
 		super(gm);
 	}
