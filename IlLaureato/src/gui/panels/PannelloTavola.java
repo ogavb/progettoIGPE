@@ -59,6 +59,7 @@ public class PannelloTavola extends GridPane  implements PaneSwitcher{
 	private PaneDomande paneDomande;
 	private PaneRicevimento paneRicevimento;
 	private PaneCR paneCentroR;
+	private PaneMensa paneMensa;
 
 	private PathTransition pathTransition[];
 	private int numPathTransition = 0;
@@ -175,13 +176,13 @@ public class PannelloTavola extends GridPane  implements PaneSwitcher{
 														    	  *
 														    	  *
     	 */
-		System.out.println("La translateX è: " + (n.getTranslateX()+11));
+		//System.out.println("La translateX è: " + (n.getTranslateX()+11));
     	//System.out.println("La dimensione è: " + mp.getWidth() + " " + mp.getHeight());
 		if( !(n.getTranslateX()+11 == 11 && n.getTranslateY()+12.5 == 12.5)
 				&& ((n.getTranslateX()+11 >= 11 && n.getTranslateX()+11 <= (mp.getWidth()*10)+11) && (n.getTranslateY() + 12.5 == 12.5) )
 				&& (mp.getLayoutY() >= mp.getHeight() ) ) {
 
-			System.out.println("Entrato nel basso");
+			//System.out.println("Entrato nel basso");
 
 			path.getElements().add(new MoveTo(n.getTranslateX()+11, n.getTranslateY()+12.5));
 			path.getElements().add(new LineTo((mp.getWidth()*10)+11,12.5));
@@ -217,7 +218,7 @@ public class PannelloTavola extends GridPane  implements PaneSwitcher{
 				&& ((n.getTranslateY()+12.5 >= 12.5 && n.getTranslateY() + 12.5 < (mp.getHeight()*10)+12.5) )
 				&& (mp.getLayoutX()<(mp.getWidth()*10))) {
 
-			System.out.println("Entrato nel girare a sinistra");
+			//System.out.println("Entrato nel girare a sinistra");
 
 			path.getElements().add(new MoveTo(n.getTranslateX()+11, n.getTranslateY()+12.5));
 			path.getElements().add(new LineTo((mp.getWidth()*10)+11,(mp.getHeight()*10)+12.5));
@@ -253,7 +254,7 @@ public class PannelloTavola extends GridPane  implements PaneSwitcher{
 				&& ((n.getTranslateX()+11 > 12 && n.getTranslateX()+11 <= (mp.getWidth()*10)+11) && (n.getTranslateY()+12.5 == (mp.getHeight()*10)+12.5))
 				&&	((mp.getLayoutY() < mp.getHeight()*10)) ) {
 
-			System.out.println("Entrato in alto");
+			//System.out.println("Entrato in alto");
 
 			path.getElements().add(new MoveTo(n.getTranslateX()+11, n.getTranslateY()+12.5));
 			path.getElements().add(new LineTo(11,(mp.getHeight()*10)+12.5));
@@ -289,7 +290,7 @@ public class PannelloTavola extends GridPane  implements PaneSwitcher{
 				&& ((n.getTranslateX()+11 == 12 ) && (n.getTranslateY()+12.5 > 12.5 && n.getTranslateY()+12.5 <= (mp.getHeight()*10)+12.5))
 				&& ( mp.getLayoutX() > 12 ) ) {
 
-			System.out.println("Entrato Top");
+			//System.out.println("Entrato Top");
 
 			path.getElements().add(new MoveTo(n.getTranslateX()+11, n.getTranslateY()+12.5));
 			path.getElements().add(new LineTo(11,12.5));
@@ -308,7 +309,7 @@ public class PannelloTavola extends GridPane  implements PaneSwitcher{
 
 		else {
 
-			System.out.println("Entrato nel default");
+			//System.out.println("Entrato nel default");
 			path.getElements().add(new MoveTo(n.getTranslateX()+11, n.getTranslateY()+12.5));
 			path.getElements().add(new LineTo(mp.getLayoutX()+11,mp.getLayoutY()+12.5));
 
@@ -349,6 +350,10 @@ public class PannelloTavola extends GridPane  implements PaneSwitcher{
 
 			case "ricevimento":
 				ricevimento();
+				break;
+
+			case "mensa":
+				mensa();
 				break;
 
 			case "centroResidenziale":
@@ -618,8 +623,8 @@ public class PannelloTavola extends GridPane  implements PaneSwitcher{
 		int count = 40;
 		for(int i = 0; i < board.length; i++)
 	        	for(int j = 0; j < board[0].length; j++)
-	        		if(i==3)
-	        			System.out.println("Casella " + count-- + " con coordinate " + board[i][j].getLayoutX() + " " + board[i][j].getLayoutY());
+	        		if(i==3) {}
+	        			//System.out.println("Casella " + count-- + " con coordinate " + board[i][j].getLayoutX() + " " + board[i][j].getLayoutY());
 
 	}
 
@@ -685,7 +690,7 @@ public class PannelloTavola extends GridPane  implements PaneSwitcher{
 
 		mappa.put("mensa", new Image("file:caselle/mensa.jpg"));
 		mappa.put("biblioteca", new Image("file:caselle/biblioteca.png"));
-		mappa.put("bookCafe", new Image("file:caselle/biblioteca.png"));
+		mappa.put("bookCafe", new Image("file:caselle/bookcafe.png"));
 		mappa.put("centroResidenziale", new Image("file:caselle/centro.jpg"));
 		mappa.put("cus", new Image("file:caselle/cus.jpg"));
 		mappa.put("esame", new Image("file:caselle/esame.png"));
@@ -712,6 +717,7 @@ public class PannelloTavola extends GridPane  implements PaneSwitcher{
 		paneDomande = new PaneDomande();
 		paneRicevimento = new PaneRicevimento();
 		paneCentroR = new PaneCR();
+		paneMensa = new PaneMensa();
 
         //disegno le cornici
         disegnaCornici(NUM_COLS);
@@ -794,27 +800,31 @@ public class PannelloTavola extends GridPane  implements PaneSwitcher{
 
 	@Override
 	public void mensa() {
-		SchermataTavolaDiGioco.switchTo(paneBiblioteca);
+		SchermataTavolaDiGioco.switchTo(paneMensa);
 	}
 
 	@Override
 	public void cus() {
+		//TO-DO
 		SchermataTavolaDiGioco.switchTo(paneBiblioteca);
 	}
 
 	@Override
 	public void bookCafe() {
-
+		//TO-DO
+		SchermataTavolaDiGioco.switchTo(paneBiblioteca);
 	}
 
 	@Override
 	public void biblioteca() {
+		//TO-DO
 		SchermataTavolaDiGioco.switchTo(paneBiblioteca);
 	}
 
 	@Override
 	public void centroResidenziale() {
-
+		//TO-DO fare il pannello centro residenziale
+		SchermataTavolaDiGioco.switchTo(paneCentroR);
 	}
 
 	@Override

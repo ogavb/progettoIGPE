@@ -10,8 +10,10 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -29,9 +31,7 @@ public class EditorTavolaDiGioco extends TavolaGridPane{
 	private BorderPane mainPane;
 	private VBox paletteCaselle;
 
-	//il salva e annulla sono
 	private Button salva;
-	private Button annulla;
 	private Button indietro;
 
 
@@ -41,16 +41,13 @@ public class EditorTavolaDiGioco extends TavolaGridPane{
 		this.stage = stage;
 
 	    salva   = new Button("Salva");
-	    annulla = new Button("Annulla");
 	    indietro = new Button("Menu");
 
 	    salva.setId("btn_etg");
-	    annulla.setId("btn_etg");
 	    indietro.setId("btn_etg");
 
-	    //all'inizio li disabilito
+	    //all'inizio disabilito il salvataggio
 	    salva.setDisable(true);
-	    annulla.setDisable(true);
 
 	    //EVENTI BOTTONI
 	    salva.setOnMouseReleased(event -> {
@@ -74,6 +71,10 @@ public class EditorTavolaDiGioco extends TavolaGridPane{
 				ScrittoreConfigurazione sc = new ScrittoreConfigurazione(sb.toString());
 		    	sc.setNomeConfigurazione(nomeConfigurazione);
 		    	sc.query();
+		    	Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("Operazione Riuscita!");
+				alert.setHeaderText("Salvataggio tavola di gioco\navvenuto con successo!");
+				alert.showAndWait();
 			}
 		});
 
@@ -110,7 +111,7 @@ public class EditorTavolaDiGioco extends TavolaGridPane{
 
 	}
 
-	private boolean controllaAlmenoQuattroEsami() {
+	/*private boolean controllaAlmenoQuattroEsami() {
 		Iterator<MyPaneTavola> it = lista.iterator();
 
 		int count = 0;
@@ -125,7 +126,7 @@ public class EditorTavolaDiGioco extends TavolaGridPane{
 
 		return count >= 4;
 
-	}
+	}*/
 	private FlowPane addFlowPane() {
 	    FlowPane flow = new FlowPane();
 	    flow.setTranslateY(10);
@@ -138,14 +139,14 @@ public class EditorTavolaDiGioco extends TavolaGridPane{
 	    String immagineCus = "file:caselle/cus.jpg";
 	    String immagineEsame = "file:caselle/esame.png";
 	    String immagineBiblioteca = "file:caselle/biblioteca.png";
-	    String immagineBookCafe = "file:caselle/mensa.png";
+	    String immagineBookCafe = "file:caselle/bookcafe.png";
 	    String immagineSemplice = "file:caselle/strada.png";
 	    String immagineCentroR = "file:caselle/centro.jpg";
 	    String immagineRicevimento = "file:caselle/centro.jpg";
 
 	    MyPanePalette pages[] = new MyPanePalette[8];
 	    pages[0] = new MyPanePalette("Biblioteca", new Image(immagineBiblioteca));
-	    pages[1] = new MyPanePalette("BookCafe", new Image(immagineSemplice));
+	    pages[1] = new MyPanePalette("BookCafe", new Image(immagineBookCafe));
 	    pages[2] = new MyPanePalette("CentroResidenziale", new Image(immagineCentroR));
 	    pages[3] = new MyPanePalette("Cus", new Image(immagineCus));
 	    pages[4] = new MyPanePalette("Esame", new Image(immagineEsame));
@@ -171,10 +172,8 @@ public class EditorTavolaDiGioco extends TavolaGridPane{
 	    return flow;
 	}
 
-	@Override
 	protected void setBottoni(boolean b) {
 		salva.setDisable(b);
-		annulla.setDisable(b);
 	}
 
 

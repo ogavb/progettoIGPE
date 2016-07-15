@@ -84,8 +84,6 @@ public class PrelevatoreDomanda extends Database{
 		   cont = this.resultset.getInt(1);
 		   cont = cont + 1;
 		   esame.setCodice(cont);
-
-		   System.out.println(esame.getNome());
 		   String sql1 = "INSERT INTO esame (codice, nome, crediti, domanda, rispostaEsatta, rispostaSbagliata )"
 					+ "		 VALUES ("+cont+",'" + esame.getNome() + "', "+esame.getCrediti() +
 					", '"+esame.getDomanda()+"','"+esame.getRispostaEsatta()+"','"+esame.getRispostaSbagliata()+"'" + ")";
@@ -106,8 +104,6 @@ public class PrelevatoreDomanda extends Database{
 	}
 
 	public void elimina(int codice){
-
-		System.out.println("Il codice da eliminare è: " + codice);
 
 		this.creaConnessione();
 		try{
@@ -135,12 +131,10 @@ public class PrelevatoreDomanda extends Database{
 	public void query(){
 
 		int count = 0;
-
 		try {
 			 this.resultset = this.stat.executeQuery("select count(*) from esame");
 			 this.resultset.next();
 			 count = this.resultset.getInt(1);
-			 System.out.println("ci sono "+count + " domande");
 		}
 		catch (SQLException e) {
 			 // In caso di errore...
@@ -155,7 +149,6 @@ public class PrelevatoreDomanda extends Database{
 		 }
 
 		int rand = ( int )( Math.random() * count +1 );
-		System.out.println("il random è "+rand);
 		this.creaConnessione();
 
 		try {
@@ -208,13 +201,13 @@ public class PrelevatoreDomanda extends Database{
 		 }
 	}
 
-	public static void main(String[] args) {
-		PrelevatoreDomanda database = new PrelevatoreDomanda();
-		ObservableList<Esame> esami = database.prelevaEsami();
-
-		Iterator<Esame> it = esami.iterator();
-		while(it.hasNext()){
-			System.out.println("Esame: " + it.next().getNome());
-		}
-	}
+//	public static void main(String[] args) {
+//		PrelevatoreDomanda database = new PrelevatoreDomanda();
+//		ObservableList<Esame> esami = database.prelevaEsami();
+//
+//		Iterator<Esame> it = esami.iterator();
+//		while(it.hasNext()){
+//			System.out.println("Esame: " + it.next().getNome());
+//		}
+//	}
 }

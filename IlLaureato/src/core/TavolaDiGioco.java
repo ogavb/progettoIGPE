@@ -17,7 +17,6 @@ public class TavolaDiGioco {
 
 	public void setNomeConfigurazione(GameManagerAstratta gm, String nomeConfigurazione) throws SQLException{
 
-		System.out.println("La configurazione è: " + nomeConfigurazione);
 		CreatoreTavolaDiGioco database = new CreatoreTavolaDiGioco();
 		database.setNomeConfigurazione(nomeConfigurazione);
 		database.query();

@@ -26,6 +26,4 @@ public class PaneRicevimento extends Pane{
 	    getChildren().add(box);
 	}
 
-	public static void main(String[] args) {
-	}
 }

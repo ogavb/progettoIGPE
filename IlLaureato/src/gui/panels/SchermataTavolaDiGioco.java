@@ -171,7 +171,7 @@ public class SchermataTavolaDiGioco implements Observer {
 		});
 		scene.heightProperty().addListener(new ChangeListener<Number>() {
 		    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
-		        System.out.println("Height: " + newSceneHeight);
+		       // System.out.println("Height: " + newSceneHeight);
 		    }
 		});
 
@@ -380,13 +380,12 @@ public class SchermataTavolaDiGioco implements Observer {
 		giocatori = new HBox[numGiocatori];
 
 		for(int i = 0; i < numGiocatori; i++){
-			giocatori[i] = new HBox();
+			giocatori[i] = new HBox(30.0);
 		}
 
 		//costruzione bottoni
         for (int i = 0; i < numGiocatori; i++)
         {
-        	//GameManager.getIstance().getGestore().getGiocatore(i).setColor(i);
         	addLabel(gm.getNomeGiocatore(i), giocatori[i],
         			(String)playerPictures.get(gm.getGestore().getGiocatore(i).getColor()),
         			(Color)colori.get(gm.getGestore().getGiocatore(i).getColor()));
@@ -405,14 +404,13 @@ public class SchermataTavolaDiGioco implements Observer {
 	private void addLabel(String text, HBox container, String image, Color cc){
 		Label label = new Label(text,new ImageView(new Image(image)));
 		label.setTextFill(cc);
-		label.setPrefSize(50, 27);
-		label.setMinSize(50, 27);
-		label.setMaxSize(50, 27);
+		label.setPrefSize(100, 27);
+		label.setMinSize(100, 27);
+		label.setMaxSize(100, 27);
 		container.getChildren().add(label);
 	}
 
 	private void mostraStatistiche(VBox vb, Giocatore g, int crediti, int anniAccademici) {
-		System.err.println("crediti del giocatore" +crediti + " " + g.getOrdineDiPartenza());
 		labelCrediti[g.getOrdineDiPartenza()].setText("Crediti: " + crediti);
 		labelAnniAccademici[g.getOrdineDiPartenza()].setText("Anni accademici: " + anniAccademici);
 	}

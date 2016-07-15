@@ -3,6 +3,7 @@ package gui.panels;
 import java.io.File;
 import java.sql.SQLException;
 
+import controller.MainController;
 import core.GameManager;
 import core.Giocatore;
 import javafx.collections.FXCollections;
@@ -48,6 +49,7 @@ public class SchermataNuovaPartita {
 	private HBox paneBottom;
 
 	private Button conferma;
+	private Button tornaAlMenu;
 	private ComboBox<String> configurazioni;
 	private String[] ColorPlayer =
 	{"blue", "cyan", "green", "purple", "red", "yellow"};
@@ -79,6 +81,7 @@ public class SchermataNuovaPartita {
 		mainPane.setMaxWidth(BorderPane.USE_PREF_SIZE);
 		mainPane.setMaxHeight(BorderPane.USE_PREF_SIZE);
 
+		//stile per avere i bordi forse lo togliamo
 		mainPane.setStyle("-fx-padding: 10;" +
 				"-fx-border-style: solid inside;" +
 				"-fx-border-width: 2;" +
@@ -167,8 +170,9 @@ public class SchermataNuovaPartita {
 			}
         });
 
+        tornaAlMenu = new Button("Torna al Menu");
         conferma = new Button("Conferma");
-        paneBottom = new HBox();
+        paneBottom = new HBox(10.0);
         paneBottom.setAlignment(Pos.BOTTOM_RIGHT);
         ObservableList<String> listaConfigurazioni;
         try {
@@ -181,7 +185,10 @@ public class SchermataNuovaPartita {
 
         paneBottom.getChildren().add(configurazioni);
         paneBottom.getChildren().add(conferma);
+        paneBottom.getChildren().add(tornaAlMenu);
 
+
+        //AZIONI DEI BOTTONI
         conferma.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -252,6 +259,14 @@ public class SchermataNuovaPartita {
     			}
 			}
 
+        });
+
+        tornaAlMenu.setOnMouseReleased(e -> {
+        	this.stage = (Stage) ((Button) e.getSource()).getScene().getWindow();
+        	try {
+				new MainController(stage);
+			} catch (Exception e1) {
+			}
         });
 
 	}

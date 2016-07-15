@@ -24,9 +24,7 @@ public class ScrittoreConfigurazione extends Database {
 			this.resultset = this.stat.executeQuery(sql);
 			this.resultset.next();
 			cont = this.resultset.getInt(1);
-			System.out.println("Ci sono " + cont + " configurazione");
 			cont = cont + 1;
-
 
 			String sql1 = "INSERT INTO tavoladigioco (codice, nome, configurazione) VALUES (" + cont + ", '" + this.nomeConfigurazione + "', '" + this.configurazioneDaScrivere + "'" + ")";
 			this.stat.execute(sql1);
