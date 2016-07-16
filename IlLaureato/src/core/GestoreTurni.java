@@ -95,6 +95,30 @@ public class GestoreTurni extends Observable implements Serializable{
 		}
 	}
 
+	/*
+	 * ritorna il nome del giocatore successivo a quello passato
+	 */
+	public String getNextPlayer(String giocatoreCorrente){
+
+		boolean trovato = false;
+
+		for(Giocatore g : giocatori){
+			if(trovato){
+				return g.getNome();
+			}
+			if(g.getNome().equals(giocatoreCorrente)){
+				trovato = true;
+			}
+		}
+
+
+		if(!trovato){
+			System.err.println("giocatore non trovato GestoreTurni");
+		}
+		return giocatori.get(0).getNome();
+
+	}
+
 	public Giocatore getVincitore(){
 		if( giocatori.size() == 1 ){
 			return giocatori.get(0);

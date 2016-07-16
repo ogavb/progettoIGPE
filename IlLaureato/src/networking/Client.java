@@ -24,6 +24,8 @@ public class Client extends Thread {
 	private List<String> send;//
 	private List<String> recive;//
 
+	private String nomeGiocatore;
+
 	private Lock lock;
 	private Condition condition;
 
@@ -57,6 +59,14 @@ public class Client extends Thread {
 		this.start();
 
 
+	}
+
+	public String getNomeGiocatore() {
+		return nomeGiocatore;
+	}
+
+	public void setNomeGiocatore(String nomeGiocatore) {
+		this.nomeGiocatore = nomeGiocatore;
 	}
 
 	public int sizeRecive(){

@@ -203,6 +203,27 @@ public class RequestManager extends Thread {
 			GestoreMatch.getInstance().removeMatch(m3);
 			break;
 
+		case 10:
+			//10##nomeGiocatore
+			requestIn.get(0).getKey().setNomeGiocatore(r[1]);
+			break;
+
+		case 11:
+			//11##numeroCaseRequestManagerClient#notifica a tutti nel match
+			Match m4=GestoreMatch.getInstance().findForId(requestIn.get(0).getKey().getId());
+			m4.notifyAll(r[1]);
+			break;
+
+		case 12:
+			//12##numeroCaseRequestManagerClient#notifica a tutti nel match tranne il player che ha mandato la richiesta
+			Match m5=GestoreMatch.getInstance().findForId(requestIn.get(0).getKey().getId());
+			m5.notifyAllExcept(requestIn.get(0).getKey().getNomeGiocatore(), r[1]);
+			break;
+
+		case 13:
+			//13##nomeGiocatore##numeroCaseRequestManagerClient#richiesta (notidica solo al player con nome nomeGiocatore)
+			Match m6=GestoreMatch.getInstance().findForId(requestIn.get(0).getKey().getId());
+			m6.notifyToPlayerName(r[1], r[2]);
 		}// endswitch
 		return null;
 	}

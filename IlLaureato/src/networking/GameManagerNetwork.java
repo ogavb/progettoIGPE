@@ -16,8 +16,15 @@ public class GameManagerNetwork extends GameManagerAstratta {
 	private GestoreTurni gestore;
 	private boolean direzione = true;
 	private String nomeConfigurazione;
+	private boolean isYourRound = false;
+
+	private Client client;
 
 	public GameManagerNetwork(){}
+
+	public void setClient(Client client){
+		this.client = client;
+	}
 
 	@Override
 	public String getNomeConfigurazione() {
@@ -90,7 +97,11 @@ public class GameManagerNetwork extends GameManagerAstratta {
 	}
 
 	@Override
-	public int turnoSuccessivo(int numGiocatori) {
+	public int turnoSuccessivo(int numGiocatori,int lancioCorrente) {
+
+		this.setYourRound(false);
+		this.client.addRequest("13##"+gestore.getNextPlayer(client.getNomeGiocatore())+"##10");
+
 		return 0;
 	}
 
@@ -177,6 +188,16 @@ public class GameManagerNetwork extends GameManagerAstratta {
 			sb.append("\n");
 		}
 		return sb.toString();
+	}
+
+	public boolean isYourRound() {
+
+		return isYourRound;
+
+	}
+
+	public void setYourRound(boolean b){
+		this.isYourRound = b;
 	}
 
 }

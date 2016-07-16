@@ -10,9 +10,7 @@ public class Dado implements Serializable{
 
 	public Dado(){}
 
-	public int lanciaDadi(){
-
-		this.dadi = ( int )( ( Math.random() * 6 ) + 1 );
-		return this.dadi;
+	public static int lanciaDadi(){
+		return ( int )( ( Math.random() * 6 ) + 1 );
 	}
 }

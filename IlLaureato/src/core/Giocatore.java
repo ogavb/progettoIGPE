@@ -63,12 +63,12 @@ public class Giocatore implements Comparable < Object >, Serializable {
 	}
 
 	public int lanciaPerOrdine() {
-		risultatoDado = dado.lanciaDadi();
+		risultatoDado = Dado.lanciaDadi();
 		return risultatoDado;
 	}
-	public int lancia(){
+	public int lancia(int risultato){
 
-		risultatoDado = dado.lanciaDadi();
+		risultatoDado = risultato;
 		casellePercorseInAnnoAccademico += this.risultatoDado;
 		System.out.println("caselle percorse dal giocatore "+casellePercorseInAnnoAccademico);
 		aggiornaAnniAccademici();

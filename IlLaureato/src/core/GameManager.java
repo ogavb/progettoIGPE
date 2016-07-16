@@ -21,44 +21,32 @@ public class GameManager extends GameManagerAstratta{
 
 	public GameManager(){}
 
-	/* (non-Javadoc)
-	 * @see core.InterfacciaGameManager#getNomeConfigurazione()
-	 */
+
 	public String getNomeConfigurazione(){
 		return this.nomeConfigurazione;
 	}
 
-	/* (non-Javadoc)
-	 * @see core.InterfacciaGameManager#getDirezione()
-	 */
+
 	public boolean getDirezione(){
 		return direzione;
 	}
 
-	/* (non-Javadoc)
-	 * @see core.InterfacciaGameManager#setDirezione(boolean)
-	 */
+
 	public void setDirezione(boolean direzione){
 		this.direzione = direzione;
 	}
 
-	/* (non-Javadoc)
-	 * @see core.InterfacciaGameManager#getGestore()
-	 */
+
 	public GestoreTurni getGestore(){
 		return gestore;
 	}
 
-	/* (non-Javadoc)
-	 * @see core.InterfacciaGameManager#getNumeroGiocatori()
-	 */
+
 	public int getNumeroGiocatori(){
 		return gestore.size();
 	}
 
-	/* (non-Javadoc)
-	 * @see core.InterfacciaGameManager#getNomeGiocatore(int)
-	 */
+
 	public String getNomeGiocatore( int i ){
 		return gestore.getGiocatore(i).getNome();
 	}
@@ -71,18 +59,14 @@ public class GameManager extends GameManagerAstratta{
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see core.InterfacciaGameManager#notificaAlgiocatore(int, core.Giocatore)
-	 */
+
 	public void notificaAlgiocatore(int azione, Giocatore g){
 		System.out.println("Sono in notifica al giocatore");
 		setChanged();
 		notifyObservers(new Stato(g,azione));
 	}
 
-	/* (non-Javadoc)
-	 * @see core.InterfacciaGameManager#init(core.Giocatore[], int, java.lang.String)
-	 */
+
 	public GameManagerAstratta init( Giocatore[] nomiGiocatori, int numGiocatori, String nomeConfigurazione ) throws SQLException {
 			this.nomeConfigurazione = nomeConfigurazione;
 			tdg = new TavolaDiGioco(this,nomeConfigurazione);
@@ -90,9 +74,7 @@ public class GameManager extends GameManagerAstratta{
 			return this;
 	}
 
-	/* (non-Javadoc)
-	 * @see core.InterfacciaGameManager#start()
-	 */
+
 	public void start(){
 		OutputMediator.println("Inizio Partita!");
 		if(gestore.size() == 1) {
@@ -102,22 +84,18 @@ public class GameManager extends GameManagerAstratta{
 
 	//Funzione che dovrà sostituire ordinaGiocatori del gestore turni in modo da controllollare
 	//il lancio dei dadi e lasciare quest'azione all'utente dall'interfaccia (eliminando il ciclo for)
-	/* (non-Javadoc)
-	 * @see core.InterfacciaGameManager#decidiOrdine()
-	 */
+
 	public void decidiOrdine() {
 		gestore.ordinaGiocatori();
 	}
 
 	//Funzione deve essere chiamata solo dopo aver chiamato prima la funzione start()
-	/* (non-Javadoc)
-	 * @see core.InterfacciaGameManager#turnoSuccessivo(int)
-	 */
-	public int turnoSuccessivo(int numGiocatori){
+
+	public int turnoSuccessivo(int numGiocatori,int lancioCorrente){
 	   	Giocatore corrente = gestore.next();
 	   	int anniAccademici = corrente.getAnniAccademici();
 
-	   	OutputMediator.println(corrente.getNome() +" lancia i dadi : "+ corrente.lancia());
+	   	OutputMediator.println(corrente.getNome() +" lancia i dadi : "+ corrente.lancia(lancioCorrente));
 	   	setChanged();
 	   	notifyObservers(new Stato(corrente, new Integer(1)));
 
@@ -160,9 +138,7 @@ public class GameManager extends GameManagerAstratta{
 		return numGiocatori;
 	}
 
-	/* (non-Javadoc)
-	 * @see core.InterfacciaGameManager#finePartita()
-	 */
+
 	public void finePartita(){
 		//TODO
 		//FUNZIONE di fine gioco -> termina il gioco scrivendo in output il vincitore
@@ -217,9 +193,7 @@ public class GameManager extends GameManagerAstratta{
 
 	}
 
-	/* (non-Javadoc)
-	 * @see core.InterfacciaGameManager#salvaPartita(java.lang.String)
-	 */
+
 	public void salvaPartita(String file)
 	{
 		ObjectOutputStream output = null;
@@ -258,9 +232,7 @@ public class GameManager extends GameManagerAstratta{
 		System.out.println("Salvataggio Riuscito");
 	}
 
-	/* (non-Javadoc)
-	 * @see core.InterfacciaGameManager#caricaPartita(java.lang.String)
-	 */
+
 	@SuppressWarnings("unchecked")
 	public void caricaPartita(String partita){
 		ObjectInputStream input = null;
@@ -328,9 +300,7 @@ public class GameManager extends GameManagerAstratta{
 		System.out.println("Caricamento Riuscito");
 	}
 
-	/* (non-Javadoc)
-	 * @see core.InterfacciaGameManager#oldPartita(java.lang.String)
-	 */
+
 	public void oldPartita(String partita){
 		caricaPartita(partita);
 		//OutputMediator.caricaGUI();
@@ -338,16 +308,12 @@ public class GameManager extends GameManagerAstratta{
 		notifyObservers(new Stato(null, new Integer(0)));
 	}
 
-	/* (non-Javadoc)
-	 * @see core.InterfacciaGameManager#getTavolaDiGioco()
-	 */
+
 	public TavolaDiGioco getTavolaDiGioco(){
 		return this.tdg;
 	}
 
-	/* (non-Javadoc)
-	 * @see core.InterfacciaGameManager#toString()
-	 */
+
 	public String toString(){
 
 		StringBuffer sb = new StringBuffer();

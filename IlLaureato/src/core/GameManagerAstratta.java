@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.Observable;
 
 import javafx.collections.ObservableList;
+import networking.Client;
 
 public class GameManagerAstratta extends Observable {
 
@@ -70,7 +71,7 @@ public class GameManagerAstratta extends Observable {
 
 	}
 
-	public int turnoSuccessivo(int numGiocatori) {
+	public int turnoSuccessivo(int numGiocatori,int lancioCorrente) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

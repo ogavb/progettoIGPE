@@ -75,4 +75,32 @@ public class Match {
 			c.insertMessage(message);
 		}
 	}
+
+	public void notifyAllExcept(String name, String request){
+
+		if(name != null && request != null){
+
+			for(Connection c:Players){
+				if(!c.getNomeGiocatore().equals(name)){
+					c.insertMessage(request);
+				}
+			}
+
+		}
+
+	}
+
+	public void notifyToPlayerName(String name, String request){
+		if(name != null && request != null){
+
+			for(Connection c:Players){
+				if(c.getNomeGiocatore().equals(name)){
+					c.insertMessage(request);
+					break;
+				}
+			}
+
+		}
+	}
 }
+

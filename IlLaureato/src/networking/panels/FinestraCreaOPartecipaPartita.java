@@ -144,6 +144,7 @@ public class FinestraCreaOPartecipaPartita {
 				System.err.println("STAGE " + primaryStage.getTitle());
 				Parent root = sm.show(primaryStage,giocatoriNum,nomeGiocatore);
 
+				client.setNomeGiocatore(nomeGiocatore);
 				client.addRequest("3##"+nomeGiocatore);
 
 				try {

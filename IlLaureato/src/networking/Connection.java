@@ -20,6 +20,7 @@ public class Connection implements Runnable {
 
 	private Socket clientSocket;
 	private int Id;
+	private String nomeGiocatore;
 	private List<String> send;
 
 	private Lock lock;
@@ -48,6 +49,12 @@ public class Connection implements Runnable {
 		this.Id=id;
 	}
 
+	public String getNomeGiocatore() {
+		return nomeGiocatore;
+	}
+	public void setNomeGiocatore(String nomeGiocatore) {
+		this.nomeGiocatore = nomeGiocatore;
+	}
 
 	private Socket getSocket(){
 		return this.clientSocket;

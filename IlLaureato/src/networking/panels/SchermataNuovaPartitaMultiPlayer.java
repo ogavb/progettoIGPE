@@ -490,6 +490,7 @@ public class SchermataNuovaPartitaMultiPlayer {
 	public void initGameManager(Giocatore[] nomiGiocatori, int numeroGiocatori, String nomeConfigurazione) throws SQLException{
 
 		this.gm = new GameManagerNetwork();
+		((GameManagerNetwork)this.gm).setClient(client);
 		this.gm = gm.init(nomiGiocatori, numeroGiocatori, nomeConfigurazione);
 
 	}
