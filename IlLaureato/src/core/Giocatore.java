@@ -45,9 +45,9 @@ public class Giocatore implements Comparable < Object >, Serializable {
 
 	private void aggiornaAnniAccademici(){
 		if(casellePercorseInAnnoAccademico >= caselleDisponibili){
-			System.out.println("caselle maggiori di 40");
 			casellePercorseInAnnoAccademico -= caselleDisponibili;
 			anniAccademici++;
+
 
 		}
 	}

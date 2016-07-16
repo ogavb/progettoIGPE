@@ -1,7 +1,5 @@
 package gui.panels;
 
-
-
 import core.AzioneDomanda;
 import core.Giocatore;
 import javafx.animation.KeyFrame;
@@ -9,7 +7,6 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.HBox;
@@ -22,9 +19,12 @@ public class PaneDomande  extends Pane{
 	private VBox boxElementi;
 	private HBox boxRisposte;
 	private HBox boxDomanda;
+	private HBox boxRisultato;
 
 	private Label risposta1;
 	private Label risposta2;
+
+	private Label risultato;
 	private Label domanda;
 
 	private ProgressIndicator timer;
@@ -34,9 +34,11 @@ public class PaneDomande  extends Pane{
 	private AzioneDomanda azione;
 
 	private final double width = 500.0;
-
 	private final double height = 300.0;
 
+
+	private String frase1 = "Hai dato la risposta giusta!\nCrediti aggiornati!!!\nOra sei piu vicino alla laurea :(";
+	private String frase2 = "Perfetto hai dato la risposta sbagliata!\nContinua Cosi!";
 	public PaneDomande() {
 
 		this.setWidth(width);
@@ -85,9 +87,16 @@ public class PaneDomande  extends Pane{
 		risposta2.getStyleClass().add("testoLabel");
 		risposta2.prefWidthProperty().bind(boxRisposte.widthProperty());
 
+
+		boxRisultato = new HBox(20.0);
+		risultato = new Label("");
+		risultato.getStyleClass().add("risultato");
+		boxRisultato.getChildren().addAll(risultato);
+
+
 		boxDomanda.getChildren().addAll(domanda, timer);
 		boxRisposte.getChildren().addAll(risposta1,risposta2);
-		boxElementi.getChildren().addAll(boxDomanda,boxRisposte);
+		boxElementi.getChildren().addAll(boxDomanda,boxRisposte,risultato);
 
 		this.getChildren().add(boxElementi);
 		this.setPrefWidth(500);
@@ -109,25 +118,30 @@ public class PaneDomande  extends Pane{
 			if (azione.controllaEsitoEsame(risposta1.getText(), giocatore)) {
 		       risposta1.setStyle("-fx-background-color: green;");
 		       risposta2.setStyle("-fx-background-color: red;");
+		       risultato.setText(frase1);
 			}
 			else {
 				 risposta1.setStyle("-fx-background-color: red;");
 			     risposta2.setStyle("-fx-background-color: green;");
-				}
+			     risultato.setText(frase2);
+			}
 			animazione.stop();
 			risposta1.setDisable(true);
 			risposta2.setDisable(true);
+
 		});
 		//se rispondo la 2
 		risposta2.setOnMouseReleased(event -> {
 			if (azione.controllaEsitoEsame(risposta2.getText(), giocatore)) {
 			   risposta2.setStyle("-fx-background-color: green;");
 		       risposta1.setStyle("-fx-background-color: red;");
+		       risultato.setText(frase1);
 			}
 			else {
 				 risposta2.setStyle("-fx-background-color: red;");
 			     risposta1.setStyle("-fx-background-color: green;");
-				}
+			     risultato.setText(frase2);
+			}
 			animazione.stop();
 			risposta1.setDisable(true);
 			risposta2.setDisable(true);
@@ -138,10 +152,11 @@ public class PaneDomande  extends Pane{
 	public void resetta() {
 		risposta1.setDisable(false);
 		risposta2.setDisable(false);
-
-		 risposta2.setStyle("-fx-background-color: #0076a3;");
-	     risposta1.setStyle("-fx-background-color: #0076a3;");
+		risultato.setText("");
+		risposta2.setStyle("-fx-background-color: #0076a3;");
+	    risposta1.setStyle("-fx-background-color: #0076a3;");
 	}
+
 
 	public void avviaAnimazione() {
 		animazione.playFromStart();
