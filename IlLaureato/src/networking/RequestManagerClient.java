@@ -29,7 +29,7 @@ public class RequestManagerClient extends Thread{
 
 	private LockManager lockManager;
 
-	private GameManagerAstratta gm;
+	private GameManagerNetwork gm;
 	private String nomeConfigurazione;
 
 	protected static Lock lock;
@@ -436,6 +436,13 @@ public class RequestManagerClient extends Thread{
 
 					break;
 
+				}
+
+				case "10":{
+
+					gm.setYourRound(true);
+
+					break;
 				}
 
 
