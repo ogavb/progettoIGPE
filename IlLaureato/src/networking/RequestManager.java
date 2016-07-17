@@ -206,6 +206,7 @@ public class RequestManager extends Thread {
 		case 10:
 			//10##nomeGiocatore
 			requestIn.get(0).getKey().setNomeGiocatore(r[1]);
+			System.err.println("Connessione settata");
 			break;
 
 		case 11:

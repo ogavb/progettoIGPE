@@ -6,6 +6,7 @@ import core.Casella;
 import core.GameManagerAstratta;
 import core.GestoreTurni;
 import core.Giocatore;
+import core.Stato;
 import core.TavolaDiGioco;
 import gui.panels.OutputMediator;
 import javafx.collections.ObservableList;
@@ -102,7 +103,50 @@ public class GameManagerNetwork extends GameManagerAstratta {
 		this.setYourRound(false);
 		this.client.addRequest("13##"+gestore.getNextPlayer(client.getNomeGiocatore())+"##10");
 
-		return 0;
+		Giocatore corrente = gestore.next();
+	   	int anniAccademici = corrente.getAnniAccademici();
+
+	   	client.addRequest("12##11#"+String.valueOf(lancioCorrente));
+
+	   	OutputMediator.println(corrente.getNome() +" lancia i dadi : "+ corrente.lancia(lancioCorrente));
+//	   	setChanged();
+//	   	notifyObservers(new Stato(corrente, new Integer(1)));
+
+
+		//Dopo che il giocatore lancia i dadi la sua posizione viene aggiornata e vengono attivati gli effetti della casella dove si verrà a posizionare
+   		updatePosizioneGiocatore(corrente);
+   		//client.addRequest("12##12#"+String.valueOf(lancioCorrente));
+   		if(corrente.getAnniAccademici() > anniAccademici ){
+   			System.out.println("il giocatore "+corrente.getOrdineDiPartenza() + " ha "+corrente.getAnniAccademici());
+   			System.out.println("Anni accademici cambiati");
+   			setChanged();
+   			notifyObservers(new Stato(corrente,5));
+	   		}
+
+//	   	else{
+//	   		//OutputMediator.println( corrente.getNome() +" si deve muovere indietro di "+ corrente.getRisultatoDado() );
+//	   		updatePosizioneGiocatoreIndietro(corrente);
+//	   	}
+
+	  	//OutputMediator.println( corrente.getPos().getX() + "  " + corrente.getPos().getY() );
+	  	controllaCasella(corrente);
+
+		//I giocatori che raggiungono 180 crediti vengono eliminati dal gioco
+	  	if( corrente.getCrediti() >= 180 ){
+	  		OutputMediator.println("Il giocatore: "+ corrente.getNome() + " si è laureato!!._.\nQuindi verrà per sempre escluso dall'università!");
+	  		gestore.rimuovi(corrente);
+	  		numGiocatori--;
+	  		//TODO
+	  		//FUNZIONE che avvisa l'uscita del giocatore
+
+	  		//Verifico se ci sono altri giocatori
+	  		if(numGiocatori == 1){
+	  			return numGiocatori;
+	  		}
+	  	}
+
+		return numGiocatori;
+
 	}
 
 	@Override

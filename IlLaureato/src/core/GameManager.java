@@ -96,11 +96,8 @@ public class GameManager extends GameManagerAstratta{
 	   	int anniAccademici = corrente.getAnniAccademici();
 
 	   	OutputMediator.println(corrente.getNome() +" lancia i dadi : "+ corrente.lancia(lancioCorrente));
-	   	setChanged();
-	   	notifyObservers(new Stato(corrente, new Integer(1)));
-
 //	   	setChanged();
-//	   	notifyObservers(new Stato(4));
+//	   	notifyObservers(new Stato(corrente, new Integer(1)));
 
 		//Dopo che il giocatore lancia i dadi la sua posizione viene aggiornata e vengono attivati gli effetti della casella dove si verrà a posizionare
 	   	if(direzione){

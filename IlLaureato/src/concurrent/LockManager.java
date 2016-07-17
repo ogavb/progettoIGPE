@@ -29,6 +29,9 @@ public class LockManager {
 	private static Lock lockOtto;
 	private static Condition conditionOtto;
 
+	private static Lock lockTredici;
+	private static Condition conditionTredici;
+
 	private static Lock lockClose;
 	private static Condition conditionClose;
 
@@ -46,6 +49,7 @@ public class LockManager {
 	private static boolean inAttesaSei = true;
 	private static boolean inAttesaSette = true;
 	private static boolean inAttesaOtto = true;
+	private static boolean inAttesaTredici = true;
 	private static boolean inAttesaClose = true;
 	private static boolean inAttesaEndAll = true;
 	private static boolean inAttesaEndMatch = true;
@@ -78,6 +82,9 @@ public class LockManager {
 
 		lockClose = new ReentrantLock();
 		conditionClose = lockClose.newCondition();
+
+		lockTredici = new ReentrantLock();
+		conditionTredici = lockTredici.newCondition();
 
 		lockEndAll = new ReentrantLock();
 		conditionEndAll = lockEndAll.newCondition();
@@ -292,6 +299,32 @@ public class LockManager {
 		inAttesaOtto = false;
 		conditionOtto.signalAll();
 		lockOtto.unlock();
+
+	}
+
+	public void attendiTredici() throws InterruptedException{
+
+		lockTredici.lock();
+
+		while(inAttesaZero){
+			System.out.println("AttendoTredici");
+			conditionTredici.await();
+		}
+
+		System.out.println("RiprendoTredici");
+
+		inAttesaTredici = true;
+
+		lockTredici.unlock();
+
+	}
+
+	public void riprendiTredici(){
+
+		lockTredici.lock();
+		inAttesaTredici = false;
+		conditionTredici.signalAll();
+		lockTredici.unlock();
 
 	}
 

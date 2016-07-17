@@ -146,6 +146,7 @@ public class FinestraCreaOPartecipaPartita {
 
 				client.setNomeGiocatore(nomeGiocatore);
 				client.addRequest("3##"+nomeGiocatore);
+				client.addRequest("10##"+nomeGiocatore);
 
 				try {
 					lockManager.attendiTre();
@@ -210,6 +211,9 @@ public class FinestraCreaOPartecipaPartita {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+
+			client.setNomeGiocatore(nomeGiocatore);
+			client.addRequest("10##"+nomeGiocatore);
 
 			primaryStage = ((Stage)((Button)event.getSource()).getScene().getWindow());
 			FinestraMultiPlayer fm = new FinestraMultiPlayer(client,nomeGiocatore,rmc);

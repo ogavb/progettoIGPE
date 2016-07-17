@@ -224,6 +224,9 @@ public class SchermataTavolaDiGioco implements Observer {
 		stage.show();
 	}
 
+	public PannelloDado getPannelloDado(){
+		return this.pannelloDado;
+	}
 /*
  * Inizializzazione dei pannelli
  */

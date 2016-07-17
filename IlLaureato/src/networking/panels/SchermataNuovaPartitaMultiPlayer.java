@@ -451,6 +451,8 @@ public class SchermataNuovaPartitaMultiPlayer {
 						e1.printStackTrace();
 					}
 
+    				rmc.setGameManagerNetwork(gm);
+
     				gm.decidiOrdine();
 
     				for(Giocatore g :  gm.getGiocatori()){
@@ -472,7 +474,6 @@ public class SchermataNuovaPartitaMultiPlayer {
     				System.err.println("GIOCATORI: " + nomiGiocatori.toString());
 
     				client.addRequest("5##" + nomeConfigurazione + "/" + nomiGiocatori.toString() + "/" + numeroGiocatori);
-    				client.addRequest("13##"+giocatori[0].getNome()+"##10");
 
     				try {
     					lockManager.attendiCinque();
@@ -480,6 +481,10 @@ public class SchermataNuovaPartitaMultiPlayer {
     					// TODO Auto-generated catch block
     					e.printStackTrace();
     				}
+
+    				client.addRequest("13##"+giocatori[0].getNome()+"##10");
+
+
 
     			}
 			}

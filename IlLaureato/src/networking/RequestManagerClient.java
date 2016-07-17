@@ -27,6 +27,8 @@ public class RequestManagerClient extends Thread{
 
 	private SchermataNuovaPartitaMultiPlayer sm;
 
+	private SchermataTavolaDiGioco stg;
+
 	private LockManager lockManager;
 
 	private GameManagerNetwork gm;
@@ -54,6 +56,14 @@ public class RequestManagerClient extends Thread{
 
 		this.start();
 
+	}
+
+	public GameManagerNetwork getGameManagerNetwork(){
+		return this.gm;
+	}
+
+	public void setGameManagerNetwork(GameManagerAstratta gm){
+		this.gm = (GameManagerNetwork) gm;
 	}
 
 	public FinestraMultiPlayer getFinestraMultiPlayer(){
@@ -321,7 +331,7 @@ public class RequestManagerClient extends Thread{
 
 	    				try {
 	    					//((Node)event.getSource()).getScene().getWindow().hide();
-							new SchermataTavolaDiGioco(sm.getGameManager());
+							stg = new SchermataTavolaDiGioco(sm.getGameManager());
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -440,11 +450,24 @@ public class RequestManagerClient extends Thread{
 
 				case "10":{
 
-					gm.setYourRound(true);
+					((GameManagerNetwork) sm.getGameManager()).setYourRound(true);
 
 					break;
 				}
 
+				case "11":{
+
+					Platform.runLater(new Runnable() {
+
+						@Override
+						public void run() {
+							stg.getPannelloDado().animazione(Integer.parseInt(r[1]));
+						}
+					});
+
+					sm.getGameManager().getGestore().next();
+					break;
+				}
 
 				}
 
