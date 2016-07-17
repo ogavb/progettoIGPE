@@ -71,9 +71,8 @@ public class GameManagerAstratta extends Observable {
 
 	}
 
-	public int turnoSuccessivo(int numGiocatori,int lancioCorrente) {
+	public void turnoSuccessivo(int lancioCorrente) {
 		// TODO Auto-generated method stub
-		return 0;
 	}
 
 	public void finePartita() {

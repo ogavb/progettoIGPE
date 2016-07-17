@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import core.AzioneDomanda;
 import core.Casella;
+import core.GameManager;
 import core.GameManagerAstratta;
 import core.Giocatore;
 import core.Posizione;
@@ -36,9 +37,6 @@ public class PannelloTavola extends GridPane  implements PaneSwitcher{
 	private GameManagerAstratta gm;
 	private TavolaDiGioco tdg;
 
-	private String rispostaUtente;
-
-	private MyPane[][] board = new MyPane[4][10];
 
 	private HashMap< String, Image> mappa = new HashMap<String, Image>();
 
@@ -49,8 +47,6 @@ public class PannelloTavola extends GridPane  implements PaneSwitcher{
 	private ImageView iv5 = new ImageView(new Image("file:giocatori/red.gif"));
 	private ImageView iv6 = new ImageView(new Image("file:giocatori/yellow.gif"));
 
-	private ImageView ricevimento = new ImageView(new Image("file:giocatori/purple.gif"));
-
 	private ImageView n = null;
 
 	//TUTTI I PANNELLI PER FARE LO SWITCHPANE
@@ -59,10 +55,13 @@ public class PannelloTavola extends GridPane  implements PaneSwitcher{
 	private PaneDomande paneDomande;
 	private PaneRicevimento paneRicevimento;
 	private PaneCR paneCentroR;
+	private PaneCus paneCus;
 	private PaneMensa paneMensa;
+	private PaneBookCafe paneBookCafe;
 
 	private PathTransition pathTransition[];
 	private int numPathTransition = 0;
+
 
 
 	/*
@@ -70,6 +69,61 @@ public class PannelloTavola extends GridPane  implements PaneSwitcher{
    	 * Costruisce il singolo MyPane della tavola da gioco indicizzato dalla riga e dalla
 	 * colonna corrente e viene ritornato
 	 */
+
+	public PannelloTavola(GameManagerAstratta gm) throws SQLException {
+
+		super();
+
+		this.gm = gm;
+		tdg = gm.getTavolaDiGioco();
+		tdg.setNomeConfigurazione(gm, gm.getNomeConfigurazione());
+
+		riga = colonna = 0;
+
+		mappa.put("mensa", new Image("file:caselle/mensa.jpg"));
+		mappa.put("biblioteca", new Image("file:caselle/biblioteca.png"));
+		mappa.put("bookCafe", new Image("file:caselle/bookcafe.png"));
+		mappa.put("centroResidenziale", new Image("file:caselle/centro.jpg"));
+		mappa.put("cus", new Image("file:caselle/cus.jpg"));
+		mappa.put("esame", new Image("file:caselle/esame.png"));
+		mappa.put("ricevimento", new Image("file:caselle/ricevimentop.png"));
+		mappa.put("semplice", new Image("file:caselle/strada.png"));
+
+		setGridLinesVisible(true);
+//		setPrefSize(500, 200);
+//		setMaxSize(500, 200);
+
+		for (int i = 0; i < NUM_COLS; i++) {
+            ColumnConstraints colConst = new ColumnConstraints();
+            colConst.setPercentWidth(100.0 / NUM_COLS);
+            getColumnConstraints().add(colConst);
+        }
+        for (int i = 0; i < NUM_ROWS; i++) {
+            RowConstraints rowConst = new RowConstraints();
+            rowConst.setPercentHeight(100.0 / NUM_ROWS);
+            getRowConstraints().add(rowConst);
+        }
+
+        paneLogo = new PaneLogo();
+		paneBiblioteca = new PaneBiblioteca();
+		paneDomande = new PaneDomande((GameManager) gm);
+		paneRicevimento = new PaneRicevimento();
+		paneCentroR = new PaneCR();
+		paneMensa = new PaneMensa();
+		paneCus = new PaneCus();
+		paneBookCafe = new PaneBookCafe();
+
+        //disegno le cornici
+        disegnaCornici(NUM_COLS);
+
+        this.setPrefSize(880, 660);
+        this.setMaxSize(880,660);
+        this.setMinSize(880, 660);
+
+
+        this.pathTransition = new PathTransition[6];
+
+    }
 
 	public MyPane makePanel() {
 		String nomeCasella = tdg.getCasella(riga, colonna).toString();
@@ -372,31 +426,6 @@ public class PannelloTavola extends GridPane  implements PaneSwitcher{
 
 	}
 
-/*
-		MyPane mp = (MyPane)getNodeByRowColumnIndex(pnuova.getY(),pnuova.getX());
-
-		switch(g.getColor()){
-		case 0:
-			mp.getChildren().add(iv1);
-			break;
-
-		case 1:
-			mp.getChildren().add(iv2);
-		    break;
-		case 2:
-			mp.getChildren().add(iv3);
-			break;
-		case 3:
-			mp.getChildren().add(iv4);
-			break;
-		case 4:
-			mp.getChildren().add(iv5);
-			break;
-		case 5:
-			mp.getChildren().add(iv6);
-			break;
-			}
-*/
 
 	/*
 	 * Rimuove l'image view del giocatore g
@@ -575,58 +604,6 @@ public class PannelloTavola extends GridPane  implements PaneSwitcher{
 
 	}
 
-	private void stampaCoordinateBoard(){
-		board[3][9] = (MyPane)getNodeByRowColumnIndex(0,1);
-		board[3][8] = (MyPane)getNodeByRowColumnIndex(0,2);
-		board[3][7] = (MyPane)getNodeByRowColumnIndex(0,3);
-		board[3][6] = (MyPane)getNodeByRowColumnIndex(0,4);
-		board[3][5] = (MyPane)getNodeByRowColumnIndex(0,5);
-		board[3][4] = (MyPane)getNodeByRowColumnIndex(0,6);
-		board[3][3] = (MyPane)getNodeByRowColumnIndex(0,7);
-		board[3][2] = (MyPane)getNodeByRowColumnIndex(0,8);
-		board[3][1] = (MyPane)getNodeByRowColumnIndex(0,9);
-		board[3][0] = (MyPane)getNodeByRowColumnIndex(0,10);
-
-		board[2][9] = (MyPane)getNodeByRowColumnIndex(1,10);
-		board[2][8] = (MyPane)getNodeByRowColumnIndex(2,10);
-		board[2][7] = (MyPane)getNodeByRowColumnIndex(3,10);
-		board[2][6] = (MyPane)getNodeByRowColumnIndex(4,10);
-		board[2][5] = (MyPane)getNodeByRowColumnIndex(5,10);
-		board[2][4] = (MyPane)getNodeByRowColumnIndex(6,10);
-		board[2][3] = (MyPane)getNodeByRowColumnIndex(7,10);
-		board[2][2] = (MyPane)getNodeByRowColumnIndex(8,10);
-		board[2][1] = (MyPane)getNodeByRowColumnIndex(9,10);
-		board[2][0] = (MyPane)getNodeByRowColumnIndex(10,10);
-
-		board[1][9] = (MyPane)getNodeByRowColumnIndex(10,9);
-		board[1][8] = (MyPane)getNodeByRowColumnIndex(10,8);
-		board[1][7] = (MyPane)getNodeByRowColumnIndex(10,7);
-		board[1][6] = (MyPane)getNodeByRowColumnIndex(10,6);
-		board[1][5] = (MyPane)getNodeByRowColumnIndex(10,5);
-		board[1][4] = (MyPane)getNodeByRowColumnIndex(10,4);
-		board[1][3] = (MyPane)getNodeByRowColumnIndex(10,3);
-		board[1][2] = (MyPane)getNodeByRowColumnIndex(10,2);
-		board[1][1] = (MyPane)getNodeByRowColumnIndex(10,1);
-		board[1][0] = (MyPane)getNodeByRowColumnIndex(10,0);
-
-		board[0][9] = (MyPane)getNodeByRowColumnIndex(9,0);
-		board[0][8] = (MyPane)getNodeByRowColumnIndex(8,0);
-		board[0][7] = (MyPane)getNodeByRowColumnIndex(7,0);
-		board[0][6] = (MyPane)getNodeByRowColumnIndex(6,0);
-		board[0][5] = (MyPane)getNodeByRowColumnIndex(5,0);
-		board[0][4] = (MyPane)getNodeByRowColumnIndex(4,0);
-		board[0][3] = (MyPane)getNodeByRowColumnIndex(3,0);
-		board[0][2] = (MyPane)getNodeByRowColumnIndex(2,0);
-		board[0][1] = (MyPane)getNodeByRowColumnIndex(1,0);
-		board[0][0] = (MyPane)getNodeByRowColumnIndex(0,0);
-
-		int count = 40;
-		for(int i = 0; i < board.length; i++)
-	        	for(int j = 0; j < board[0].length; j++)
-	        		if(i==3) {}
-	        			//System.out.println("Casella " + count-- + " con coordinate " + board[i][j].getLayoutX() + " " + board[i][j].getLayoutY());
-
-	}
 
 	/*
 	 * Restituisce il MyPane indicizzato da row e column
@@ -677,59 +654,7 @@ public class PannelloTavola extends GridPane  implements PaneSwitcher{
 	/*
 	 * Costruisce la tavola da gioco
 	 */
-	public PannelloTavola(GameManagerAstratta gm) throws SQLException {
 
-		super();
-
-		this.gm = gm;
-		rispostaUtente = "";
-		tdg = gm.getTavolaDiGioco();
-		tdg.setNomeConfigurazione(gm, gm.getNomeConfigurazione());
-
-		riga = colonna = 0;
-
-		mappa.put("mensa", new Image("file:caselle/mensa.jpg"));
-		mappa.put("biblioteca", new Image("file:caselle/biblioteca.png"));
-		mappa.put("bookCafe", new Image("file:caselle/bookcafe.png"));
-		mappa.put("centroResidenziale", new Image("file:caselle/centro.jpg"));
-		mappa.put("cus", new Image("file:caselle/cus.jpg"));
-		mappa.put("esame", new Image("file:caselle/esame.png"));
-		mappa.put("ricevimento", new Image("file:caselle/ricevimento.png"));
-		mappa.put("semplice", new Image("file:caselle/strada.png"));
-
-		setGridLinesVisible(true);
-//		setPrefSize(500, 200);
-//		setMaxSize(500, 200);
-
-		for (int i = 0; i < NUM_COLS; i++) {
-            ColumnConstraints colConst = new ColumnConstraints();
-            colConst.setPercentWidth(100.0 / NUM_COLS);
-            getColumnConstraints().add(colConst);
-        }
-        for (int i = 0; i < NUM_ROWS; i++) {
-            RowConstraints rowConst = new RowConstraints();
-            rowConst.setPercentHeight(100.0 / NUM_ROWS);
-            getRowConstraints().add(rowConst);
-        }
-
-        paneLogo = new PaneLogo();
-		paneBiblioteca = new PaneBiblioteca();
-		paneDomande = new PaneDomande();
-		paneRicevimento = new PaneRicevimento();
-		paneCentroR = new PaneCR();
-		paneMensa = new PaneMensa();
-
-        //disegno le cornici
-        disegnaCornici(NUM_COLS);
-
-        this.setPrefSize(880, 660);
-        this.setMaxSize(880,660);
-        this.setMinSize(880, 660);
-
-
-        this.pathTransition = new PathTransition[6];
-
-    }
 
 	public int getNUM_COLS() {
 		return NUM_COLS;
@@ -806,13 +731,13 @@ public class PannelloTavola extends GridPane  implements PaneSwitcher{
 	@Override
 	public void cus() {
 		//TO-DO
-		SchermataTavolaDiGioco.switchTo(paneBiblioteca);
+		SchermataTavolaDiGioco.switchTo(paneCus);
 	}
 
 	@Override
 	public void bookCafe() {
 		//TO-DO
-		SchermataTavolaDiGioco.switchTo(paneBiblioteca);
+		SchermataTavolaDiGioco.switchTo(paneBookCafe);
 	}
 
 	@Override

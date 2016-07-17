@@ -98,7 +98,7 @@ public class GameManagerNetwork extends GameManagerAstratta {
 	}
 
 	@Override
-	public int turnoSuccessivo(int numGiocatori,int lancioCorrente) {
+	public int turnoSuccessivo(int lancioCorrente) {
 
 		this.setYourRound(false);
 		this.client.addRequest("13##"+gestore.getNextPlayer(client.getNomeGiocatore())+"##10");

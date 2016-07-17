@@ -1,20 +1,26 @@
 package gui.panels;
 
+
 import core.AzioneDomanda;
+import core.GameManager;
 import core.Giocatore;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 public class PaneDomande  extends Pane{
+
+	private final int NUMCREDITIPERLAUREARSI = 5;
 
 	private VBox boxElementi;
 	private HBox boxRisposte;
@@ -32,6 +38,7 @@ public class PaneDomande  extends Pane{
 
 	private Giocatore giocatore;
 	private AzioneDomanda azione;
+	private GameManager gm;
 
 	private final double width = 500.0;
 	private final double height = 300.0;
@@ -39,8 +46,9 @@ public class PaneDomande  extends Pane{
 
 	private String frase1 = "Hai dato la risposta giusta!\nCrediti aggiornati!!!\nOra sei piu vicino alla laurea :(";
 	private String frase2 = "Perfetto hai dato la risposta sbagliata!\nContinua Cosi!";
-	public PaneDomande() {
+	public PaneDomande(GameManager gm) {
 
+		this.gm = gm;
 		this.setWidth(width);
 		this.setHeight(height);
 
@@ -109,11 +117,15 @@ public class PaneDomande  extends Pane{
 
 	    animazione = new Timeline(initFrame,endFrame);
 
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("LAUREATO!!!!");
+		alert.setContentText("Ti Sei laureato!!\nQuindi verrai escluso dall'università!!\nVERGOGNA!");
+
 	    animazione.setOnFinished(event -> {
 			azione.controllaEsitoEsame("", giocatore);
 		});
 
-		//se rispondo la 1
+		//se rispondo la prima label
 		risposta1.setOnMouseReleased(event -> {
 			if (azione.controllaEsitoEsame(risposta1.getText(), giocatore)) {
 		       risposta1.setStyle("-fx-background-color: green;");
@@ -129,13 +141,20 @@ public class PaneDomande  extends Pane{
 			risposta1.setDisable(true);
 			risposta2.setDisable(true);
 
+			if ( controllaSeLaureato(giocatore) ) {
+	   		      alert.showAndWait();
+		       }
+
+
 		});
-		//se rispondo la 2
+		//se rispondo la seconda label
 		risposta2.setOnMouseReleased(event -> {
 			if (azione.controllaEsitoEsame(risposta2.getText(), giocatore)) {
 			   risposta2.setStyle("-fx-background-color: green;");
 		       risposta1.setStyle("-fx-background-color: red;");
 		       risultato.setText(frase1);
+
+
 			}
 			else {
 				 risposta2.setStyle("-fx-background-color: red;");
@@ -145,6 +164,11 @@ public class PaneDomande  extends Pane{
 			animazione.stop();
 			risposta1.setDisable(true);
 			risposta2.setDisable(true);
+
+			 if ( controllaSeLaureato(giocatore) ) {
+  			      alert.showAndWait();
+		       }
+
 		});
 	}
 
@@ -162,6 +186,14 @@ public class PaneDomande  extends Pane{
 		animazione.playFromStart();
 	}
 
+	private boolean controllaSeLaureato(Giocatore g ) {
+		if ( g.getCrediti() >= NUMCREDITIPERLAUREARSI) {
+			gm.getGestore().rimuovi(g);
+			return true;
+		}
+		return false;
+
+	}
 	public void setTestiLabel(AzioneDomanda a, Giocatore g) {
 		azione = a;
 		giocatore = g;

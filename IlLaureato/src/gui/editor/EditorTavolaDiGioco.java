@@ -111,22 +111,6 @@ public class EditorTavolaDiGioco extends TavolaGridPane{
 
 	}
 
-	/*private boolean controllaAlmenoQuattroEsami() {
-		Iterator<MyPaneTavola> it = lista.iterator();
-
-		int count = 0;
-
-		while(it.hasNext()){
-			MyPaneTavola mt = it.next();
-
-			if(mt.getNomeCasella().equals("Esame")){
-				count++;
-			}
-		}
-
-		return count >= 4;
-
-	}*/
 	private FlowPane addFlowPane() {
 	    FlowPane flow = new FlowPane();
 	    flow.setTranslateY(10);
@@ -142,7 +126,7 @@ public class EditorTavolaDiGioco extends TavolaGridPane{
 	    String immagineBookCafe = "file:caselle/bookcafe.png";
 	    String immagineSemplice = "file:caselle/strada.png";
 	    String immagineCentroR = "file:caselle/centro.jpg";
-	    String immagineRicevimento = "file:caselle/centro.jpg";
+	    String immagineRicevimento = "file:caselle/ricevimentop.png";
 
 	    MyPanePalette pages[] = new MyPanePalette[8];
 	    pages[0] = new MyPanePalette("Biblioteca", new Image(immagineBiblioteca));

@@ -16,7 +16,6 @@ public class GameManager extends GameManagerAstratta{
 
 	private TavolaDiGioco tdg;
 	private GestoreTurni gestore;
-	private boolean direzione = true;
 	private String nomeConfigurazione;
 
 	public GameManager(){}
@@ -24,16 +23,6 @@ public class GameManager extends GameManagerAstratta{
 
 	public String getNomeConfigurazione(){
 		return this.nomeConfigurazione;
-	}
-
-
-	public boolean getDirezione(){
-		return direzione;
-	}
-
-
-	public void setDirezione(boolean direzione){
-		this.direzione = direzione;
 	}
 
 
@@ -75,73 +64,35 @@ public class GameManager extends GameManagerAstratta{
 	}
 
 
-	public void start(){
-		OutputMediator.println("Inizio Partita!");
-		if(gestore.size() == 1) {
-			finePartita();
-		}
-	}
-
-	//Funzione che dovrà sostituire ordinaGiocatori del gestore turni in modo da controllollare
-	//il lancio dei dadi e lasciare quest'azione all'utente dall'interfaccia (eliminando il ciclo for)
-
 	public void decidiOrdine() {
 		gestore.ordinaGiocatori();
 	}
 
-	//Funzione deve essere chiamata solo dopo aver chiamato prima la funzione start()
 
-	public int turnoSuccessivo(int numGiocatori,int lancioCorrente){
+	public void turnoSuccessivo(int lancioCorrente){
 	   	Giocatore corrente = gestore.next();
-	   	int anniAccademici = corrente.getAnniAccademici();
-
+	   	int anniAccademiciPrecedentiAlTurno = corrente.getAnniAccademici();
 	   	OutputMediator.println(corrente.getNome() +" lancia i dadi : "+ corrente.lancia(lancioCorrente));
-//	   	setChanged();
-//	   	notifyObservers(new Stato(corrente, new Integer(1)));
 
-		//Dopo che il giocatore lancia i dadi la sua posizione viene aggiornata e vengono attivati gli effetti della casella dove si verrà a posizionare
-	   	if(direzione){
-	   		updatePosizioneGiocatore(corrente);
-	   		if(corrente.getAnniAccademici() > anniAccademici ){
-	   			System.out.println("il giocatore "+corrente.getOrdineDiPartenza() + " ha "+corrente.getAnniAccademici());
-	   			System.out.println("Anni accademici cambiati");
-	   			setChanged();
-	   			notifyObservers(new Stato(corrente,5));
-	   		}
+		//Dopo che il giocatore lancia i dadi la sua posizione viene aggiornata
+	   	//e vengono attivati gli effetti della casella dove si verrà a posizionare
+   		updatePosizioneGiocatore(corrente);
 
-	   	}
-	   	else{
-	   		//OutputMediator.println( corrente.getNome() +" si deve muovere indietro di "+ corrente.getRisultatoDado() );
-	   		updatePosizioneGiocatoreIndietro(corrente);
-	   	}
-
-	  	//OutputMediator.println( corrente.getPos().getX() + "  " + corrente.getPos().getY() );
+   		if(corrente.getAnniAccademici() > anniAccademiciPrecedentiAlTurno ){
+   			System.out.println("il giocatore "+corrente.getOrdineDiPartenza() + " ha "+corrente.getAnniAccademici());
+   			setChanged();
+   			notifyObservers(new Stato(corrente,5));
+   		}
 	  	controllaCasella(corrente);
 
-		//I giocatori che raggiungono 180 crediti vengono eliminati dal gioco
-	  	if( corrente.getCrediti() >= 180 ){
-	  		OutputMediator.println("Il giocatore: "+ corrente.getNome() + " si è laureato!!._.\nQuindi verrà per sempre escluso dall'università!");
-	  		gestore.rimuovi(corrente);
-	  		numGiocatori--;
-	  		//TODO
-	  		//FUNZIONE che avvisa l'uscita del giocatore
-
-	  		//Verifico se ci sono altri giocatori
-	  		if(numGiocatori == 1){
-	  			return numGiocatori;
-	  		}
-	  	}
-
-		return numGiocatori;
 	}
-
 
 	public void finePartita(){
 		//TODO
 		//FUNZIONE di fine gioco -> termina il gioco scrivendo in output il vincitore
-		OutputMediator.println("Fine partita!");
+		OutputMediator.println("FINE PARTITA!");
 		Giocatore vincitore = gestore.getVincitore();
-		OutputMediator.println("Il vincitore è: "+ vincitore.getNome() +" con "+ vincitore.getCrediti() +" crediti e con "+ vincitore.getAnniAccademici() +" anni accademici!");
+		OutputMediator.println("Il VINCITORE E': "+ vincitore.getNome() +" CON "+ vincitore.getCrediti() +" CREDITI E "+ vincitore.getAnniAccademici() +" ANNI ACCADEMICI!");
 	}
 
 	protected void controllaCasella( Giocatore corrente ){
@@ -158,36 +109,12 @@ public class GameManager extends GameManagerAstratta{
 		if( g.getRisultatoDado() >= tdg.getTavola()[0].length - g.getPos().getY() )
 			g.getPos().setX( ( g.getPos().getX() + 1 ) % tdg.getTavola().length );
 
-		g.getPos().setY( ( g.getPos().getY() + g.getRisultatoDado() )
-								  % tdg.getTavola()[0].length );
+		g.getPos().setY( ( g.getPos().getY() + g.getRisultatoDado() ) % tdg.getTavola()[0].length );
 
-
+		//questo cambiamento nel gestore fa scattare l'evento di movimento pedina
 		gestore.getGiocatori().set(g.getOrdineDiPartenza(), g);
 
 		OutputMediator.println( "A: "+ g.getPos().getX() + "  " + g.getPos().getY() );
-	}
-
-	protected void updatePosizioneGiocatoreIndietro( Giocatore g ){
-
-		OutputMediator.println( "Si sposta da: "+ g.getPos().getX() + "  " + g.getPos().getY() );
-
-		if ( g.getRisultatoDado() > g.getPos().getY() )
-		{
-	       if ( g.getPos().getX() > 0 )  // se non passo dal via ( al contrario )
-				 g.getPos().setX(g.getPos().getX() -1 );
-		   else
-		   {
-		      g.getPos().setX(tdg.getTavola().length -1);
-		   }
-	       g.getPos().setY(tdg.getTavola()[0].length - ( g.getRisultatoDado() - g.getPos().getY() ) );
-		}
-	    else
-	    	g.getPos().setY( g.getPos().getY() - g.getRisultatoDado() ) ;
-
-		gestore.getGiocatori().set(g.getOrdineDiPartenza(), g);
-
-		OutputMediator.println( "A: "+ g.getPos().getX() + "  " + g.getPos().getY() );
-
 	}
 
 

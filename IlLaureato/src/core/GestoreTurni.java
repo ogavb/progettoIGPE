@@ -19,8 +19,10 @@ public class GestoreTurni extends Observable implements Serializable{
 	private ObservableList < Giocatore > giocatori;
 	private List < Integer > turni;
 	private int numGiocatori;
+
 	//Indice del giocatore a cui tocca lanciare i dadi
 	private int giocatoreAttuale;
+
 	private boolean statoIniziale;
 	private Giocatore[] players;
 	private int count;
@@ -38,15 +40,15 @@ public class GestoreTurni extends Observable implements Serializable{
 				c.next();
 				if(!statoIniziale){
 					if (c.wasReplaced()){
+						Giocatore spostato = c.getRemoved().get(0);
 						setChanged();
-						notifyObservers(new Stato(c.getRemoved().get(0), new Integer(2)));
-						//OutputMediator.aggiornaPosizioneGiocatore(c.getRemoved().get(0));
-						System.out.println(c.getRemoved().get(0));
+						notifyObservers(new Stato(spostato, new Integer(2)));
+						System.out.println(spostato);
 					}
 					else if(c.wasRemoved()&&controlla){
+						Giocatore rimosso = c.getRemoved().get(0);
 						setChanged();
-						notifyObservers(new Stato(c.getRemoved().get(0), new Integer(3)));
-						//OutputMediator.rimuoviGiocatore(c.getRemoved().get(0));
+						notifyObservers(new Stato(rimosso, new Integer(3)));
 					}
 				}
 			}
@@ -55,21 +57,15 @@ public class GestoreTurni extends Observable implements Serializable{
 
 		this.count = 0;
 		this.controlla = true;
-
+		this.numGiocatori = numGiocatori;
 		this.players = players;
-		//players = new Giocatore[numGiocatori];
-		//for( int i = 0; i < nomiGiocatori.length; i++ )
-			//players[i] = new Giocatore( nomiGiocatori[i] );
 
 		//Inizializzo l'arrayList dei turni
 		this.turni = new ArrayList < Integer >();
 		for( int i = 0; i < players.length; i++ ){
 			this.turni.add( new Integer(0));
 		}
-		this.numGiocatori = numGiocatori;
-
-		//ordinaGiocatori();
-		giocatoreAttuale = players.length - 1;
+		this.giocatoreAttuale = players.length -1;
 	}
 
 	public Giocatore next(){
@@ -87,11 +83,11 @@ public class GestoreTurni extends Observable implements Serializable{
 			}
 			//Se il giocatore deve scontare penalità, passa il turno e ...
 			else{
+				//qui il giocatore sconta i turni di penalità
 				turni.set( giocatoreAttuale, turni.get( giocatoreAttuale ) - 1 );
-
 				OutputMediator.println(giocatori.get(giocatoreAttuale).getNome() +", sta fermo per altri "+ turni.get(giocatoreAttuale) + " turni!\n");
 			}
-		// ... il ciclo while si ripete finché non trova il giocatore che ha il permesso di lanciare i dadi
+		// il ciclo while si ripete finché non trova il giocatore che ha il permesso di lanciare i dadi
 		}
 	}
 
@@ -110,8 +106,6 @@ public class GestoreTurni extends Observable implements Serializable{
 				trovato = true;
 			}
 		}
-
-
 		if(!trovato){
 			System.err.println("giocatore non trovato GestoreTurni");
 		}
@@ -127,11 +121,10 @@ public class GestoreTurni extends Observable implements Serializable{
 	}
 
 	public int size(){
-
 		return this.numGiocatori;
-
 	}
 
+	//FUNZIONE UTILE PER IL GIOCO IN RETE
 	public void setOrdinaGiocatori(Giocatore[] g){
 
 		for(int i = 0; i < g.length; i++){
@@ -156,9 +149,7 @@ public class GestoreTurni extends Observable implements Serializable{
 		while(ig.hasNext()){
 			this.giocatori.add(ig.next());
 		}
-
 		controlla = true;
-
 	}
 
 	public List<Integer> getTurni(){
@@ -195,23 +186,25 @@ public class GestoreTurni extends Observable implements Serializable{
 		for(int i = g.getOrdineDiPartenza()+1; i < giocatori.size(); i++){
   			giocatori.get(i).setOrdineDiPartenza(giocatori.get(i).getOrdineDiPartenza()-1);
   		}
-
 		giocatori.remove(g);
-
 		giocatoreAttuale--;
+
+		if(giocatori.size() == 1 ) {
+			System.err.println("");
+			setChanged();
+			System.err.println(this.getVincitore());
+			notifyObservers(new Stato(this.getVincitore(),4));
+		}
 	}
 
 	public void ordinaGiocatori(){
 
-		System.err.println("players.length " + players.length);
 		for( int j = 0; j < players.length; j++ ){
-
 			count++;
 			players[count-1].lanciaPerOrdine();
 			this.giocatori.add( players[count-1] );
 
 		}
-
 		if( count == this.numGiocatori ){
 			Collections.sort( giocatori );
 
@@ -223,13 +216,12 @@ public class GestoreTurni extends Observable implements Serializable{
 				cont++;
 			}
 		}
-
 	}
 
 	//Funzione che modifica i turni che il giocatore deve aspettare
 	public void modificaTurni( Giocatore g, int numTurni ){
-
 		turni.set( giocatori.indexOf(g), turni.get(giocatori.indexOf(g)) + numTurni );
 	}
+
 
 }

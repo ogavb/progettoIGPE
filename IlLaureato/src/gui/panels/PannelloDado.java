@@ -22,7 +22,6 @@ public class PannelloDado extends GridPane {
 	private Image imgDadoUno;
 	private ImageView imageViewUno;
 
-	private int numGiocatori;
 	private static String primo;
 
 	private DadiListener eventoDado;
@@ -31,7 +30,6 @@ public class PannelloDado extends GridPane {
 	public PannelloDado(Integer i1,GameManagerAstratta gm) {
 
 		this.gm = gm;
-		numGiocatori = 0;
 
 		if (i1 != 0) primo = i1.toString(); else primo = "roll";
 
@@ -56,9 +54,6 @@ public class PannelloDado extends GridPane {
 	}
 
 
-	void setNumGiocatori(int numG){
-		numGiocatori = numG;
-	}
 
 	void setPrimo(int risultato) {
 		imgDadoUno = new Image("file:dadi/" + risultato + ".gif");
@@ -68,10 +63,12 @@ public class PannelloDado extends GridPane {
 		this.getChildren().clear();
 		add(imageViewUno, 1, 0);
 	}
+	public void rimuoviListener (){
+		imageViewUno.removeEventHandler(MouseEvent.MOUSE_RELEASED, eventoDado);
+	}
 
 	public void animazione(int lancioCorrente){
 
-		if(numGiocatori != 1 && numGiocatori != 0){
 
 			setPrimo(( int )( ( Math.random() * 6 ) + 1 ));
 			RotateTransition rt1 = new RotateTransition(Duration.millis(60), imageViewUno);
@@ -168,18 +165,15 @@ public class PannelloDado extends GridPane {
 
 														@Override
 														public void handle(ActionEvent event) {
-
 															setPrimo(lancioCorrente);
-
+															gm.turnoSuccessivo(lancioCorrente);
 														}
 													});
 
 												}
 											});
-
 										}
 									});
-
 								}
 							});
 
@@ -192,7 +186,6 @@ public class PannelloDado extends GridPane {
 
 		}
 
-	}
 
 	private class DadiListener implements EventHandler<MouseEvent>{
 
@@ -202,20 +195,17 @@ public class PannelloDado extends GridPane {
 			if(gm instanceof GameManagerNetwork && ((GameManagerNetwork)gm).isYourRound()){
 				System.err.println("PUOI TIRARE IL DADO");
 				int lancioCorrente = Dado.lanciaDadi();
-
 				animazione(lancioCorrente);
-				numGiocatori = gm.turnoSuccessivo(numGiocatori, lancioCorrente);
-				if(numGiocatori==1)
-					gm.finePartita();
 			}
 
 			else if(gm instanceof GameManager){
+				System.err.println("ISTANZA DI GAME MANAGER NORMALE");
+				//qui stabliamo il random per il prossimo giocatore
 				int lancioCorrente = Dado.lanciaDadi();
-
+				//parte l'animazione del dado
+				//e dopo gestisce il turno del giocatore
+				//con una chiamata al metodo gm.turnosuccessivo
 				animazione(lancioCorrente);
-				numGiocatori = gm.turnoSuccessivo(numGiocatori,lancioCorrente);
-				if(numGiocatori == 1)
-					gm.finePartita();
 			}
 		}
 
