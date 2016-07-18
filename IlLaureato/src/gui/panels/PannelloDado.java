@@ -195,7 +195,6 @@ public class PannelloDado extends GridPane {
 
 		@Override
 		public void handle(MouseEvent event) {
-			System.err.println("is your round è : "+((GameManagerNetwork)gm).isYourRound());
 			if(gm instanceof GameManagerNetwork && ((GameManagerNetwork)gm).isYourRound()){
 				System.err.println("PUOI TIRARE IL DADO");
 				int lancioCorrente = Dado.lanciaDadi();
