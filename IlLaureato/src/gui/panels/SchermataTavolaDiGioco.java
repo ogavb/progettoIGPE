@@ -242,7 +242,6 @@ public class SchermataTavolaDiGioco implements Observer {
 
 		initPannelloTextArea();
 		pannelloDado = new PannelloDado(0,gm);
-		pannelloDado.setNumGiocatori(gm.getNumeroGiocatori());
 
 		pannelloComando.setCenter(pannelloTextArea);
 		pannelloComando.setBottom(pannelloDado);
@@ -452,6 +451,13 @@ public class SchermataTavolaDiGioco implements Observer {
 			pannelloTavola.rimuoviGiocatore(ogg.getGiocatore());
 			break;
 
+		case 4:
+			System.out.println("entrato nel caso 4");
+			pannelloDado.rimuoviListener();
+			group.getChildren().clear();
+			PaneFinePartita p = new PaneFinePartita(ogg.getGiocatore());
+			switchTo(p);
+			break;
 		case 5:
 			mostraStatistiche(statistiche[ogg.getGiocatore().getOrdineDiPartenza()], ogg.getGiocatore(), ogg.getGiocatore().getCrediti(),  ogg.getGiocatore().getAnniAccademici());
 			break;

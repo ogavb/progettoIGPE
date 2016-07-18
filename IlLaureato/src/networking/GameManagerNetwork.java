@@ -104,7 +104,7 @@ public class GameManagerNetwork extends GameManagerAstratta {
 	}
 
 	@Override
-	public int turnoSuccessivo(int numGiocatori,int lancioCorrente) {
+	public int turnoSuccessivo(int lancioCorrente) {
 
 		Giocatore corrente = gestore.next();
 	   	int anniAccademici = corrente.getAnniAccademici();

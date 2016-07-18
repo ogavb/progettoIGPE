@@ -31,7 +31,7 @@ public class TavolaDiGioco {
 				switch(parola){
 
 				case "Biblioteca":
-					this.tavola[i][j] = new CasellaBiblioteca(new AzioneMovimento(gm, true),"biblioteca");
+					this.tavola[i][j] = new CasellaBiblioteca(new AzioneRilanciaDado(gm),"biblioteca");
 					break;
 
 				case "BookCafe":
@@ -39,7 +39,7 @@ public class TavolaDiGioco {
 					break;
 
 				case "CentroResidenziale":
-					this.tavola[i][j] = new CasellaCentroResidenziale(new AzioneFermaTurno(gm, 2),"centroResidenziale");
+					this.tavola[i][j] = new CasellaCentroResidenziale(new AzioneFermaTurno(gm, 3),"centroResidenziale");
 					break;
 
 				case "Cus":
