@@ -3,6 +3,7 @@ package gui.panels;
 
 import core.AzioneDomanda;
 import core.GameManager;
+import core.GameManagerAstratta;
 import core.Giocatore;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -38,7 +39,7 @@ public class PaneDomande  extends Pane{
 
 	private Giocatore giocatore;
 	private AzioneDomanda azione;
-	private GameManager gm;
+	private GameManagerAstratta gm;
 
 	private final double width = 500.0;
 	private final double height = 300.0;
@@ -46,7 +47,7 @@ public class PaneDomande  extends Pane{
 
 	private String frase1 = "Hai dato la risposta giusta!\nCrediti aggiornati!!!\nOra sei piu vicino alla laurea :(";
 	private String frase2 = "Perfetto hai dato la risposta sbagliata!\nContinua Cosi!";
-	public PaneDomande(GameManager gm) {
+	public PaneDomande(GameManagerAstratta gm) {
 
 		this.gm = gm;
 		this.setWidth(width);

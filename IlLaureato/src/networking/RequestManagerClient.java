@@ -464,11 +464,11 @@ public class RequestManagerClient extends Thread{
 						@Override
 						public void run() {
 							//Richiesta animazione dado
-							stg.getPannelloDado().animazione(Integer.parseInt(r[1]));
+							stg.getPannelloDado().animazione(Integer.parseInt(r[1]),false);
 						}
 					});
 
-					((GameManagerNetwork) sm.getGameManager()).getGestore().next();
+					//((GameManagerNetwork) sm.getGameManager()).getGestore().next();
 
 					break;
 				}

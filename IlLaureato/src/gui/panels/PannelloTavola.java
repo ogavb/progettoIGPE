@@ -106,7 +106,7 @@ public class PannelloTavola extends GridPane  implements PaneSwitcher{
 
         paneLogo = new PaneLogo();
 		paneBiblioteca = new PaneBiblioteca();
-		paneDomande = new PaneDomande((GameManager) gm);
+		paneDomande = new PaneDomande(gm);
 		paneRicevimento = new PaneRicevimento();
 		paneCentroR = new PaneCR();
 		paneMensa = new PaneMensa();
