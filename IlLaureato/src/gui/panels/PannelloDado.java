@@ -1,14 +1,9 @@
 package gui.panels;
 
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
 import core.Dado;
 import core.GameManager;
 import core.GameManagerAstratta;
 import javafx.animation.RotateTransition;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
@@ -200,7 +195,7 @@ public class PannelloDado extends GridPane {
 
 		@Override
 		public void handle(MouseEvent event) {
-
+			System.err.println("is your round è : "+((GameManagerNetwork)gm).isYourRound());
 			if(gm instanceof GameManagerNetwork && ((GameManagerNetwork)gm).isYourRound()){
 				System.err.println("PUOI TIRARE IL DADO");
 				int lancioCorrente = Dado.lanciaDadi();

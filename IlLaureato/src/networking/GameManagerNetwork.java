@@ -118,11 +118,10 @@ public class GameManagerNetwork extends GameManagerAstratta {
            //corrente.lancia setta il g.getRisultatoDado()
            OutputMediator.println(corrente.getNome() +" lancia i dadi : "+ corrente.lancia(lancioCorrente));
 
-        //Dopo che il giocatore lancia i dadi la sua posizione
+           //Dopo che il giocatore lancia i dadi la sua posizione
            // viene aggiornata e vengono attivati gli effetti
            //della casella dove si verrà a posizionare
            updatePosizioneGiocatore(corrente);
-           //client.addRequest("12##12#"+corrente.toString());
 
            if(corrente.getAnniAccademici() > anniAccademici ){
                System.out.println("il giocatore "+corrente.getOrdineDiPartenza() + " ha "+corrente.getAnniAccademici());
@@ -248,6 +247,7 @@ public class GameManagerNetwork extends GameManagerAstratta {
     }
 
     public void setYourRound(boolean b){
+    	System.err.println("setto turno : "+b);
         this.isYourRound = b;
     }
 
