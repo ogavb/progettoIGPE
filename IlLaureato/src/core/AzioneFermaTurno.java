@@ -1,5 +1,7 @@
 package core;
 
+import networking.GameManagerNetwork;
+
 public class AzioneFermaTurno extends AzioneAstratta {
 
 	private int numTurni;
@@ -14,6 +16,8 @@ public class AzioneFermaTurno extends AzioneAstratta {
 	public void esegui( Giocatore g ) {
 
 		gm.getGestore().modificaTurni( g, numTurni );
+		if( gm instanceof GameManagerNetwork)
+			((GameManagerNetwork)gm).setYourRound(false);
 
 	}
 
