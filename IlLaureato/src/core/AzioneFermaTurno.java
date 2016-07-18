@@ -16,7 +16,7 @@ public class AzioneFermaTurno extends AzioneAstratta {
 	public void esegui( Giocatore g ) {
 
 		gm.getGestore().modificaTurni( g, numTurni );
-		if( gm instanceof GameManagerNetwork)
+		if( gm instanceof GameManagerNetwork && !((GameManagerNetwork)gm).isRequestActive())
 			((GameManagerNetwork)gm).setYourRound(false);
 
 	}

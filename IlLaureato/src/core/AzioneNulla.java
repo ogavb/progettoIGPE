@@ -10,7 +10,7 @@ public class AzioneNulla extends AzioneAstratta {
 	}
 
 	public void esegui( Giocatore g ) {
-		if( gm instanceof GameManagerNetwork)
+		if( gm instanceof GameManagerNetwork && !((GameManagerNetwork)gm).isRequestActive())
 			((GameManagerNetwork)gm).setYourRound(false);
 	}
 

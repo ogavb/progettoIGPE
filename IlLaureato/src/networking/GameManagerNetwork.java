@@ -3,6 +3,8 @@ package networking;
 import java.sql.SQLException;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import com.sun.javafx.collections.SetAdapterChange;
+
 import core.Casella;
 import core.GameManagerAstratta;
 import core.GestoreTurni;
@@ -19,8 +21,17 @@ public class GameManagerNetwork extends GameManagerAstratta {
     private boolean direzione = true;
     private String nomeConfigurazione;
     private boolean isYourRound = false;
+    private boolean requestActive = false;
 
-    private Client client;
+    public boolean isRequestActive() {
+		return requestActive;
+	}
+
+	public void setRequestActive(boolean requestActive) {
+		this.requestActive = requestActive;
+	}
+
+	private Client client;
 
     public GameManagerNetwork(){}
 
@@ -146,6 +157,7 @@ public class GameManagerNetwork extends GameManagerAstratta {
                }
           //OutputMediator.println( corrente.getPos().getX() + "  " + corrente.getPos().getY() );
           controllaCasella(corrente);
+          setRequestActive(false);
     }
 
     @Override
