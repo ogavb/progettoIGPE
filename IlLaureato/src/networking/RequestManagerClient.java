@@ -455,6 +455,7 @@ public class RequestManagerClient extends Thread{
 					System.err.println("CAMBIO TURNO");
 
 					((GameManagerNetwork) sm.getGameManager()).setYourRound(true);
+					System.err.println("TEST "+((GameManagerNetwork) sm.getGameManager()).isYourRound());
 
 					break;
 				}

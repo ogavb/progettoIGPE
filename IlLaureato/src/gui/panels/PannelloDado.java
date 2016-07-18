@@ -171,11 +171,14 @@ public class PannelloDado extends GridPane {
 														@Override
 														public void handle(ActionEvent event) {
 															setPrimo(lancioCorrente);
-															if(flag)
+															if(flag){
 															   gm.turnoSuccessivo(lancioCorrente);
-															else
+															   System.err.println("1 CASO");
+															}
+															else{
 															   ((GameManagerNetwork )gm).turnoSuccessivoDiRichiesta(lancioCorrente);
-
+																System.err.println("2 CASO");
+															}
 															}
 														});
 
@@ -200,6 +203,8 @@ public class PannelloDado extends GridPane {
 
 		@Override
 		public void handle(MouseEvent event) {
+
+			System.err.println("HANDLE " + ((GameManagerNetwork)gm).isYourRound());
 
 			if(gm instanceof GameManagerNetwork && ((GameManagerNetwork)gm).isYourRound()){
 				System.err.println("PUOI TIRARE IL DADO");

@@ -98,6 +98,8 @@ public class GameManagerNetwork extends GameManagerAstratta {
     @Override
     public void turnoSuccessivo(int lancioCorrente) {
 
+    	System.err.println("SONO ENTRATO IN TURNO SUCCESSIVO");
+
         Giocatore corrente = gestore.next();
            int anniAccademici = corrente.getAnniAccademici();
 
@@ -236,6 +238,7 @@ public class GameManagerNetwork extends GameManagerAstratta {
     }
 
     public void setYourRound(boolean b){
+    	System.err.println("SET YOUR ROUND " + b);
         this.isYourRound = b;
     }
 
