@@ -29,6 +29,7 @@ public class MainController extends Pane implements Initializable {
 	final private String IMG_EXTENTION = ".png";
 
 	private Stage stage;
+	private Stage fasullo;
     private Scene scene;
 
 	@FXML
