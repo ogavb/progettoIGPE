@@ -72,7 +72,7 @@ public class PannelloDado extends GridPane {
 		imageViewUno.removeEventHandler(MouseEvent.MOUSE_RELEASED, eventoDado);
 	}
 
-	public void animazione(int lancioCorrente){
+	public void animazione(int lancioCorrente,boolean flag){
 
 
 			setPrimo(( int )( ( Math.random() * 6 ) + 1 ));
@@ -171,9 +171,13 @@ public class PannelloDado extends GridPane {
 														@Override
 														public void handle(ActionEvent event) {
 															setPrimo(lancioCorrente);
-															gm.turnoSuccessivo(lancioCorrente);
-														}
-													});
+															if(flag)
+															   gm.turnoSuccessivo(lancioCorrente);
+															else
+															   ((GameManagerNetwork )gm).turnoSuccessivoDiRichiesta(lancioCorrente);
+
+															}
+														});
 
 												}
 											});
@@ -200,7 +204,7 @@ public class PannelloDado extends GridPane {
 			if(gm instanceof GameManagerNetwork && ((GameManagerNetwork)gm).isYourRound()){
 				System.err.println("PUOI TIRARE IL DADO");
 				int lancioCorrente = Dado.lanciaDadi();
-				animazione(lancioCorrente);
+				animazione(lancioCorrente,true);
 			}
 
 			else if(gm instanceof GameManager){
@@ -210,7 +214,7 @@ public class PannelloDado extends GridPane {
 				//parte l'animazione del dado
 				//e dopo gestisce il turno del giocatore
 				//con una chiamata al metodo gm.turnosuccessivo
-				animazione(lancioCorrente);
+				animazione(lancioCorrente, true);
 			}
 		}
 
