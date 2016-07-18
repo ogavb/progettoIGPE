@@ -451,7 +451,6 @@ public class RequestManagerClient extends Thread{
 				}
 
 				case "10":{
-
 					((GameManagerNetwork) sm.getGameManager()).setYourRound(true);
 
 					break;
@@ -464,6 +463,7 @@ public class RequestManagerClient extends Thread{
 						@Override
 						public void run() {
 							//Richiesta animazione dado
+							((GameManagerNetwork) sm.getGameManager()).setRequestActive(true);
 							stg.getPannelloDado().animazione(Integer.parseInt(r[1]),false);
 						}
 					});

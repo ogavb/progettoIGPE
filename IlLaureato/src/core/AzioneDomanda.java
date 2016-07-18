@@ -63,7 +63,7 @@ public class AzioneDomanda extends AzioneAstratta {
 
 		PrelevatoreDomanda database = new PrelevatoreDomanda(this);
 		database.query();
-		if( gm instanceof GameManagerNetwork)
+		if( gm instanceof GameManagerNetwork && !((GameManagerNetwork)gm).isRequestActive())
 			((GameManagerNetwork)gm).setYourRound(false);
 	}
 
