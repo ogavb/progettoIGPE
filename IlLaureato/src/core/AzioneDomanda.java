@@ -3,6 +3,7 @@ package core;
 import gui.panels.OutputMediator;
 import jdbc.PrelevatoreDomanda;
 import model.Risposta;
+import networking.GameManagerNetwork;
 
 public class AzioneDomanda extends AzioneAstratta {
 
@@ -62,6 +63,8 @@ public class AzioneDomanda extends AzioneAstratta {
 
 		PrelevatoreDomanda database = new PrelevatoreDomanda(this);
 		database.query();
+		if( gm instanceof GameManagerNetwork)
+			((GameManagerNetwork)gm).setYourRound(false);
 	}
 
 	public boolean controllaEsitoEsame( String risposta, Giocatore g ) {

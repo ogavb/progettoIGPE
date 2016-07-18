@@ -1,5 +1,7 @@
 package core;
 
+import networking.GameManagerNetwork;
+
 public class AzioneNulla extends AzioneAstratta {
 
 	public AzioneNulla(GameManagerAstratta gm) {
@@ -8,6 +10,8 @@ public class AzioneNulla extends AzioneAstratta {
 	}
 
 	public void esegui( Giocatore g ) {
+		if( gm instanceof GameManagerNetwork)
+			((GameManagerNetwork)gm).setYourRound(false);
 	}
 
 }
