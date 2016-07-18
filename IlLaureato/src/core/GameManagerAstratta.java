@@ -55,6 +55,10 @@ public class GameManagerAstratta extends Observable {
 
 	}
 
+	public Client getClient(){
+		return null;
+	}
+
 	public GameManagerAstratta init(Giocatore[] nomiGiocatori, int numGiocatori, String nomeConfigurazione)
 			throws SQLException {
 		// TODO Auto-generated method stub

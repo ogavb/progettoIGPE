@@ -1,9 +1,14 @@
 package gui.panels;
 
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 import core.Dado;
 import core.GameManager;
 import core.GameManagerAstratta;
 import javafx.animation.RotateTransition;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
@@ -170,7 +175,15 @@ public class PannelloDado extends GridPane {
 														public void handle(ActionEvent event) {
 
 															setPrimo(lancioCorrente);
-
+															if((gm instanceof GameManagerNetwork && ((GameManagerNetwork)gm).isYourRound()))
+															{
+															   //dentro turno successivo c'è la richiesta di avvio animazione
+															   numGiocatori = gm.turnoSuccessivo(numGiocatori,lancioCorrente);
+															   //richiesta di settare is yourRound a true a quel client
+															   gm.getClient().addRequest("13##"+gm.getGestore().getNextPlayer(gm.getClient().getNomeGiocatore())+"##10");
+															   if(numGiocatori == 1)
+															      gm.finePartita();
+															}
 														}
 													});
 
@@ -202,20 +215,12 @@ public class PannelloDado extends GridPane {
 			if(gm instanceof GameManagerNetwork && ((GameManagerNetwork)gm).isYourRound()){
 				System.err.println("PUOI TIRARE IL DADO");
 				int lancioCorrente = Dado.lanciaDadi();
-
 				animazione(lancioCorrente);
-				numGiocatori = gm.turnoSuccessivo(numGiocatori, lancioCorrente);
-				if(numGiocatori==1)
-					gm.finePartita();
 			}
 
 			else if(gm instanceof GameManager){
 				int lancioCorrente = Dado.lanciaDadi();
-
 				animazione(lancioCorrente);
-				numGiocatori = gm.turnoSuccessivo(numGiocatori,lancioCorrente);
-				if(numGiocatori == 1)
-					gm.finePartita();
 			}
 		}
 

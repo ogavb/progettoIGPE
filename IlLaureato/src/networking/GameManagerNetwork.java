@@ -1,6 +1,7 @@
 package networking;
 
 import java.sql.SQLException;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import core.Casella;
 import core.GameManagerAstratta;
@@ -25,6 +26,10 @@ public class GameManagerNetwork extends GameManagerAstratta {
 
 	public void setClient(Client client){
 		this.client = client;
+	}
+
+	public Client getClient(){
+		return this.client;
 	}
 
 	@Override
@@ -67,7 +72,8 @@ public class GameManagerNetwork extends GameManagerAstratta {
 
 	@Override
 	public void notificaAlgiocatore(int azione, Giocatore g) {
-
+		setChanged();
+		notifyObservers(new Stato(g,azione));
 	}
 
 	public void setOrdinaGiocatori(Giocatore[] g){
@@ -100,22 +106,24 @@ public class GameManagerNetwork extends GameManagerAstratta {
 	@Override
 	public int turnoSuccessivo(int numGiocatori,int lancioCorrente) {
 
-		this.setYourRound(false);
-		this.client.addRequest("13##"+gestore.getNextPlayer(client.getNomeGiocatore())+"##10");
-
 		Giocatore corrente = gestore.next();
 	   	int anniAccademici = corrente.getAnniAccademici();
 
+	   	//richiesta di animazione agli altri client
 	   	client.addRequest("12##11#"+String.valueOf(lancioCorrente));
 
+	   	//corrente.lancia setta il g.getRisultatoDado()
 	   	OutputMediator.println(corrente.getNome() +" lancia i dadi : "+ corrente.lancia(lancioCorrente));
 //	   	setChanged();
 //	   	notifyObservers(new Stato(corrente, new Integer(1)));
 
 
-		//Dopo che il giocatore lancia i dadi la sua posizione viene aggiornata e vengono attivati gli effetti della casella dove si verrà a posizionare
+		//Dopo che il giocatore lancia i dadi la sua posizione
+	   	// viene aggiornata e vengono attivati gli effetti
+	   	//della casella dove si verrà a posizionare
    		updatePosizioneGiocatore(corrente);
-   		//client.addRequest("12##12#"+String.valueOf(lancioCorrente));
+   		client.addRequest("12##12#"+corrente.toString());
+
    		if(corrente.getAnniAccademici() > anniAccademici ){
    			System.out.println("il giocatore "+corrente.getOrdineDiPartenza() + " ha "+corrente.getAnniAccademici());
    			System.out.println("Anni accademici cambiati");
@@ -123,10 +131,6 @@ public class GameManagerNetwork extends GameManagerAstratta {
    			notifyObservers(new Stato(corrente,5));
 	   		}
 
-//	   	else{
-//	   		//OutputMediator.println( corrente.getNome() +" si deve muovere indietro di "+ corrente.getRisultatoDado() );
-//	   		updatePosizioneGiocatoreIndietro(corrente);
-//	   	}
 
 	  	//OutputMediator.println( corrente.getPos().getX() + "  " + corrente.getPos().getY() );
 	  	controllaCasella(corrente);
@@ -144,6 +148,10 @@ public class GameManagerNetwork extends GameManagerAstratta {
 	  			return numGiocatori;
 	  		}
 	  	}
+
+	    //questa parte disabilita il dado e manda la richiesta di attiva dado al
+	    //prossimo giocatore
+	    this.setYourRound(false);
 
 		return numGiocatori;
 
@@ -163,7 +171,7 @@ public class GameManagerNetwork extends GameManagerAstratta {
 		c.action( corrente );
 	}
 
-	protected void updatePosizioneGiocatore( Giocatore g ){
+	public void updatePosizioneGiocatore( Giocatore g ){
 
 		OutputMediator.println( "Si sposta da: "+ g.getPos().getX() + "  " + g.getPos().getY() );
 
@@ -235,9 +243,7 @@ public class GameManagerNetwork extends GameManagerAstratta {
 	}
 
 	public boolean isYourRound() {
-
 		return isYourRound;
-
 	}
 
 	public void setYourRound(boolean b){

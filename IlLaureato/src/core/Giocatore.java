@@ -135,13 +135,13 @@ public class Giocatore implements Comparable < Object >, Serializable {
 
 		StringBuffer sb = new StringBuffer();
 
-		sb.append("Nome giocatore: " + this.nome + "  ");
-		sb.append("Ordine di partenza: " + this.ordineDiPartenza + "  " );
-//		sb.append("Numero crediti: " + this.crediti + "\n");
-//		sb.append("Posizione X: " + this.pos.getX() + " Posizione Y: " + this.pos.getY() + "\n");
-//		sb.append("Anno accademico: " + this.anniAccademici + "\n");
-//		sb.append("Dadi: " + this.risultatoDado + "\n");
-//
+		sb.append(this.nome + ",");
+		sb.append(this.ordineDiPartenza + "," );
+		sb.append(this.crediti + ",");
+		sb.append(this.pos.getX() + "," + this.pos.getY() + ",");
+		sb.append(this.anniAccademici + ",");
+		sb.append(this.risultatoDado);
+
 		return sb.toString();
 	}
 }

@@ -11,6 +11,8 @@ import concurrent.LockManager;
 import core.GameManager;
 import core.GameManagerAstratta;
 import core.Giocatore;
+import core.Posizione;
+import core.Stato;
 import gui.panels.SchermataTavolaDiGioco;
 import javafx.application.Platform;
 import javafx.scene.Node;
@@ -461,12 +463,52 @@ public class RequestManagerClient extends Thread{
 
 						@Override
 						public void run() {
+							//Richiesta animazione dado
 							stg.getPannelloDado().animazione(Integer.parseInt(r[1]));
 						}
 					});
 
-					sm.getGameManager().getGestore().next();
+					((GameManagerNetwork) sm.getGameManager()).getGestore().next();
+
 					break;
+				}
+
+				case "12":{
+
+					String [] r1 = r[1].split(",");
+
+					Platform.runLater(new Runnable() {
+
+						@Override
+						public void run() {
+
+							for(Giocatore g : ((GameManagerNetwork) sm.getGameManager()).getGestore().getGiocatori()){
+								if(g.getNome().equals(r1[0])){
+									g.setRisultatoDado(Integer.parseInt(r1[6]));
+									System.err.println("L'HO TROVATO"
+											+ " risultato dado giocatore g : "+g.getRisultatoDado());
+									((GameManagerNetwork) sm.getGameManager()).notificaAlgiocatore(2, g);
+									break;
+								}
+							}
+
+
+						}
+					});
+
+//					String [] r1 = r[1].split(",");
+//
+//					for(Giocatore g : ((GameManagerNetwork) sm.getGameManager()).getGestore().getGiocatori()){
+//						if(g.getNome().equals(r1[0])){
+//							g.setPos(new Posizione(Integer.parseInt(r1[3]),Integer.parseInt(r1[4])));
+//							g.setRisultatoDado(Integer.parseInt(r1[6]));
+//							((GameManagerNetwork) sm.getGameManager()).updatePosizioneGiocatore(g);
+//							break;
+//						}
+//					}
+
+					break;
+
 				}
 
 				}
