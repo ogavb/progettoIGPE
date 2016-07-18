@@ -171,6 +171,7 @@ public class PannelloDado extends GridPane {
 														@Override
 														public void handle(ActionEvent event) {
 															setPrimo(lancioCorrente);
+															gm.turnoSuccessivo(lancioCorrente);
 														}
 													});
 
