@@ -85,20 +85,12 @@ public class GameManagerNetwork extends GameManagerAstratta {
 	}
 
 	@Override
-	public void start() {
-		OutputMediator.println("Inizio Partita!");
-		if(gestore.size() == 1) {
-			finePartita();
-		}
-	}
-
-	@Override
 	public void decidiOrdine() {
 		gestore.ordinaGiocatori();
 	}
 
 	@Override
-	public int turnoSuccessivo(int lancioCorrente) {
+	public void turnoSuccessivo(int lancioCorrente) {
 
 		this.setYourRound(false);
 		this.client.addRequest("13##"+gestore.getNextPlayer(client.getNomeGiocatore())+"##10");
@@ -109,9 +101,6 @@ public class GameManagerNetwork extends GameManagerAstratta {
 	   	client.addRequest("12##11#"+String.valueOf(lancioCorrente));
 
 	   	OutputMediator.println(corrente.getNome() +" lancia i dadi : "+ corrente.lancia(lancioCorrente));
-//	   	setChanged();
-//	   	notifyObservers(new Stato(corrente, new Integer(1)));
-
 
 		//Dopo che il giocatore lancia i dadi la sua posizione viene aggiornata e vengono attivati gli effetti della casella dove si verrà a posizionare
    		updatePosizioneGiocatore(corrente);
@@ -123,30 +112,7 @@ public class GameManagerNetwork extends GameManagerAstratta {
    			notifyObservers(new Stato(corrente,5));
 	   		}
 
-//	   	else{
-//	   		//OutputMediator.println( corrente.getNome() +" si deve muovere indietro di "+ corrente.getRisultatoDado() );
-//	   		updatePosizioneGiocatoreIndietro(corrente);
-//	   	}
-
-	  	//OutputMediator.println( corrente.getPos().getX() + "  " + corrente.getPos().getY() );
 	  	controllaCasella(corrente);
-
-		//I giocatori che raggiungono 180 crediti vengono eliminati dal gioco
-	  	if( corrente.getCrediti() >= 180 ){
-	  		OutputMediator.println("Il giocatore: "+ corrente.getNome() + " si è laureato!!._.\nQuindi verrà per sempre escluso dall'università!");
-	  		gestore.rimuovi(corrente);
-	  		numGiocatori--;
-	  		//TODO
-	  		//FUNZIONE che avvisa l'uscita del giocatore
-
-	  		//Verifico se ci sono altri giocatori
-	  		if(numGiocatori == 1){
-	  			return numGiocatori;
-	  		}
-	  	}
-
-		return numGiocatori;
-
 	}
 
 	@Override
