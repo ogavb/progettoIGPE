@@ -107,6 +107,7 @@ public class SchermataTavolaDiGioco implements Observer {
 
       group.setTranslateX(centroX);
       group.setTranslateY(centroY);
+      group.getChildren().clear();
 
       centro.getChildren().add(new ImageView(image));
       centro.getChildren().add(group);
@@ -437,7 +438,6 @@ public class SchermataTavolaDiGioco implements Observer {
    public void update(Observable o, Object arg) {
       Stato ogg = (Stato) arg;
       Integer scelta = ogg.getScelta();
-      // System.out.println("Scelta " + scelta);
 
       switch (scelta) {
 
@@ -447,7 +447,7 @@ public class SchermataTavolaDiGioco implements Observer {
                nomiGiocatori[i] = gm.getNomeGiocatore(i);
             }
             try {
-               ((Node) toolBar).getScene().getWindow().hide();
+               ((Stage ) toolBar.getScene().getWindow()).close();
                new SchermataTavolaDiGioco(gm);
             }
             catch (Exception e) {

@@ -98,18 +98,11 @@ public class LockManager {
    public void attendiZero() throws InterruptedException {
 
       lockZero.lock();
-
       while (inAttesaZero) {
-         System.out.println("AttendoZero");
          conditionZero.await();
       }
-
-      System.out.println("RiprendoZero");
-
       inAttesaZero = true;
-
       lockZero.unlock();
-
    }
 
    public void riprendiZero() {
@@ -126,16 +119,10 @@ public class LockManager {
       lockUnoQuattro.lock();
 
       while (inAttesaUnoQuattro) {
-         System.out.println("AttendoUnoQuattro");
          conditionUnoQuattro.await();
       }
-
-      System.out.println("RiprendoUnoQuattro");
-
       inAttesaUnoQuattro = true;
-
       lockUnoQuattro.unlock();
-
    }
 
    public void riprendiUnoQuattro() {
@@ -152,16 +139,10 @@ public class LockManager {
       lockTre.lock();
 
       while (inAttesaTre) {
-         System.out.println("AttendoTre");
          conditionTre.await();
       }
-
-      System.out.println("RiprendoTre");
-
       inAttesaTre = true;
-
       lockTre.unlock();
-
    }
 
    public void riprendiTre() {
@@ -170,7 +151,6 @@ public class LockManager {
       inAttesaTre = false;
       conditionTre.signalAll();
       lockTre.unlock();
-
    }
 
    public void attendiQuattro() throws InterruptedException {
@@ -178,16 +158,10 @@ public class LockManager {
       lockQuattro.lock();
 
       while (inAttesaQuattro) {
-         System.out.println("AttendoQuattro");
          conditionQuattro.await();
       }
-
-      System.out.println("RiprendoQuattro");
-
       inAttesaQuattro = true;
-
       lockQuattro.unlock();
-
    }
 
    public void riprendiQuattro() {
@@ -196,7 +170,6 @@ public class LockManager {
       inAttesaQuattro = false;
       conditionQuattro.signalAll();
       lockQuattro.unlock();
-
    }
 
    public void attendiCinque() throws InterruptedException {
@@ -204,16 +177,10 @@ public class LockManager {
       lockCinque.lock();
 
       while (inAttesaCinque) {
-         System.out.println("AttendoCinque");
          conditionCinque.await();
       }
-
-      System.out.println("RiprendoCinque");
-
       inAttesaCinque = true;
-
       lockCinque.unlock();
-
    }
 
    public void riprendiCinque() {
@@ -228,18 +195,11 @@ public class LockManager {
    public void attendiSei() throws InterruptedException {
 
       lockSei.lock();
-
       while (inAttesaSei) {
-         System.out.println("AttendoSei");
          conditionSei.await();
       }
-
-      System.out.println("RiprendoSei");
-
       inAttesaSei = true;
-
       lockSei.unlock();
-
    }
 
    public void riprendiSei() {
@@ -256,16 +216,10 @@ public class LockManager {
       lockSette.lock();
 
       while (inAttesaSette) {
-         System.out.println("AttendoSette");
          conditionSette.await();
       }
-
-      System.out.println("RiprendoSette");
-
       inAttesaSette = true;
-
       lockSette.unlock();
-
    }
 
    public void riprendiSette() {
@@ -282,16 +236,10 @@ public class LockManager {
       lockOtto.lock();
 
       while (inAttesaOtto) {
-         System.out.println("AttendoOtto");
          conditionOtto.await();
       }
-
-      System.out.println("RiprendoOtto");
-
       inAttesaOtto = true;
-
       lockOtto.unlock();
-
    }
 
    public void riprendiOtto() {
@@ -308,16 +256,11 @@ public class LockManager {
       lockTredici.lock();
 
       while (inAttesaZero) {
-         System.out.println("AttendoTredici");
          conditionTredici.await();
       }
 
-      System.out.println("RiprendoTredici");
-
       inAttesaTredici = true;
-
       lockTredici.unlock();
-
    }
 
    public void riprendiTredici() {
@@ -334,14 +277,10 @@ public class LockManager {
       lockClose.lock();
 
       while (inAttesaClose) {
-         System.out.println("AttendoClose");
          conditionClose.await();
       }
 
-      System.out.println("RiprendoClose");
-
       inAttesaClose = true;
-
       lockClose.unlock();
 
    }
@@ -360,14 +299,9 @@ public class LockManager {
       lockEndAll.lock();
 
       while (inAttesaEndAll) {
-         System.out.println("AttendoEndAll");
          conditionEndAll.await();
       }
-
-      System.out.println("RiprendoEndAll");
-
       lockEndAll.unlock();
-
    }
 
    public void riprendiEndAll() {
@@ -385,16 +319,10 @@ public class LockManager {
       lockEndMatch.lock();
 
       while (inAttesaEndMatch) {
-         System.out.println("AttendoEndMatch");
          conditionEndMatch.await();
       }
-
-      System.out.println("RiprendoEndMatch");
-
       inAttesaEndMatch = true;
-
       lockEndMatch.unlock();
-
    }
 
    public void riprendiEndMatch() {

@@ -80,6 +80,7 @@ public class AzioneDomanda extends AzioneAstratta {
 
    public boolean controllaEsitoEsame(String risposta, Giocatore g) {
       String rispostaGiocatore = risposta;
+      if( gm instanceof GameManagerNetwork)
       ((GameManagerNetwork) gm).inviaLabelRisposta(risposta);
 
       if (rispostaGiocatore.equals("")) {

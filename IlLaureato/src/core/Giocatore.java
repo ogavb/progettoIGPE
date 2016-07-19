@@ -1,9 +1,8 @@
 package core;
 
 import java.io.Serializable;
+import java.util.HashSet;
 
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
 
 public class Giocatore implements Comparable<Object>, Serializable {
 
@@ -15,10 +14,10 @@ public class Giocatore implements Comparable<Object>, Serializable {
    private int anniAccademici;
    private int casellePercorseInAnnoAccademico;
    private final int caselleDisponibili = 40;
-   private Dado dado;
    private int risultatoDado;
    private int ordineDiPartenza;
    private int color;
+   private HashSet<Integer> esamiSvolti;
 
    public Giocatore(String nome) {
 
@@ -27,10 +26,10 @@ public class Giocatore implements Comparable<Object>, Serializable {
       this.pos = new Posizione(0, 0);
       this.anniAccademici = 1;
       this.casellePercorseInAnnoAccademico = 0;
-      this.dado = new Dado();
       this.risultatoDado = 0;
       this.setOrdineDiPartenza(0);
       this.color = 0;
+      this.esamiSvolti = new HashSet<>();
    }
 
    public int compareTo(Object o) {
