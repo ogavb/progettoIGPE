@@ -2,7 +2,9 @@ package gui.editor;
 
 import java.sql.SQLException;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Map.Entry;
 
 import gui.panels.SceltaEditor;
 import javafx.event.Event;
@@ -62,10 +64,16 @@ public class EditorTavolaDiGioco extends TavolaGridPane {
          if (result.isPresent()) {
             nomeConfigurazione = result.get();
 
-            Iterator<MyPaneTavola> it = lista.iterator();
+            Iterator<Entry<Integer, MyPaneTavola>> it = lista.entrySet().iterator();
+
+
             while (it.hasNext()) {
-               sb.append(it.next().getNomeCasella() + " ");
-            }
+              Map.Entry<Integer,MyPaneTavola> entry = (Map.Entry<Integer, MyPaneTavola>)it.next();
+
+              String nomeCasella = entry.getValue().getNomeCasella();
+              sb.append(nomeCasella + " ");
+              System.err.println("CONFIGURAZIONE: " + nomeCasella + ",");
+           }
 
             ScrittoreConfigurazione sc = new ScrittoreConfigurazione(
                   sb.toString());

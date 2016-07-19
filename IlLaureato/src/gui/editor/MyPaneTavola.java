@@ -11,6 +11,7 @@ import javafx.scene.layout.FlowPane;
 public class MyPaneTavola extends FlowPane {
 
    private String nomeCasella;
+   private int indice;
 
    public MyPaneTavola(String nomeCasella, Image immagineCasella) {
       this.setNomeCasella(nomeCasella);
@@ -33,6 +34,14 @@ public class MyPaneTavola extends FlowPane {
 
    public void setNomeCasella(String nomeCasella) {
       this.nomeCasella = nomeCasella;
+   }
+
+   public int getIndice() {
+      return indice;
+   }
+
+   public void setIndice(int indice) {
+      this.indice = indice;
    }
 
 }
