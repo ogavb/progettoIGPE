@@ -1,9 +1,17 @@
 package gui.editor;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+
 import core.Giocatore;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
@@ -16,7 +24,8 @@ public abstract class TavolaGridPane extends GridPane {
    private int NUM_COLS;
    private int NUM_ROWS;
 
-   protected LinkedHashSet<MyPaneTavola> lista = new LinkedHashSet<>();
+
+   protected HashMap<Integer, MyPaneTavola> lista = new HashMap<>();
 
    protected String nomeCasellaSelezionata;
    protected Image immagineCasellaSelezionata;
@@ -63,8 +72,9 @@ public abstract class TavolaGridPane extends GridPane {
    /*
     * Costruisce un MyPaneTavola vuoto
     */
-   public MyPaneTavola makePanel() {
+   public MyPaneTavola makePanel(int indice) {
       MyPaneTavola p = new MyPaneTavola();
+      p.setIndice(indice);
 
       p.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
@@ -72,7 +82,8 @@ public abstract class TavolaGridPane extends GridPane {
          public void handle(MouseEvent event) {
             p.setBackGround(immagineCasellaSelezionata);
             p.setNomeCasella(nomeCasellaSelezionata);
-            lista.add(p);
+            System.err.println("CASELLA SELEZIONTA IN EDITOR: " + p.getNomeCasella());
+            lista.put(p.getIndice(), p);
 
             if (controllaCondizione()) {
 
@@ -90,33 +101,41 @@ public abstract class TavolaGridPane extends GridPane {
 
    private boolean controllaCondizione() {
       int cont = 0;
-      for (MyPaneTavola myPaneTavola : lista) {
-         if (myPaneTavola.getNomeCasella().equals("Esame")) {
-            cont++;
-         }
-      }
+
+      Iterator<Entry<Integer, MyPaneTavola>> it = lista.entrySet().iterator();
+
+
+      while (it.hasNext()) {
+        Map.Entry<Integer,MyPaneTavola> entry = (Map.Entry<Integer, MyPaneTavola>)it.next();
+
+        if(entry.getValue().getNomeCasella().equals("Esame")){
+           cont++;
+        }
+
+     }
+
       return cont >= 4 && lista.size() == 40;
    }
 
    private void disegnaCornici(int numCols) {
       // Top
       for (int i = 0; i < numCols - 1; i++) {
-         add(makePanel(), i, 0);
+         add(makePanel(i), i, 0);
       }
 
       // Right
       for (int i = 0; i < numCols - 1; i++) {
-         add(makePanel(), numCols - 1, i);
+         add(makePanel(numCols+i), numCols - 1, i);
       }
 
       // Bottom
-      for (int i = numCols - 1; i > 0; i--) {
-         add(makePanel(), i, numCols - 1);
+      for (int i = numCols - 1, v = 21; i > 0; i--, v++) {
+         add(makePanel(v), i, numCols - 1);
       }
 
       // Left
-      for (int i = numCols - 1; i > 0; i--) {
-         add(makePanel(), 0, i);
+      for (int i = numCols - 1, v = 32; i > 0; i--, v++) {
+         add(makePanel(v), 0, i);
       }
    }
 

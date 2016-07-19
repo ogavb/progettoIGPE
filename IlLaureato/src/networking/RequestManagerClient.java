@@ -19,6 +19,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Alert.AlertType;
+import jdbc.ScrittoreConfigurazione;
 import model.MatchTableView;
 import networking.panels.FinestraMultiPlayer;
 import networking.panels.SchermataNuovaPartitaMultiPlayer;
@@ -315,6 +316,12 @@ public class RequestManagerClient extends Thread {
                            giocatori[i]
                                  .setOrdineDiPartenza(Integer.parseInt(r3[2]));
                         }
+
+                        ScrittoreConfigurazione sc = new ScrittoreConfigurazione(
+                              r1[0]);
+                        sc.setNomeConfigurazione(nomeConfigurazione);
+                        sc.query();
+
                         try {
                            sm.initGameManager(giocatori, numeroGiocatori,
                                  r1[0]);
