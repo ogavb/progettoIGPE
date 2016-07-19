@@ -44,9 +44,9 @@ public class FinestraMultiPlayer {
 
 	private String nomeGiocatore;
 
-	public FinestraMultiPlayer(Client client,String nomeGiocatore,RequestManagerClient rmc) {
+	public FinestraMultiPlayer(Stage stage,Client client,String nomeGiocatore,RequestManagerClient rmc) {
 
-		primaryStage = new Stage();
+		primaryStage = stage;
 
 		this.client = client;
 

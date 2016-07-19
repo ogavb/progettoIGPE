@@ -235,7 +235,7 @@ public class EditorDomande {
 	    mainPane.getChildren().add(tableView);
 
 	    scene = new Scene(mainPane);
-		scene.getStylesheets().add("css/mainCss.css");
+		scene.getStylesheets().add("css/editor.css");
 		this.stage.setScene(scene);
 		this.stage.setResizable(false);
 		this.stage.centerOnScreen();

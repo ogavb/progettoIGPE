@@ -173,6 +173,14 @@ public class GameManagerNetwork extends GameManagerAstratta {
         c.action( corrente );
     }
 
+    public void inviaLabelRisposta(String labelCliccata) {
+    	client.addRequest("12##13#"+labelCliccata);
+    }
+
+    public void inviaEsame(String esame){
+    	client.addRequest(esame);
+    }
+
     public void updatePosizioneGiocatore( Giocatore g ){
 
         OutputMediator.println( "Si sposta da: "+ g.getPos().getX() + "  " + g.getPos().getY() );

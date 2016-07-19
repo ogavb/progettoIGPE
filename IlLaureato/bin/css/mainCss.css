@@ -24,7 +24,7 @@ Label {
 	-fx-font-size: 15;
 }
 
-Button{
+Button {
 	-fx-min-width: 150px ;
 	-fx-min-height: 30px ;
 	-fx-pref-width: 150px ;
@@ -37,6 +37,8 @@ Button{
 	-fx-font-size: 15;
 
 }
+
+
 
 Button:hover {
 	-fx-min-width: 150px ;
@@ -51,18 +53,6 @@ Button:hover {
  	-fx-font-size: 17;
 }
 
-Label {
-	-fx-min-width: 150px ;
-	-fx-min-height: 30px ;
-	-fx-pref-width: 150px ;
-	-fx-pref-height: 30px ;
-	-fx-background-color: linear-gradient(rgb(22, 179, 184) 5%, rgb(189, 51, 42) 100%) rgb(22, 179, 184);
-	-fx-background-radius: 30;
-	-fx-border-radius: 30%;
-	-fx-background-insets: 0;
-	-fx-text-fill: white;
-	-fx-font-size: 15;
-}
 
 #btn_etg {
 	-fx-min-width: 80px ;

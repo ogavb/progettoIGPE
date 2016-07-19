@@ -61,14 +61,25 @@ public class AzioneDomanda extends AzioneAstratta {
 	@Override
 	public void esegui(Giocatore g) {
 
-		PrelevatoreDomanda database = new PrelevatoreDomanda(this);
-		database.query();
+		if(gm instanceof GameManagerNetwork && ((GameManagerNetwork)gm).isYourRound() ){
+		   PrelevatoreDomanda database = new PrelevatoreDomanda(this);
+		   database.query();
+		   ((GameManagerNetwork)gm).inviaEsame("12##14#"+domanda+","+ris.getRisposte()[0]+","+
+				   		 ris.getRisposte()[1]+","+rispostaEsatta+","+crediti);
+		}
 		if( gm instanceof GameManagerNetwork && !((GameManagerNetwork)gm).isRequestActive())
 			((GameManagerNetwork)gm).setYourRound(false);
+
+		if(gm instanceof GameManager) {
+			PrelevatoreDomanda database = new PrelevatoreDomanda(this);
+            database.query();
+		}
+
 	}
 
 	public boolean controllaEsitoEsame( String risposta, Giocatore g ) {
 		String rispostaGiocatore = risposta;
+		((GameManagerNetwork)gm).inviaLabelRisposta(risposta);
 
 		if ( rispostaGiocatore.equals("")){
 			OutputMediator.println( "Hai finito il tempo!! crediti aggiornati");

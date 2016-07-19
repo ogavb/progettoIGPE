@@ -501,4 +501,8 @@ public class SchermataNuovaPartitaMultiPlayer {
 
 	}
 
+	public void hide() {
+		primaryStage.hide();
+	}
+
 }

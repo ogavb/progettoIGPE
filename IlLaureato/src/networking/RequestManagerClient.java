@@ -297,42 +297,28 @@ public class RequestManagerClient extends Thread{
 
 						@Override
 						public void run() {
-							//gm = new GameManagerNetwork();
-
 							String r1[] = r[1].split("/");
 							String r2[] = r1[1].split(",");
-
 							String r3[] = null;
-
-							for(int i = 0; i < r2.length; i++){
-								System.out.println("r2: " + r2[i]);
-							}
 
 							int numeroGiocatori = Integer.parseInt(r1[2]);
 
 							Giocatore[] giocatori = new Giocatore[r2.length];
 							for(int i = 0; i < giocatori.length; i++){
 								r3 = r2[i].split("\\(");
-								for(int j = 0; j < r3.length; j++){
-									System.out.println("r3: " + r3[j]);
-								}
 								giocatori[i] = new Giocatore(r3[0]);
 								giocatori[i].setColor(Integer.parseInt(r3[1]));
 								giocatori[i].setOrdineDiPartenza(Integer.parseInt(r3[2]));
 							}
-
 							try {
 								sm.initGameManager(giocatori, numeroGiocatori, r1[0]);
 							} catch (SQLException e1) {
-								// TODO Auto-generated catch block
 								e1.printStackTrace();
 							}
 
 						sm.getGameManager().setOrdinaGiocatori(giocatori);
-	    				//gm.decidiOrdine();
-
 	    				try {
-	    					//((Node)event.getSource()).getScene().getWindow().hide();
+	    					sm.hide();
 							stg = new SchermataTavolaDiGioco(sm.getGameManager());
 						} catch (Exception e) {
 							e.printStackTrace();
@@ -482,10 +468,8 @@ public class RequestManagerClient extends Thread{
 					String [] r1 = r[1].split(",");
 
 					Platform.runLater(new Runnable() {
-
 						@Override
 						public void run() {
-
 							for(Giocatore g : ((GameManagerNetwork) sm.getGameManager()).getGestore().getGiocatori()){
 								if(g.getNome().equals(r1[0])){
 									g.setRisultatoDado(Integer.parseInt(r1[6]));
@@ -493,34 +477,23 @@ public class RequestManagerClient extends Thread{
 											+ " risultato dado giocatore g : "+g.getRisultatoDado());
 									((GameManagerNetwork) sm.getGameManager()).notificaAlgiocatore(2, g);
 									break;
+									}
 								}
 							}
-
-
-						}
-					});
-
-//					String [] r1 = r[1].split(",");
-//
-//					for(Giocatore g : ((GameManagerNetwork) sm.getGameManager()).getGestore().getGiocatori()){
-//						if(g.getNome().equals(r1[0])){
-//							g.setPos(new Posizione(Integer.parseInt(r1[3]),Integer.parseInt(r1[4])));
-//							g.setRisultatoDado(Integer.parseInt(r1[6]));
-//							((GameManagerNetwork) sm.getGameManager()).updatePosizioneGiocatore(g);
-//							break;
-//						}
-//					}
-
+						});
+					break;
+					}
+				case "13":
+					stg.getPannelloTavola().getPD().addOn(r[1]);
 					break;
 
-				}
-
-				}
+				case "14":
+					String [] r1 = r[2].split(",");
+					break;
 
 			}
-
 		}
-
+	}
 	}
 
 }

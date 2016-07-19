@@ -63,6 +63,10 @@ public class SchermataTavolaDiGioco implements Observer {
 
 	private PannelloTavola pannelloTavola;
 
+	public PannelloTavola getPannelloTavola() 	{
+		return pannelloTavola;
+	}
+
 	private BorderPane pannelloComando;
 
 	//pannelloComando è composto da:

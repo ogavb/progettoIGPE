@@ -55,8 +55,7 @@ public class SchermataNuovaPartita {
 	{"blue", "cyan", "green", "purple", "red", "yellow"};
 
 	private GameManager gm;
-
-	//variabili per la musica
+//variabili per la musica
 //	private String path;
 //	private Media media;
 //	private MediaPlayer mediaPlayer;

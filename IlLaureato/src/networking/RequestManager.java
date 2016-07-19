@@ -225,8 +225,14 @@ public class RequestManager extends Thread {
 			//13##nomeGiocatore##numeroCaseRequestManagerClient#richiesta (notidica solo al player con nome nomeGiocatore)
 			Match m6=GestoreMatch.getInstance().findForId(requestIn.get(0).getKey().getId());
 			m6.notifyToPlayerName(r[1], r[2]);
+			break;
+	
+		case 14:
 		}// endswitch
+		
+			
 		return null;
+	
 	}
 
 

@@ -16,9 +16,6 @@ public class FinestraCreaPartita {
 	private Scene scene;
 	private Pane mainPane;
 
-	private String style   = "-fx-background-color: linear-gradient(rgb(22, 179, 184) 5%, rgb(189, 51, 42) 100%) rgb(22, 179, 184);-fx-background-radius: 30;-fx-background-insets: 0; -fx-text-fill: white;-fx-font-size: 11;";
-    private String styleOn = "-fx-background-color: linear-gradient(rgb(30,140,150) 10%, rgb(189, 51, 42) 100%) rgb(22, 179, 184);-fx-background-radius: 30;-fx-background-insets: 0; -fx-text-fill: white;-fx-font-size: 13;";
-
 	private TextField ipServer;
 	private ComboBox<Integer> nGiocatori;
 	private RadioButton selezionaIpServer;
@@ -35,8 +32,6 @@ public class FinestraCreaPartita {
 		mainPane.setPrefWidth(300);
 		mainPane.setPrefHeight(300);
 
-		mainPane.setStyle("-fx-background-color: A2382B;");
-
 		ipServer = new TextField();
 		ipServer.setPromptText("IP SERVER");
 		ipServer.setEditable(false);
@@ -47,10 +42,6 @@ public class FinestraCreaPartita {
 		selezionaIpServer.setTranslateX(250);
 		selezionaIpServer.setTranslateY(25);
 
-		selezionaIpServer.setOnAction(event -> {
-			ipServer.setEditable(true);
-		});
-
 		ObservableList<Integer> items = FXCollections.observableArrayList();
 		items.add(2); items.add(3); items.add(4); items.add(5); items.add(6);
 		nGiocatori = new ComboBox<Integer>(items);
@@ -60,41 +51,19 @@ public class FinestraCreaPartita {
 		nGiocatori.setTranslateY(110);
 
 
-		nGiocatori.setStyle(style);
-		nGiocatori.setStyle(style);
-
 		nGiocatori.setPrefSize(160, 40);
 		nGiocatori.setPrefSize(160, 40);
-
-		nGiocatori.setOnMouseEntered(event -> {
-			nGiocatori.setStyle(styleOn);
-	    });
-		nGiocatori.setOnMouseExited(event -> {
-			nGiocatori.setStyle(style);
-	    });
-		nGiocatori.setOnAction(event -> {
-			ok.setDisable(false);
-		});
-
 
 		ok = new Button("OK");
-
-		ok.setStyle(style);
-		ok.setStyle(style);
-
 		ok.setPrefSize(160, 40);
 		ok.setPrefSize(160, 40);
-
-		ok.setOnMouseEntered(event -> {
-			ok.setStyle(styleOn);
-	    });
-		ok.setOnMouseExited(event -> {
-			ok.setStyle(style);
-	    });
-
 		ok.setDisable(true);
 		ok.setTranslateX(75);
 		ok.setTranslateY(210);
+
+		nGiocatori.setOnAction(event -> {
+			ok.setDisable(false);
+		});
 
 		ok.setOnAction(event -> {
 			ipServ = ipServer.getText();
@@ -102,12 +71,18 @@ public class FinestraCreaPartita {
 			stage.close();
 		});
 
+		selezionaIpServer.setOnAction(event -> {
+			ipServer.setEditable(true);
+		});
+
 		mainPane.getChildren().addAll(ipServer,nGiocatori,selezionaIpServer,ok);
 
 		stage = new Stage();
 		scene = new Scene(mainPane);
+		scene.getStylesheets().add("css/creaPartitaMulti.css");
 		stage.setScene(scene);
 		stage.showAndWait();
+
 
 	}
 

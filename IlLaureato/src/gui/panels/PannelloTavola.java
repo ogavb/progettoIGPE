@@ -62,14 +62,6 @@ public class PannelloTavola extends GridPane  implements PaneSwitcher{
 	private PathTransition pathTransition[];
 	private int numPathTransition = 0;
 
-
-
-	/*
-	 * OVERRIDING MAKE_PANEL
-   	 * Costruisce il singolo MyPane della tavola da gioco indicizzato dalla riga e dalla
-	 * colonna corrente e viene ritornato
-	 */
-
 	public PannelloTavola(GameManagerAstratta gm) throws SQLException {
 
 		super();
@@ -90,9 +82,8 @@ public class PannelloTavola extends GridPane  implements PaneSwitcher{
 		mappa.put("semplice", new Image("file:caselle/strada.png"));
 
 		setGridLinesVisible(true);
-//		setPrefSize(500, 200);
-//		setMaxSize(500, 200);
 
+		//crea le colonne e le righe per la griglia della tavola
 		for (int i = 0; i < NUM_COLS; i++) {
             ColumnConstraints colConst = new ColumnConstraints();
             colConst.setPercentWidth(100.0 / NUM_COLS);
@@ -121,22 +112,18 @@ public class PannelloTavola extends GridPane  implements PaneSwitcher{
         this.setMinSize(880, 660);
 
 
+        //
         this.pathTransition = new PathTransition[6];
 
     }
 
+	public PaneDomande getPD(){
+		return paneDomande;
+	}
+
 	public MyPane makePanel() {
 		String nomeCasella = tdg.getCasella(riga, colonna).toString();
 		MyPane p = new MyPane(tdg.getCasella(riga, colonna), mappa.get(nomeCasella));
-
-		setOnMouseClicked(new EventHandler<MouseEvent>(){
-
-			@Override
-			public void handle(MouseEvent event) {
-//				System.out.println(p.getLayoutX() + " " + p.getLayoutY());
-			}
-
-		});
 
 		if(colonna < 9 )
 			colonna++;
@@ -152,8 +139,6 @@ public class PannelloTavola extends GridPane  implements PaneSwitcher{
 	 * Sposta l'image view del giocatore g nella nuova posizione mediante animazioni
 	 */
 	public void spostaGiocatore(Giocatore g){
-		//stampaCoordinateBoard();
-
 		/*
 		 * Converto la posizione reale del giocatore nella corrispondente posizione della
 		 * tavola da gioco
@@ -206,10 +191,6 @@ public class PannelloTavola extends GridPane  implements PaneSwitcher{
 		 */
 		Path path = new Path();
 
-		//System.out.println((n.getTranslateX()+11 ) + " " + (n.getTranslateY()+12.5 ));
-    	//System.out.println((mp.getLayoutX()+11) + " " + (mp.getLayoutY()+12.5));
-
-
     	/*
     	 * se l'immagine n si trova sul lato TOP della tavola e la casella dove l'immagine
     	 * andrà a posizionarsi si trova sul lato RIGHT, allora si crea un PATH che va dalla
@@ -230,13 +211,9 @@ public class PannelloTavola extends GridPane  implements PaneSwitcher{
 														    	  *
 														    	  *
     	 */
-		//System.out.println("La translateX è: " + (n.getTranslateX()+11));
-    	//System.out.println("La dimensione è: " + mp.getWidth() + " " + mp.getHeight());
 		if( !(n.getTranslateX()+11 == 11 && n.getTranslateY()+12.5 == 12.5)
 				&& ((n.getTranslateX()+11 >= 11 && n.getTranslateX()+11 <= (mp.getWidth()*10)+11) && (n.getTranslateY() + 12.5 == 12.5) )
 				&& (mp.getLayoutY() >= mp.getHeight() ) ) {
-
-			//System.out.println("Entrato nel basso");
 
 			path.getElements().add(new MoveTo(n.getTranslateX()+11, n.getTranslateY()+12.5));
 			path.getElements().add(new LineTo((mp.getWidth()*10)+11,12.5));
@@ -271,8 +248,6 @@ public class PannelloTavola extends GridPane  implements PaneSwitcher{
 				&& (n.getTranslateX()+11 == (mp.getWidth()*10)+12)
 				&& ((n.getTranslateY()+12.5 >= 12.5 && n.getTranslateY() + 12.5 < (mp.getHeight()*10)+12.5) )
 				&& (mp.getLayoutX()<(mp.getWidth()*10))) {
-
-			//System.out.println("Entrato nel girare a sinistra");
 
 			path.getElements().add(new MoveTo(n.getTranslateX()+11, n.getTranslateY()+12.5));
 			path.getElements().add(new LineTo((mp.getWidth()*10)+11,(mp.getHeight()*10)+12.5));

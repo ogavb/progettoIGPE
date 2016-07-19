@@ -17,7 +17,7 @@ import networking.RequestManagerClient;
 public class FinestraCreaOPartecipaPartita {
 
 	private Stage primaryStage;
-
+	private Scene scene;
 	private Pane mainPane;
 
 	private Button creaPartita;
@@ -30,48 +30,41 @@ public class FinestraCreaOPartecipaPartita {
 
 	private String nomeGiocatore;
 
-	public FinestraCreaOPartecipaPartita() {
+
+	public FinestraCreaOPartecipaPartita(Stage stage) {
 
 		lockManager = new LockManager();
-
 		nomeGiocatore = nomeRandom(( int )( ( Math.random() * 10 ) + 1 ));
 
-		primaryStage = new Stage();
-
+		primaryStage = stage;
 		mainPane = new Pane();
 		mainPane.setPrefWidth(300);
 		mainPane.setPrefHeight(150);
 
-		mainPane.setStyle("-fx-background-color: A2382B;");
-
 		creaPartita = new Button("CREA PARTITA");
 		partecipaPartita = new Button("PARTECIPA");
-
-		String style   = "-fx-background-color: linear-gradient(rgb(22, 179, 184) 5%, rgb(189, 51, 42) 100%) rgb(22, 179, 184);-fx-background-radius: 30;-fx-background-insets: 0; -fx-text-fill: white;-fx-font-size: 11;";
-	    String styleOn = "-fx-background-color: linear-gradient(rgb(30,140,150) 10%, rgb(189, 51, 42) 100%) rgb(22, 179, 184);-fx-background-radius: 30;-fx-background-insets: 0; -fx-text-fill: white;-fx-font-size: 13;";
-
-	    creaPartita.setStyle(style);
-		partecipaPartita.setStyle(style);
 
 		creaPartita.setPrefSize(160, 40);
 		partecipaPartita.setPrefSize(160, 40);
 
-		creaPartita.setOnMouseEntered(event -> {
-			creaPartita.setStyle(styleOn);
-	    });
-		creaPartita.setOnMouseExited(event -> {
-			creaPartita.setStyle(style);
-	    });
+		creaPartita.setTranslateX(75);
+		creaPartita.setTranslateY(25);
 
-		partecipaPartita.setOnMouseEntered(event -> {
-			partecipaPartita.setStyle(styleOn);
-	    });
-		partecipaPartita.setOnMouseExited(event -> {
-			partecipaPartita.setStyle(style);
-	    });
+		partecipaPartita.setTranslateX(75);
+		partecipaPartita.setTranslateY(75);
+
+		mainPane.getChildren().add(creaPartita);
+	    mainPane.getChildren().add(partecipaPartita);
+
+	    scene = new Scene(mainPane);
+	    scene.getStylesheets().add("css/mainCss.css");
+		primaryStage.setScene(scene);
+		primaryStage.show();
+
 
 		creaPartita.setOnMouseReleased(event -> {
 
+			primaryStage.hide();
 			int giocatoriNum = 0;
 			String numeroGiocatori = null;
 
@@ -79,6 +72,10 @@ public class FinestraCreaOPartecipaPartita {
 
 			FinestraCreaPartita fm = new FinestraCreaPartita();
 			fm.showAndWait();
+
+			if(fm.getIpServer() == null )
+				primaryStage.show();
+
 
 			if(fm.getIpServer() != null){
 
@@ -110,7 +107,6 @@ public class FinestraCreaOPartecipaPartita {
 
 				}
 				else{
-
 					giocatoriNum = fm.getNumGiocatori();
 
 					numeroGiocatori = "0##" + String.valueOf(giocatoriNum);
@@ -139,9 +135,6 @@ public class FinestraCreaOPartecipaPartita {
 					e1.printStackTrace();
 				}
 
-				primaryStage = ((Stage)((Button)event.getSource()).getScene().getWindow());
-				primaryStage.setTitle("PROVA");
-				System.err.println("STAGE " + primaryStage.getTitle());
 				Parent root = sm.show(primaryStage,giocatoriNum,nomeGiocatore);
 
 				client.setNomeGiocatore(nomeGiocatore);
@@ -177,12 +170,13 @@ public class FinestraCreaOPartecipaPartita {
 			boolean ok = false;
 
 			do{
-
+				primaryStage.hide();
 				FinestraPartecipaPartita fpp = new FinestraPartecipaPartita();
 
 				fpp.showAndWait();
 
-				if(fpp.getIpServer() == null) return;
+				if(fpp.getIpServer() == null)
+				 primaryStage.show();
 
 				if(!fpp.getIpServer().equals("")){
 					try {
@@ -215,8 +209,7 @@ public class FinestraCreaOPartecipaPartita {
 			client.setNomeGiocatore(nomeGiocatore);
 			client.addRequest("10##"+nomeGiocatore);
 
-			primaryStage = ((Stage)((Button)event.getSource()).getScene().getWindow());
-			FinestraMultiPlayer fm = new FinestraMultiPlayer(client,nomeGiocatore,rmc);
+			FinestraMultiPlayer fm = new FinestraMultiPlayer(primaryStage,client,nomeGiocatore,rmc);
 			rmc.setFinsetraMultiplayer(fm);
 	    	Parent root = fm.show(primaryStage,rmc.getMatchs());
 	    	Scene scene = new Scene(root);
@@ -224,21 +217,6 @@ public class FinestraCreaOPartecipaPartita {
 	    	primaryStage.show();
 
 		});
-
-
-
-		creaPartita.setTranslateX(75);
-		creaPartita.setTranslateY(25);
-
-		partecipaPartita.setTranslateX(75);
-		partecipaPartita.setTranslateY(75);
-
-		mainPane.getChildren().add(creaPartita);
-	    mainPane.getChildren().add(partecipaPartita);
-
-	    Scene scene = new Scene(mainPane);
-		primaryStage.setScene(scene);
-		primaryStage.show();
 
 	}
 
