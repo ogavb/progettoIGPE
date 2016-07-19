@@ -48,28 +48,28 @@ public class MainController extends Pane implements Initializable {
    private ImageView onlineGameContainer;
    @FXML
    private ImageView editorContainer;
-   @FXML
+/*   @FXML
    private ImageView optionContainer;
    @FXML
    private ImageView creditsContainer;
-   @FXML
+*/   @FXML
    private ImageView exitContainer;
 
    private Image newGame;
    private Image loadGame;
    private Image onlineGame;
    private Image editor;
-   private Image option;
+/*   private Image option;
    private Image credits;
-   private Image exit;
+*/   private Image exit;
 
    private Image newGameEffect;
    private Image loadGameEffect;
    private Image onlineGameEffect;
    private Image editorEffect;
-   private Image optionEffect;
+/*   private Image optionEffect;
    private Image creditsEffect;
-   private Image exitEffect;
+*/   private Image exitEffect;
 
    public MainController(Stage stage) throws IOException {
       this.stage = stage;
@@ -111,11 +111,11 @@ public class MainController extends Pane implements Initializable {
             IMG_FOLDER + "Partita Online Effect" + IMG_EXTENTION);
       editor = new Image(IMG_FOLDER + "Editor" + IMG_EXTENTION);
       editorEffect = new Image(IMG_FOLDER + "Editor Effect" + IMG_EXTENTION);
-      option = new Image(IMG_FOLDER + "Opzioni" + IMG_EXTENTION);
+/*      option = new Image(IMG_FOLDER + "Opzioni" + IMG_EXTENTION);
       optionEffect = new Image(IMG_FOLDER + "Opzioni Effect" + IMG_EXTENTION);
       credits = new Image(IMG_FOLDER + "Crediti" + IMG_EXTENTION);
       creditsEffect = new Image(IMG_FOLDER + "Crediti Effect" + IMG_EXTENTION);
-      exit = new Image(IMG_FOLDER + "Esci" + IMG_EXTENTION);
+*/      exit = new Image(IMG_FOLDER + "Esci" + IMG_EXTENTION);
       exitEffect = new Image(IMG_FOLDER + "Esci Effect" + IMG_EXTENTION);
    }
 
@@ -185,13 +185,13 @@ public class MainController extends Pane implements Initializable {
          case "editorContainer":
             iv.setImage(editorEffect);
             break;
-         case "optionContainer":
+/*         case "optionContainer":
             iv.setImage(optionEffect);
             break;
          case "creditsContainer":
             iv.setImage(creditsEffect);
             break;
-         case "exitContainer":
+*/         case "exitContainer":
             iv.setImage(exitEffect);
             break;
 
@@ -221,13 +221,13 @@ public class MainController extends Pane implements Initializable {
          case "editorContainer":
             iv.setImage(editor);
             break;
-         case "optionContainer":
+/*         case "optionContainer":
             iv.setImage(option);
             break;
          case "creditsContainer":
             iv.setImage(credits);
             break;
-         case "exitContainer":
+*/         case "exitContainer":
             iv.setImage(exit);
             break;
 
