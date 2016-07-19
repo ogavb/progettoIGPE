@@ -105,9 +105,6 @@ public class GameManager extends GameManagerAstratta {
 
    protected void updatePosizioneGiocatore(Giocatore g) {
 
-      OutputMediator.println(
-            "Si sposta da: " + g.getPos().getX() + "  " + g.getPos().getY());
-
       if (g.getRisultatoDado() >= tdg.getTavola()[0].length - g.getPos().getY())
          g.getPos().setX((g.getPos().getX() + 1) % tdg.getTavola().length);
 
@@ -117,10 +114,7 @@ public class GameManager extends GameManagerAstratta {
       // questo cambiamento nel gestore fa scattare l'evento di movimento pedina
       gestore.getGiocatori().set(g.getOrdineDiPartenza(), g);
 
-      OutputMediator
-            .println("A: " + g.getPos().getX() + "  " + g.getPos().getY());
    }
-
    public void salvaPartita(String file) {
       ObjectOutputStream output = null;
 

@@ -1,6 +1,5 @@
 package gui.panels;
 
-import java.io.File;
 import java.sql.SQLException;
 
 import controller.MainController;
@@ -9,7 +8,6 @@ import core.Giocatore;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -200,6 +198,7 @@ public class SchermataNuovaPartita {
             errorDuplicate = false;
 
             for (int k = 0; k < nGiocatori.getValue(); k++) {
+
                // il metodo trim() di String ritorna una stringa rimuovendo
                // gli spazi ( se presenti ), all'inizio e alla fine della
                // stringa

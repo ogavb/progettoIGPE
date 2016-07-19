@@ -217,16 +217,17 @@ public class SchermataNuovaPartitaMultiPlayer {
       paneBottom = new HBox();
       paneBottom.setStyle("-fx-background-color: A2382B;");
       paneBottom.setAlignment(Pos.BOTTOM_RIGHT);
+
       ObservableList<String> listaConfigurazioni;
-      try {
-         listaConfigurazioni = new CreatoreTavolaDiGioco()
-               .prelevaNomiConfigurazioni();
-         configurazioni = new ComboBox<>(listaConfigurazioni);
-         configurazioni.setValue(listaConfigurazioni.get(0));
-      }
-      catch (SQLException e1) {
-         e1.printStackTrace();
-      }
+         try {
+            listaConfigurazioni = new CreatoreTavolaDiGioco()
+                  .prelevaNomiConfigurazioni();
+            configurazioni = new ComboBox<>(listaConfigurazioni);
+            configurazioni.setValue(listaConfigurazioni.get(0));
+         }
+         catch (SQLException e1) {
+            e1.printStackTrace();
+         }
 
       configurazioni.setStyle(style);
       configurazioni.setStyle(style);
@@ -242,12 +243,9 @@ public class SchermataNuovaPartitaMultiPlayer {
       });
 
       if (isClient && rmc.getFinestraMultiPlayer() != null) {
-
          conferma.setDisable(true);
          configurazioni.setDisable(true);
-
       }
-
       paneBottom.getChildren().add(configurazioni);
       paneBottom.getChildren().add(conferma);
       paneBottom.getChildren().add(esci);

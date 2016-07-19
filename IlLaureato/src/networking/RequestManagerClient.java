@@ -263,13 +263,8 @@ public class RequestManagerClient extends Thread {
                         break;
 
                      }
-
                   }
-
-// lockManager.riprendi();
-
                   break;
-
                }
 
                case "3": {
@@ -316,20 +311,13 @@ public class RequestManagerClient extends Thread {
                            giocatori[i]
                                  .setOrdineDiPartenza(Integer.parseInt(r3[2]));
                         }
-
-                        ScrittoreConfigurazione sc = new ScrittoreConfigurazione(
-                              r1[0]);
-                        sc.setNomeConfigurazione(nomeConfigurazione);
-                        sc.query();
-
                         try {
                            sm.initGameManager(giocatori, numeroGiocatori,
-                                 r1[0]);
+                                 nomeConfigurazione);
                         }
                         catch (SQLException e1) {
                            e1.printStackTrace();
                         }
-
                         sm.getGameManager().setOrdinaGiocatori(giocatori);
                         try {
                            sm.hide();

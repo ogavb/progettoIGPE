@@ -183,8 +183,11 @@ public class MainController extends Pane implements Initializable {
 
       Optional<String> result = dialog.showAndWait();
 
-      gm.caricaPartita(result.get());
+      if(!result.isPresent() ) {
+         return;
+      }
 
+      gm.caricaPartita(result.get());
       try {
          new SchermataTavolaDiGioco(gm);
       } catch (Exception e1) {

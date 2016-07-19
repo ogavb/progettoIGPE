@@ -81,29 +81,33 @@ public class AzioneDomanda extends AzioneAstratta {
 
    public boolean controllaEsitoEsame(String risposta, Giocatore g) {
       String rispostaGiocatore = risposta;
+
+      //questo per il giocoInRETE TO-DO
       if( gm instanceof GameManagerNetwork)
       ((GameManagerNetwork) gm).inviaLabelRisposta(risposta);
 
       if (rispostaGiocatore.equals("")) {
          OutputMediator.println("Hai finito il tempo!!\nCrediti aggiornati!!");
-         // aggiorna i crediti dal punto di vista logico
          g.inserisciEsameSvolto(this.getCodiceEsame());
+
+         // aggiorna i crediti dal punto di vista logico
          g.aggiornaCrediti(crediti);
          // aggiorna i crediti dal punto di vista grafico
          gm.notificaAlgiocatore(5, g);
+
          return true;
       }
-
       if (rispostaGiocatore.equals(rispostaEsatta)) {
-         OutputMediator.println("Risposta corretta! ");
+         OutputMediator.println("Risposta corretta!");
+         OutputMediator.println("IlGiocatore guadagna "+crediti+" crediti!");
          g.inserisciEsameSvolto(this.getCodiceEsame());
+         System.err.println("inserisco l'esame con codice: "+this.getCodiceEsame());
          g.aggiornaCrediti(crediti);
          gm.notificaAlgiocatore(5, g);
          return true;
       }
-
-      OutputMediator.println("Risposta errata! ");
-
+      g.inserisciEsameSvolto(this.getCodiceEsame());
+      OutputMediator.println("Risposta errata!\nContinua cosi!!");
       return false;
 
    }

@@ -23,7 +23,7 @@ import javafx.util.Duration;
 
 public class PaneDomande extends Pane {
 
-   private final int NUMCREDITIPERLAUREARSI = 5;
+   private final int NUMCREDITIPERLAUREARSI = 50;
 
    private VBox boxElementi;
    private HBox boxRisposte;

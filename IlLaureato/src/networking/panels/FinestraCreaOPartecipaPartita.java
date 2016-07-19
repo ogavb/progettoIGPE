@@ -3,12 +3,14 @@ package networking.panels;
 import java.util.Random;
 
 import concurrent.LockManager;
+import controller.MainController;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import networking.Client;
 import networking.MultiThreadedServer;
@@ -20,8 +22,10 @@ public class FinestraCreaOPartecipaPartita {
    private Scene scene;
    private Pane mainPane;
 
+   private VBox boxButton;
    private Button creaPartita;
    private Button partecipaPartita;
+   private Button TornaAlMenu;
 
    private Client client;
    private MultiThreadedServer server;
@@ -40,20 +44,16 @@ public class FinestraCreaOPartecipaPartita {
       mainPane.setPrefWidth(300);
       mainPane.setPrefHeight(150);
 
-      creaPartita = new Button("CREA PARTITA");
-      partecipaPartita = new Button("PARTECIPA");
+      boxButton = new VBox(10.0);
+      creaPartita      = new Button("Crea Partita");
+      partecipaPartita = new Button("Partecipa");
+      TornaAlMenu      = new Button("Torna al menu");
 
-      creaPartita.setPrefSize(160, 40);
-      partecipaPartita.setPrefSize(160, 40);
+      boxButton.getChildren().addAll(creaPartita,partecipaPartita,TornaAlMenu);
+      mainPane.getChildren().add(boxButton);
 
-      creaPartita.setTranslateX(75);
-      creaPartita.setTranslateY(25);
-
-      partecipaPartita.setTranslateX(75);
-      partecipaPartita.setTranslateY(75);
-
-      mainPane.getChildren().add(creaPartita);
-      mainPane.getChildren().add(partecipaPartita);
+      boxButton.setTranslateX(75);
+      boxButton.setTranslateY(10);
 
       scene = new Scene(mainPane);
       scene.getStylesheets().add("css/mainCss.css");
@@ -221,9 +221,16 @@ public class FinestraCreaOPartecipaPartita {
          Scene scene = new Scene(root);
          primaryStage.setScene(scene);
          primaryStage.show();
-
       });
 
+      TornaAlMenu.setOnMouseReleased(e-> {
+            this.primaryStage= (Stage) ((Button) e.getSource()).getScene().getWindow();
+            try {
+               new MainController(stage);
+            }
+            catch (Exception e1) {
+            }
+         });
    }
 
    public String getNomeGiocatore() {

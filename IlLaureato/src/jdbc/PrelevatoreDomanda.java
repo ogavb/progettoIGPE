@@ -147,19 +147,23 @@ public class PrelevatoreDomanda extends Database{
 		 }
 
 		int rand = 0;
+
 		if(hashSet.size() < count ){
 
 		   do {
    		rand = ( int )( Math.random() * count +1 );
+   		System.out.println("il rand è :"+rand);
 		   }
    		while(hashSet.contains(rand));
 		}
-
 		else {
-		   rand = ( int )( Math.random() * count +1 );
+		   hashSet.clear();
+		   System.out.println("entrato nell'else di random");
+	      rand = ( int )( Math.random() * count +1 );
 		}
 		this.creaConnessione();
 
+		azioneDomanda.setCodiceEsame(rand);
 
 		try {
 			this.resultset = this.stat.executeQuery(
@@ -167,7 +171,6 @@ public class PrelevatoreDomanda extends Database{
 					 + "from esame"
 					 + " where codice = "+ rand
 					 );
-
 
 			 // Scorro e mostro i risultati.
 			 while (resultset.next()) {

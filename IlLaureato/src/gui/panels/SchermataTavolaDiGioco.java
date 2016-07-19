@@ -8,6 +8,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Optional;
 
+import controller.MainController;
 import core.GameManagerAstratta;
 import core.Giocatore;
 import core.Stato;
@@ -349,13 +350,18 @@ public class SchermataTavolaDiGioco implements Observer {
 
       Button esci = new Button();
       esci.setGraphic(new ImageView(new Image(iconaChiudi)));
-      esci.setTooltip(new Tooltip("Esci"));
+      esci.setTooltip(new Tooltip("Torna al Menu"));
       esci.setTranslateZ(-1);
       esci.setOnAction(new EventHandler<ActionEvent>() {
 
          @Override
          public void handle(ActionEvent event) {
-            System.exit(0);
+            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            try {
+               new MainController(stage);
+            }
+            catch (Exception e1) {
+            }
          }
 
       });
