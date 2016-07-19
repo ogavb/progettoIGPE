@@ -9,7 +9,6 @@ import javafx.stage.Stage;
 import jdbc.CreatoreTavolaDiGioco;
 
 public class StartGame extends Application {
-
    // questo primaryStage deve essere l'unico Stage dell'applicazione
    @Override
    public void start(Stage primaryStage) throws Exception {

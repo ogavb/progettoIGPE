@@ -1,12 +1,10 @@
 package jdbc;
 
 import java.sql.SQLException;
-import java.util.Iterator;
-
+import java.util.HashSet;
 import core.AzioneDomanda;
 import model.Esame;
 import model.Risposta;
-import gui.panels.OutputMediator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -127,8 +125,7 @@ public class PrelevatoreDomanda extends Database{
 		}
 	}
 
-	@Override
-	public void query(){
+	public void query2(HashSet<Integer> hashSet){
 
 		int count = 0;
 		try {
@@ -136,6 +133,7 @@ public class PrelevatoreDomanda extends Database{
 			 this.resultset.next();
 			 count = this.resultset.getInt(1);
 		}
+
 		catch (SQLException e) {
 			 // In caso di errore...
 		}
@@ -148,8 +146,20 @@ public class PrelevatoreDomanda extends Database{
 			 }
 		 }
 
-		int rand = ( int )( Math.random() * count +1 );
+		int rand = 0;
+		if(hashSet.size() < count ){
+
+		   do {
+   		rand = ( int )( Math.random() * count +1 );
+		   }
+   		while(hashSet.contains(rand));
+		}
+
+		else {
+		   rand = ( int )( Math.random() * count +1 );
+		}
 		this.creaConnessione();
+
 
 		try {
 			this.resultset = this.stat.executeQuery(
@@ -158,6 +168,7 @@ public class PrelevatoreDomanda extends Database{
 					 + " where codice = "+ rand
 					 );
 
+
 			 // Scorro e mostro i risultati.
 			 while (resultset.next()) {
 
@@ -165,7 +176,6 @@ public class PrelevatoreDomanda extends Database{
 				 String domanda = this.resultset.getString("domanda");
 
 				 this.crediti = this.resultset.getInt("crediti");
-
 				 azioneDomanda.setRispostaEsatta(this.resultset.getString("rispostaEsatta"));
 				 azioneDomanda.setCrediti(this.crediti);
 
@@ -180,11 +190,6 @@ public class PrelevatoreDomanda extends Database{
 				 }
 				 this.azioneDomanda.setRisposte(ris);
 				 this.azioneDomanda.setDomanda(domanda);
-
-				 OutputMediator.println("domanda: " + domanda);
-				 OutputMediator.print(ris.getRisposte()[0] + "    ");
-				 OutputMediator.println(ris.getRisposte()[1]);
-				 OutputMediator.print("\n");
 			 }
 
 		}
@@ -201,13 +206,8 @@ public class PrelevatoreDomanda extends Database{
 		 }
 	}
 
-//	public static void main(String[] args) {
-//		PrelevatoreDomanda database = new PrelevatoreDomanda();
-//		ObservableList<Esame> esami = database.prelevaEsami();
-//
-//		Iterator<Esame> it = esami.iterator();
-//		while(it.hasNext()){
-//			System.out.println("Esame: " + it.next().getNome());
-//		}
-//	}
+   @Override
+   public void query() {
+   }
+
 }

@@ -192,6 +192,9 @@ public class PaneDomande extends Pane {
 
       animazione.setOnFinished(event -> {
          azione.controllaEsitoEsame("", giocatore);
+         if (controllaSeLaureato(giocatore)) {
+            alert.showAndWait();
+         }
       });
 
       // se rispondo la prima label
