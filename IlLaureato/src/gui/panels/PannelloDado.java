@@ -1,5 +1,7 @@
 package gui.panels;
 
+import java.io.File;
+
 import core.Dado;
 import core.GameManager;
 import core.GameManagerAstratta;
@@ -11,6 +13,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 import networking.GameManagerNetwork;
@@ -23,10 +27,18 @@ public class PannelloDado extends GridPane {
    private ImageView imageViewUno;
 
    private static String primo;
+   private final String path = "dadoSuono.mp3";
+   private Media media;
+   private MediaPlayer mediaPlayer;
+
+   private final  double durata = 100.0;
 
    private DadiListener eventoDado;
 
    public PannelloDado(Integer i1, GameManagerAstratta gm) {
+
+      media = new Media(new File(path).toURI().toString());
+
 
       this.gm = gm;
 
@@ -69,6 +81,8 @@ public class PannelloDado extends GridPane {
    }
 
    public void animazione(int lancioCorrente, boolean flag) {
+      mediaPlayer = new MediaPlayer(media);
+      mediaPlayer.play();
 
       setPrimo((int) ((Math.random() * 6) + 1));
       RotateTransition rt1 = new RotateTransition(Duration.millis(60),
@@ -88,7 +102,7 @@ public class PannelloDado extends GridPane {
          public void handle(ActionEvent event) {
 
             setPrimo((int) ((Math.random() * 6) + 1));
-            RotateTransition rt2 = new RotateTransition(Duration.millis(60),
+            RotateTransition rt2 = new RotateTransition(Duration.millis(durata),
                   imageViewUno);
 
             rt2.setFromAngle(0.0);
@@ -106,7 +120,7 @@ public class PannelloDado extends GridPane {
 
                   setPrimo((int) ((Math.random() * 6) + 1));
                   RotateTransition rt3 = new RotateTransition(
-                        Duration.millis(60), imageViewUno);
+                        Duration.millis(durata), imageViewUno);
 
                   rt3.setFromAngle(0.0);
                   rt3.setToAngle(360.0);
@@ -123,7 +137,7 @@ public class PannelloDado extends GridPane {
 
                         setPrimo((int) ((Math.random() * 6) + 1));
                         RotateTransition rt4 = new RotateTransition(
-                              Duration.millis(60), imageViewUno);
+                              Duration.millis(durata), imageViewUno);
 
                         rt4.setFromAngle(0.0);
                         rt4.setToAngle(360.0);
@@ -140,7 +154,7 @@ public class PannelloDado extends GridPane {
 
                               setPrimo((int) ((Math.random() * 6) + 1));
                               RotateTransition rt5 = new RotateTransition(
-                                    Duration.millis(60), imageViewUno);
+                                    Duration.millis(durata), imageViewUno);
 
                               rt5.setFromAngle(0.0);
                               rt5.setToAngle(360.0);
@@ -158,7 +172,7 @@ public class PannelloDado extends GridPane {
 
                                     setPrimo((int) ((Math.random() * 6) + 1));
                                     RotateTransition rt6 = new RotateTransition(
-                                          Duration.millis(60), imageViewUno);
+                                          Duration.millis(durata), imageViewUno);
 
                                     rt6.setFromAngle(0.0);
                                     rt6.setToAngle(360.0);
@@ -170,7 +184,6 @@ public class PannelloDado extends GridPane {
 
                                     rt6.setOnFinished(
                                           new EventHandler<ActionEvent>() {
-
                                        @Override
                                        public void handle(ActionEvent event) {
                                           setPrimo(lancioCorrente);
@@ -212,6 +225,7 @@ public class PannelloDado extends GridPane {
             System.err.println("PUOI TIRARE IL DADO");
             int lancioCorrente = Dado.lanciaDadi();
             animazione(lancioCorrente, true);
+
          }
 
          else if (gm instanceof GameManager) {

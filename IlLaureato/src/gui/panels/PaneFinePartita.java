@@ -1,9 +1,13 @@
 package gui.panels;
 
+import java.io.File;
+
 import core.Giocatore;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 public class PaneFinePartita extends Pane {
 
@@ -12,7 +16,17 @@ public class PaneFinePartita extends Pane {
    private VBox boxLabel = new VBox(10.0);
    private Label nome, crediti, anni;
 
+   private String path = "vittoria.mp3";
+   private Media media;
+   private MediaPlayer mediaPlayer;
+
    public PaneFinePartita(Giocatore g) {
+
+      media = new Media(new File(path).toURI().toString());
+      mediaPlayer = new MediaPlayer(media);
+      mediaPlayer.play();
+
+      SchermataNuovaPartita.mediaPlayerSn.pause();
 
       this.getStylesheets().add("css/finePartita.css");
       this.setWidth(640.0);

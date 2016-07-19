@@ -1,5 +1,6 @@
 package gui.panels;
 
+import java.io.File;
 import java.sql.SQLException;
 
 import controller.MainController;
@@ -54,21 +55,21 @@ public class SchermataNuovaPartita {
 
    private GameManager gm;
 // variabili per la musica
-// private String path;
-// private Media media;
-// private MediaPlayer mediaPlayer;
-// private MediaView mediaView;
+   private String path;
+   private Media media;
+   public static MediaPlayer mediaPlayerSn;
 
    public SchermataNuovaPartita(Stage stage) {
 
       this.stage = stage;
       stage.setTitle("Nuova Partita");
 
-// path = "C:/Users/Cosimo/Desktop/MUSICA/ragazzi.mp3";
-// media = new Media(new File(path).toURI().toString());
-// mediaPlayer = new MediaPlayer(media);
-// mediaPlayer.setAutoPlay(true);
-// mediaView = new MediaView(mediaPlayer);
+      path = "musica1.mp3";
+      media = new Media(new File(path).toURI().toString());
+      mediaPlayerSn = new MediaPlayer(media);
+      mediaPlayerSn.setAutoPlay(true);
+
+
 
       mainPane = new BorderPane();
       mainPane.setPrefWidth(600);
