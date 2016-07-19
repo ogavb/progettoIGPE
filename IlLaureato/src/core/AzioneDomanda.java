@@ -7,6 +7,7 @@ import networking.GameManagerNetwork;
 
 public class AzioneDomanda extends AzioneAstratta {
 
+   private int codiceDomanda;
    private String domanda;
    private Risposta ris;
    private String rispostaEsatta;
@@ -73,7 +74,7 @@ public class AzioneDomanda extends AzioneAstratta {
 
       if (gm instanceof GameManager) {
          PrelevatoreDomanda database = new PrelevatoreDomanda(this);
-         database.query();
+         database.query2(g.getEsamiSvolti());
       }
 
    }
@@ -86,6 +87,7 @@ public class AzioneDomanda extends AzioneAstratta {
       if (rispostaGiocatore.equals("")) {
          OutputMediator.println("Hai finito il tempo!! crediti aggiornati");
          // aggiorna i crediti dal punto di vista logico
+         g.inserisciEsameSvolto(this.getCodiceDomanda());
          g.aggiornaCrediti(crediti);
          // aggiorna i crediti dal punto di vista grafico
          gm.notificaAlgiocatore(5, g);
@@ -94,14 +96,27 @@ public class AzioneDomanda extends AzioneAstratta {
 
       if (rispostaGiocatore.equals(rispostaEsatta)) {
          OutputMediator.println("Risposta corretta! ");
+         g.inserisciEsameSvolto(this.getCodiceDomanda());
          g.aggiornaCrediti(crediti);
          gm.notificaAlgiocatore(5, g);
          return true;
+      }
+
+      else {
+         g.inserisciEsameSvolto(this.getCodiceDomanda());
       }
       OutputMediator.println("Risposta errata! ");
 
       return false;
 
+   }
+
+   public int getCodiceDomanda() {
+      return codiceDomanda;
+   }
+
+   public void setCodiceDomanda(int codiceDomanda) {
+      this.codiceDomanda = codiceDomanda;
    }
 
 }

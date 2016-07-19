@@ -71,10 +71,8 @@ public class Giocatore implements Comparable<Object>, Serializable {
 
       risultatoDado = risultato;
       casellePercorseInAnnoAccademico += this.risultatoDado;
-      System.out.println("caselle percorse dal giocatore "
-            + casellePercorseInAnnoAccademico);
+      //funzione che controlla se siamo passati dal via
       aggiornaAnniAccademici();
-      // OutputMediator.risultatoDado(risultatoDado);
       return risultatoDado;
    }
 
@@ -145,5 +143,14 @@ public class Giocatore implements Comparable<Object>, Serializable {
       sb.append(this.risultatoDado);
 
       return sb.toString();
+   }
+
+   public void inserisciEsameSvolto(int codiceDomanda) {
+      this.esamiSvolti.add(codiceDomanda);
+   }
+
+
+   public HashSet<Integer> getEsamiSvolti() {
+      return esamiSvolti;
    }
 }
