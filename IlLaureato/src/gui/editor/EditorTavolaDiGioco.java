@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.Optional;
 
 import gui.panels.SceltaEditor;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -19,6 +21,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import jdbc.ScrittoreConfigurazione;
@@ -29,15 +32,45 @@ public class EditorTavolaDiGioco extends TavolaGridPane {
    private Scene scene;
 
    private BorderPane mainPane;
+   private Pane centro;
    private VBox paletteCaselle;
 
    private Button salva;
    private Button indietro;
 
+   private boolean schermoIntero=false;
+
    public EditorTavolaDiGioco(Stage stage) throws SQLException {
       super(11, 11);
 
       this.stage = stage;
+      this.centro = new Pane();
+
+      this.centro.getChildren().add(new ImageView("file:icone/ilLaureato.png"));
+      this.centro.setTranslateX(146); //233 121
+      this.centro.setTranslateY(118);
+
+//       addListener(new ChangeListener<Number>() {
+//         @Override
+//         public void changed(ObservableValue<? extends Number> observableValue,
+//               Number oldSceneWidth, Number newSceneWidth) {
+//               System.err.println("entrato nel listener");
+//               if(schermoIntero) {
+//                  centro.setTranslateX(233);
+//                  centro.setTranslateY(121);
+//                  schermoIntero = false;
+//               }
+//               else {
+//                  centro.setTranslateX(146);
+//                  centro.setTranslateY(118);
+//                  schermoIntero = true;
+//               }
+//         }});
+
+      this.setOnMouseClicked(e -> {
+         System.err.println("X: "+e.getSceneX());
+         System.err.println("Y: "+e.getSceneY());
+      });
 
       salva = new Button("Salva");
       indietro = new Button("Menu");
@@ -92,7 +125,6 @@ public class EditorTavolaDiGioco extends TavolaGridPane {
       mainPane.setPrefHeight(720);
 
       setStyle("-fx-background-color: DAE6F3;");
-
       mainPane.setTop(new ImageView(new Image("file:icone/editor.png")));
       BorderPane.setAlignment(mainPane.getTop(), Pos.CENTER);
 
@@ -106,6 +138,7 @@ public class EditorTavolaDiGioco extends TavolaGridPane {
       scene = new Scene(mainPane);
       scene.getStylesheets().add("css/mainCss.css");
 
+      mainPane.getChildren().add(centro);
       this.stage.setScene(scene);
       this.stage.centerOnScreen();
       this.stage.setResizable(true);
