@@ -48,11 +48,11 @@ public class MainController extends Pane implements Initializable {
    private ImageView onlineGameContainer;
    @FXML
    private ImageView editorContainer;
-   @FXML
+/*   @FXML
    private ImageView optionContainer;
    @FXML
    private ImageView creditsContainer;
-   @FXML
+*/   @FXML
    private ImageView exitContainer;
 
    private Image newGame;
