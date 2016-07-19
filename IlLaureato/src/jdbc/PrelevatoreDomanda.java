@@ -2,12 +2,9 @@ package jdbc;
 
 import java.sql.SQLException;
 import java.util.HashSet;
-import java.util.Iterator;
-
 import core.AzioneDomanda;
 import model.Esame;
 import model.Risposta;
-import gui.panels.OutputMediator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -150,21 +147,19 @@ public class PrelevatoreDomanda extends Database{
 		 }
 
 		int rand = 0;
+		if(hashSet.size() < count ){
 
-		//se il giocatore ha gia visualizzato tutti gli esami
-		//faccio un random normale si ripetono
-		//pero finche non li ha fatti ne da diversi
-		if( hashSet.size() < count) {
-				do{
-	      rand = ( int )( Math.random() * count +1 );
-		}while (hashSet.contains(rand));
-
-		 azioneDomanda.setCodiceDomanda(rand);
+		   do {
+   		rand = ( int )( Math.random() * count +1 );
+		   }
+   		while(hashSet.contains(rand));
 		}
+
 		else {
 		   rand = ( int )( Math.random() * count +1 );
 		}
 		this.creaConnessione();
+
 
 		try {
 			this.resultset = this.stat.executeQuery(
@@ -172,6 +167,7 @@ public class PrelevatoreDomanda extends Database{
 					 + "from esame"
 					 + " where codice = "+ rand
 					 );
+
 
 			 // Scorro e mostro i risultati.
 			 while (resultset.next()) {

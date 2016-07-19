@@ -7,7 +7,7 @@ import networking.GameManagerNetwork;
 
 public class AzioneDomanda extends AzioneAstratta {
 
-   private int codiceDomanda;
+   private int codiceEsame;
    private String domanda;
    private Risposta ris;
    private String rispostaEsatta;
@@ -85,38 +85,35 @@ public class AzioneDomanda extends AzioneAstratta {
       ((GameManagerNetwork) gm).inviaLabelRisposta(risposta);
 
       if (rispostaGiocatore.equals("")) {
-         OutputMediator.println("Hai finito il tempo!! crediti aggiornati");
+         OutputMediator.println("Hai finito il tempo!!\nCrediti aggiornati!!");
          // aggiorna i crediti dal punto di vista logico
-         g.inserisciEsameSvolto(this.getCodiceDomanda());
+         g.inserisciEsameSvolto(this.getCodiceEsame());
          g.aggiornaCrediti(crediti);
          // aggiorna i crediti dal punto di vista grafico
          gm.notificaAlgiocatore(5, g);
-         return false;
+         return true;
       }
 
       if (rispostaGiocatore.equals(rispostaEsatta)) {
          OutputMediator.println("Risposta corretta! ");
-         g.inserisciEsameSvolto(this.getCodiceDomanda());
+         g.inserisciEsameSvolto(this.getCodiceEsame());
          g.aggiornaCrediti(crediti);
          gm.notificaAlgiocatore(5, g);
          return true;
       }
 
-      else {
-         g.inserisciEsameSvolto(this.getCodiceDomanda());
-      }
       OutputMediator.println("Risposta errata! ");
 
       return false;
 
    }
 
-   public int getCodiceDomanda() {
-      return codiceDomanda;
+   public int getCodiceEsame() {
+      return codiceEsame;
    }
 
-   public void setCodiceDomanda(int codiceDomanda) {
-      this.codiceDomanda = codiceDomanda;
+   public void setCodiceEsame(int codice ) {
+      this.codiceEsame = codice;
    }
 
 }

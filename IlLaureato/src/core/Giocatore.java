@@ -145,8 +145,8 @@ public class Giocatore implements Comparable<Object>, Serializable {
       return sb.toString();
    }
 
-   public void inserisciEsameSvolto(int codiceDomanda) {
-      this.esamiSvolti.add(codiceDomanda);
+   public void inserisciEsameSvolto(int i) {
+      this.esamiSvolti.add(i);
    }
 
 
