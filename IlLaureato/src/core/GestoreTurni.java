@@ -213,7 +213,10 @@ public class GestoreTurni extends Observable implements Serializable {
 			}
 		}
 	}
+<<<<<<< HEAD
 
+=======
+>>>>>>> branch 'master' of https://github.com/ogavb/progettoIGPE.git
 	// Funzione che modifica i turni che il giocatore deve aspettare
 	public void modificaTurni(Giocatore g, int numTurni) {
 		turni.set(giocatori.indexOf(g),
