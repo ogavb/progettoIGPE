@@ -1,43 +1,43 @@
 
 Label {
-	-fx-min-width: 150px ;
-	-fx-min-height: 40px ;
-	-fx-pref-width: 150px ;
-	-fx-pref-height: 40px ;
-	-fx-background-radius: 30;
-	-fx-border-radius: 30%;
-	-fx-background-insets: 0;
+	-fx-min-width: 150.0px ;
+	-fx-min-height: 40.0px ;
+	-fx-pref-width: 150.0px ;
+	-fx-pref-height: 40.0px ;
+	-fx-background-radius: 30.0;
+	-fx-border-radius: 30.0%;
+	-fx-background-insets: 0.0;
 	-fx-text-fill: white;
-	-fx-font-size: 15;
+	-fx-font-size: 15.0;
 }
 
 .testoLabel {
-		-fx-padding: 5;
+		-fx-padding: 5.0;
 		-fx-background-color: #0076a3;
 		-fx-border-style: solid inside;
-		-fx-font-size: 16;
+		-fx-font-size: 16.0;
 		-fx-font-family: sans-serif;
 		-fx-font-weight: bold;
-		-fx-border-width: 2;
-		-fx-border-radius: 15;
+		-fx-border-width: 2.0;
+		-fx-border-radius: 15.0;
 		-fx-border-color: white;
 }
 
 
 .testo {
-		-fx-padding: 5;
-		-fx-font-size: 16;
+		-fx-padding: 5.0;
+		-fx-font-size: 16.0;
 		-fx-font-family: sans-serif;
 		-fx-font-weight: bold;
 }
 
 
 .risultato {
-	-fx-min-width: 450px ;
-	-fx-min-height: 70px ;
-	-fx-pref-width: 450px ;
-	-fx-pref-height: 70px ;
-	-fx-font-size: 16;
+	-fx-min-width: 450.0px ;
+	-fx-min-height: 70.0px ;
+	-fx-pref-width: 450.0px ;
+	-fx-pref-height: 70.0px ;
+	-fx-font-size: 16.0;
 	-fx-font-family: sans-serif;
 	-fx-font-weight: bold;
 }

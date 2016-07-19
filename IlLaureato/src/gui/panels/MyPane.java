@@ -11,33 +11,36 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.FlowPane;
 
-public class MyPane extends FlowPane{
+public class MyPane extends FlowPane {
 
-	private Casella c;
+   private Casella c;
 
-	public MyPane(Casella c,Image immagine) {
-		this.setCasella(c);
-		setBackGround(immagine);
+   public MyPane(Casella c, Image immagine) {
+      this.setCasella(c);
+      setBackGround(immagine);
 
-		this.setDepthTest(DepthTest.ENABLE);
-		this.setTranslateZ(0.0);
+      this.setDepthTest(DepthTest.ENABLE);
+      this.setTranslateZ(0.0);
 
-//		System.out.println("La z del pannello è " + this.getTranslateZ());
-	}
+// System.out.println("La z del pannello è " + this.getTranslateZ());
+   }
 
-	public MyPane(){}
+   public MyPane() {
+   }
 
-	public Casella getCasella() {
-		return c;
-	}
+   public Casella getCasella() {
+      return c;
+   }
 
-	public void setCasella(Casella c) {
-		this.c = c;
-	}
+   public void setCasella(Casella c) {
+      this.c = c;
+   }
 
-	public void setBackGround(Image image){
-		BackgroundSize bs = new BackgroundSize(80, 60, true, true, true, false);
-		this.setBackground(new Background(new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, bs)));
-	}
+   public void setBackGround(Image image) {
+      BackgroundSize bs = new BackgroundSize(80, 60, true, true, true, false);
+      this.setBackground(new Background(
+            new BackgroundImage(image, BackgroundRepeat.NO_REPEAT,
+                  BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, bs)));
+   }
 
 }

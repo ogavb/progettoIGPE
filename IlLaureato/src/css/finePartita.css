@@ -1,21 +1,21 @@
 #pannello{
 	-fx-background-image:  url("file:icone/youwin.jpg");
 	-fx-background-repeat: stretch;
-    -fx-background-size: 640 480;
+    -fx-background-size: 640.0 480.0;
     -fx-background-position: center center;
-    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);
+    -fx-effect: dropshadow(three-pass-box, black, 30.0, 0.5, 0.0, 0.0);
 }
 
 .label {
-    -fx-font-size: 30pt;
+    -fx-font-size: 30.0pt;
     -fx-font-family: "Segoe UI Semibold";
     -fx-text-fill: red;
     -fx-opacity: 0.6;
 }
 
 .label-bright {
-    -fx-font-size: 30pt;
+    -fx-font-size: 30.0pt;
     -fx-font-family: "Segoe UI Semibold";
     -fx-text-fill: red;
-    -fx-opacity: 1;
+    -fx-opacity: 1.0;
 }

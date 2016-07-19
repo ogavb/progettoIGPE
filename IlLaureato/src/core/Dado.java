@@ -2,15 +2,16 @@ package core;
 
 import java.io.Serializable;
 
-public class Dado implements Serializable{
+public class Dado implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+   private static final long serialVersionUID = 1L;
 
-	private int dadi;
+   private int dadi;
 
-	public Dado(){}
+   public Dado() {
+   }
 
-	public static int lanciaDadi(){
-		return ( int )( ( Math.random() * 6 ) + 1 );
-	}
+   public static int lanciaDadi() {
+      return (int) ((Math.random() * 6) + 1);
+   }
 }

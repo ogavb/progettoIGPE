@@ -10,25 +10,23 @@ import jdbc.CreatoreTavolaDiGioco;
 
 public class StartGame extends Application {
 
-	//questo primaryStage deve essere l'unico Stage dell'applicazione
-	@Override
-	public void start(Stage primaryStage) throws Exception {
+   // questo primaryStage deve essere l'unico Stage dell'applicazione
+   @Override
+   public void start(Stage primaryStage) throws Exception {
 
-		MainController mc = new MainController(primaryStage);
+      MainController mc = new MainController(primaryStage);
 
-		//avvio database cosi non ho problemi
-		new CreatoreTavolaDiGioco();
+      // avvio database cosi non ho problemi
+      new CreatoreTavolaDiGioco();
 
-		primaryStage.setTitle("Il Laureato");
-		primaryStage.getIcons().add(new Image("data/icon.png"));
-		primaryStage.setScene(mc.getScena());
-		primaryStage.show();
-	}
+      primaryStage.setTitle("Il Laureato");
+      primaryStage.getIcons().add(new Image("data/icon.png"));
+      primaryStage.setScene(mc.getScena());
+      primaryStage.show();
+   }
 
-
-
-	public static void main(String[] args) {
-		launch(args);
-	}
+   public static void main(String[] args) {
+      launch(args);
+   }
 
 }

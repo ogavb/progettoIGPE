@@ -23,213 +23,224 @@ import util.TabellaMatchUtil;
 
 public class FinestraMultiPlayer {
 
-	private Stage primaryStage;
-	private Pane mainPane;
+   private Stage primaryStage;
+   private Pane mainPane;
 
+   private VBox boxComponenti;
+   private HBox boxBottoni;
+   private Button partecipaPartita;
+   private Button annulla;
 
-	private VBox boxComponenti;
-	private HBox boxBottoni;
-	private Button partecipaPartita;
-	private Button annulla;
+   private TableView<MatchTableView> tableMatchs;
+   private TableColumn<MatchTableView, Integer> idMatch;
+   private TableColumn<MatchTableView, Integer> numeroGiocatori;
+   private TableColumn<MatchTableView, Integer> numeroGiocatoriCorrenti;
 
+   private Client client;
+   private RequestManagerClient rmc;
+   private LockManager lockManager;
 
-	private TableView<MatchTableView> tableMatchs;
-	private TableColumn<MatchTableView, Integer> idMatch;
-	private TableColumn<MatchTableView, Integer> numeroGiocatori;
-	private TableColumn<MatchTableView, Integer> numeroGiocatoriCorrenti;
+   private String nomeGiocatore;
 
-	private Client client;
-	private RequestManagerClient rmc;
-	private LockManager lockManager;
+   public FinestraMultiPlayer(Stage stage, Client client, String nomeGiocatore,
+         RequestManagerClient rmc) {
 
-	private String nomeGiocatore;
+      primaryStage = stage;
 
-	public FinestraMultiPlayer(Stage stage,Client client,String nomeGiocatore,RequestManagerClient rmc) {
+      this.client = client;
 
-		primaryStage = stage;
+      this.rmc = rmc;
 
-		this.client = client;
+      this.nomeGiocatore = nomeGiocatore;
 
-		this.rmc = rmc;
+      this.lockManager = new LockManager();
 
-		this.nomeGiocatore = nomeGiocatore;
+      SchermataNuovaPartitaMultiPlayer sm = new SchermataNuovaPartitaMultiPlayer(
+            true, client, rmc);
+      rmc.setSchermataNuovaPartitaMultiPlayer(sm);
 
-		this.lockManager = new LockManager();
+   }
 
-		SchermataNuovaPartitaMultiPlayer sm = new SchermataNuovaPartitaMultiPlayer(true,client,rmc);
-		rmc.setSchermataNuovaPartitaMultiPlayer(sm);
+   @Override
+   protected void finalize() throws Throwable {
+      // TODO Auto-generated method stub
+      System.out.print("L'ho distrutto");
+      super.finalize();
 
-	}
-	@Override
-	protected void finalize() throws Throwable {
-		// TODO Auto-generated method stub
-		System.out.print("L'ho distrutto");
-		super.finalize();
+   }
 
-	}
+   public void close() {
+      primaryStage.close();
+      System.err.println("CHIAMATO METODO CLOSE SU FINESTRA MATCH");
+   }
 
-	public void close(){
-		primaryStage.close();
-		System.err.println("CHIAMATO METODO CLOSE SU FINESTRA MATCH");
-	}
+   public String getNomeGiocatore() {
+      return this.nomeGiocatore;
+   }
 
-	public String getNomeGiocatore(){
-		return this.nomeGiocatore;
-	}
+   public Parent show(Stage stage, String[] matchs) {
 
-	public Parent show(Stage stage,String [] matchs){
+      System.err.println("CHIAMATO METODO SHOW");
 
-		System.err.println("CHIAMATO METODO SHOW");
+      this.primaryStage = stage;
 
-		this.primaryStage = stage;
+      boxComponenti = new VBox(30.0);
+      boxBottoni = new HBox(2.0);
 
-		boxComponenti = new VBox(30.0);
-		boxBottoni = new HBox(2.0);
+      mainPane = new Pane();
+      mainPane.setPrefWidth(325);
+      mainPane.setPrefHeight(500);
 
-		mainPane = new Pane();
-		mainPane.setPrefWidth(325);
-		mainPane.setPrefHeight(500);
+      mainPane.setStyle("-fx-background-color: A2382B;");
 
-		mainPane.setStyle("-fx-background-color: A2382B;");
+      partecipaPartita = new Button("PARTECIPA");
+      annulla = new Button("ANNULLA");
 
-		partecipaPartita = new Button("PARTECIPA");
-		annulla = new Button("ANNULLA");
+      String style = "-fx-background-color: linear-gradient(rgb(22, 179, 184) 5%, rgb(189, 51, 42) 100%) rgb(22, 179, 184);-fx-background-radius: 30;-fx-background-insets: 0; -fx-text-fill: white;-fx-font-size: 11;";
+      String styleOn = "-fx-background-color: linear-gradient(rgb(30,140,150) 10%, rgb(189, 51, 42) 100%) rgb(22, 179, 184);-fx-background-radius: 30;-fx-background-insets: 0; -fx-text-fill: white;-fx-font-size: 13;";
 
-		String style   = "-fx-background-color: linear-gradient(rgb(22, 179, 184) 5%, rgb(189, 51, 42) 100%) rgb(22, 179, 184);-fx-background-radius: 30;-fx-background-insets: 0; -fx-text-fill: white;-fx-font-size: 11;";
-	    String styleOn = "-fx-background-color: linear-gradient(rgb(30,140,150) 10%, rgb(189, 51, 42) 100%) rgb(22, 179, 184);-fx-background-radius: 30;-fx-background-insets: 0; -fx-text-fill: white;-fx-font-size: 13;";
+      partecipaPartita.setStyle(style);
 
-		partecipaPartita.setStyle(style);
+      partecipaPartita.setPrefSize(160, 40);
 
-		partecipaPartita.setPrefSize(160, 40);
+      annulla.setStyle(style);
 
-		annulla.setStyle(style);
+      annulla.setPrefSize(160, 40);
 
-		annulla.setPrefSize(160, 40);
+      partecipaPartita.setOnMouseEntered(event -> {
+         partecipaPartita.setStyle(styleOn);
+      });
+      partecipaPartita.setOnMouseExited(event -> {
+         partecipaPartita.setStyle(style);
+      });
 
-		partecipaPartita.setOnMouseEntered(event -> {
-			partecipaPartita.setStyle(styleOn);
-	    });
-		partecipaPartita.setOnMouseExited(event -> {
-			partecipaPartita.setStyle(style);
-	    });
+      annulla.setOnMouseEntered(event -> {
+         annulla.setStyle(styleOn);
+      });
+      annulla.setOnMouseExited(event -> {
+         annulla.setStyle(style);
+      });
 
-		annulla.setOnMouseEntered(event -> {
-			annulla.setStyle(styleOn);
-	    });
-		annulla.setOnMouseExited(event -> {
-			annulla.setStyle(style);
-	    });
+      partecipaPartita.setOnMouseReleased(event -> {
 
-		partecipaPartita.setOnMouseReleased(event -> {
+         MatchTableView match = null;
 
-			MatchTableView match = null;
+         if (tableMatchs != null)
+            match = tableMatchs.getSelectionModel().getSelectedItem();
 
-			if(tableMatchs != null)
-				match = tableMatchs.getSelectionModel().getSelectedItem();
+         if (match == null) {
 
-			if(match == null){
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Errore");
+            alert.setHeaderText("Selezionare una partita");
+            alert.showAndWait();
 
-				Alert alert = new Alert(AlertType.ERROR);
-			    alert.setTitle("Errore");
-			    alert.setHeaderText("Selezionare una partita");
-			    alert.showAndWait();
+         }
+         else {
 
-			}
-			else  {
+            int idMatch = match.getIdMatch();
 
-				int idMatch = match.getIdMatch();
+            client.addRequest("1##" + idMatch);
 
-				client.addRequest("1##"+idMatch);
+            try {
+               lockManager.attendiUnoQuattro();
+            }
+            catch (Exception e) {
+               // TODO Auto-generated catch block
+               e.printStackTrace();
+            }
 
-				try {
-					lockManager.attendiUnoQuattro();
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+            this.primaryStage = ((Stage) ((Button) event.getSource()).getScene()
+                  .getWindow());
+            rmc.getSchermataNuovaPartitaMultiPlayer().setIsClient(true);
+            Parent root = rmc.getSchermataNuovaPartitaMultiPlayer().show(
+                  this.primaryStage, match.getNumeroGiocatori(), nomeGiocatore);
 
-				this.primaryStage = ((Stage)((Button)event.getSource()).getScene().getWindow());
-				rmc.getSchermataNuovaPartitaMultiPlayer().setIsClient(true);
-				Parent root = rmc.getSchermataNuovaPartitaMultiPlayer().show(this.primaryStage,match.getNumeroGiocatori(),nomeGiocatore);
+            client.addRequest("3##" + nomeGiocatore);
 
-				client.addRequest("3##"+nomeGiocatore);
+            try {
+               lockManager.attendiTre();
+            }
+            catch (Exception e) {
+               // TODO Auto-generated catch block
+               e.printStackTrace();
+            }
 
-				try {
-					lockManager.attendiTre();
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+         }
+      });
 
-				Scene scene = new Scene(root);
-			    stage.setScene(scene);
-			    stage.show();
-			}
-		});
+      primaryStage.setOnCloseRequest(event -> {
+         client.addRequest("#END#");
+         stage.close();
+      });
 
-		primaryStage.setOnCloseRequest(event -> {
-			client.addRequest("#END#");
-			stage.close();
-		});
+      annulla.setOnMouseReleased(event -> {
 
-		annulla.setOnMouseReleased(event -> {
+         client.addRequest("#END#");
+         stage.close();
 
-			client.addRequest("#END#");
-			stage.close();
+      });
+      createTableView();
 
-		});
-		createTableView();
+      tableMatchs.setOnMouseReleased(event -> {
+         MatchTableView match = tableMatchs.getSelectionModel()
+               .getSelectedItem();
+         if (match != null
+               && match.getGiocatoriCorrenti() == match.getNumeroGiocatori()) {
+            System.err
+                  .println("MATCH TABLE VIEW: " + match.getGiocatoriCorrenti()
+                        + " " + match.getNumeroGiocatori());
+            partecipaPartita.setDisable(true);
+         }
+         else if (match != null
+               && match.getGiocatoriCorrenti() < match.getNumeroGiocatori())
+            partecipaPartita.setDisable(false);
+      });
 
-		tableMatchs.setOnMouseReleased(event -> {
-			MatchTableView match = tableMatchs.getSelectionModel().getSelectedItem();
-			if(match != null && match.getGiocatoriCorrenti() == match.getNumeroGiocatori()){
-				System.err.println("MATCH TABLE VIEW: " + match.getGiocatoriCorrenti() + " " + match.getNumeroGiocatori());
-				partecipaPartita.setDisable(true);
-			}
-			else if(match != null && match.getGiocatoriCorrenti() < match.getNumeroGiocatori())
-				partecipaPartita.setDisable(false);
-		});
+      boxBottoni.getChildren().add(partecipaPartita);
+      boxBottoni.getChildren().add(annulla);
 
-	    boxBottoni.getChildren().add(partecipaPartita);
-		boxBottoni.getChildren().add(annulla);
+      boxComponenti.getChildren().add(tableMatchs);
+      boxComponenti.getChildren().add(boxBottoni);
+      mainPane.getChildren().add(boxComponenti);
 
-		boxComponenti.getChildren().add(tableMatchs);
-		boxComponenti.getChildren().add(boxBottoni);
-		mainPane.getChildren().add(boxComponenti);
+      List<MatchTableView> tmp = new ArrayList<>();
+      String match[] = null;
+      for (String s : matchs) {
+         match = s.split(",");
+         tmp.add(new MatchTableView(Integer.parseInt(match[0]),
+               Integer.parseInt(match[1]), Integer.parseInt(match[2])));
 
+      }
 
-	    List<MatchTableView> tmp = new ArrayList<>();
-	    String match[] = null;
-		for(String s : matchs){
-			match = s.split(",");
-			tmp.add(new MatchTableView(Integer.parseInt(match[0]), Integer.parseInt(match[1]), Integer.parseInt(match[2])));
+      tableMatchs.getItems().clear();
+      tableMatchs.getItems().addAll(tmp);
 
-		}
+      return mainPane;
 
-		tableMatchs.getItems().clear();
-		tableMatchs.getItems().addAll(tmp);
+   }
 
-		return mainPane;
+   public Client getClient() {
+      return this.client;
+   }
 
-	}
+   public TableView<MatchTableView> getTableMatchs() {
+      return this.tableMatchs;
+   }
 
-	public Client getClient(){
-		return this.client;
-	}
+   @SuppressWarnings("unchecked")
+   private void createTableView() {
+      tableMatchs = new TableView<>(TabellaMatchUtil.getListaMatch());
+      idMatch = TabellaMatchUtil.getColonnaIDMatch();
+      numeroGiocatori = TabellaMatchUtil.getColonnaNumeroGiocatori();
+      numeroGiocatoriCorrenti = TabellaMatchUtil.getColonnaGiocatoriCorrenti();
 
-	public TableView<MatchTableView> getTableMatchs(){
-		return this.tableMatchs;
-	}
+      tableMatchs.getColumns().addAll(idMatch, numeroGiocatori,
+            numeroGiocatoriCorrenti);
 
-	@SuppressWarnings("unchecked")
-	private void createTableView(){
-		tableMatchs                = new TableView<>(TabellaMatchUtil.getListaMatch());
-		idMatch 			       = TabellaMatchUtil.getColonnaIDMatch();
-		numeroGiocatori			   = TabellaMatchUtil.getColonnaNumeroGiocatori();
-		numeroGiocatoriCorrenti    = TabellaMatchUtil.getColonnaGiocatoriCorrenti();
-
-		tableMatchs.getColumns().addAll(idMatch,numeroGiocatori, numeroGiocatoriCorrenti);
-
-	}
+   }
 
 }

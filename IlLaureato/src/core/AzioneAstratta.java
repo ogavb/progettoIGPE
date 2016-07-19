@@ -2,17 +2,17 @@ package core;
 
 import core.Giocatore;
 
-public abstract class AzioneAstratta implements Azione{
+public abstract class AzioneAstratta implements Azione {
 
-	protected GameManagerAstratta gm;
+   protected GameManagerAstratta gm;
 
-	public AzioneAstratta(GameManagerAstratta gm){
+   public AzioneAstratta(GameManagerAstratta gm) {
 
-		super();
+      super();
 
-		this.gm = gm;
-	}
+      this.gm = gm;
+   }
 
-	public abstract void esegui( Giocatore g );
+   public abstract void esegui(Giocatore g);
 
 }

@@ -11,68 +11,69 @@ import javafx.stage.Stage;
 
 public class SceltaEditor {
 
-	private Stage stage;
-	private Scene scene;
+   private Stage stage;
+   private Scene scene;
 
-	private Pane pane;
-	private VBox box;
-	private Button editorDomande;
-	private Button editorTavola;
-	private Button indietro;
+   private Pane pane;
+   private VBox box;
+   private Button editorDomande;
+   private Button editorTavola;
+   private Button indietro;
 
-	public SceltaEditor(Stage stage){
-		this.stage = stage;
+   public SceltaEditor(Stage stage) {
+      this.stage = stage;
 
-		pane = new Pane();
-		pane.setPrefSize(450,210);
+      pane = new Pane();
+      pane.setPrefSize(450, 210);
 
-		this.box = new VBox(30.0);
+      this.box = new VBox(30.0);
 
-		editorDomande = new Button("editor Domande");
-		editorTavola = new Button("editor Tavola");
-		indietro = new Button("Torna al menu");
+      editorDomande = new Button("editor Domande");
+      editorTavola = new Button("editor Tavola");
+      indietro = new Button("Torna al menu");
 
-		// EVENTI DEI BOTTONI
-		editorDomande.setOnMouseReleased(e -> {
-			this.stage = (Stage) ((Button) e.getSource()).getScene().getWindow();
-			new EditorDomande(stage);
-		});
+      // EVENTI DEI BOTTONI
+      editorDomande.setOnMouseReleased(e -> {
+         this.stage = (Stage) ((Button) e.getSource()).getScene().getWindow();
+         new EditorDomande(stage);
+      });
 
-		indietro.setOnMouseReleased(e-> {
-			this.stage = (Stage) ((Button) e.getSource()).getScene().getWindow();
-			try {
-				new MainController(stage);
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		});
+      indietro.setOnMouseReleased(e -> {
+         this.stage = (Stage) ((Button) e.getSource()).getScene().getWindow();
+         try {
+            new MainController(stage);
+         }
+         catch (Exception e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+         }
+      });
 
-		editorTavola.setOnMouseReleased(e -> {
-			this.stage = (Stage) ((Button) e.getSource()).getScene().getWindow();
-			try {
-				new EditorTavolaDiGioco(stage);
-			} catch (Exception e1) {
-				System.err.println("eccezione");
-			}
-		});
-		//FINE EVENTI BOTTONI
+      editorTavola.setOnMouseReleased(e -> {
+         this.stage = (Stage) ((Button) e.getSource()).getScene().getWindow();
+         try {
+            new EditorTavolaDiGioco(stage);
+         }
+         catch (Exception e1) {
+            System.err.println("eccezione");
+         }
+      });
+      // FINE EVENTI BOTTONI
 
-		box.getChildren().add(editorDomande);
-		box.getChildren().add(editorTavola);
-		box.getChildren().add(indietro);
+      box.getChildren().add(editorDomande);
+      box.getChildren().add(editorTavola);
+      box.getChildren().add(indietro);
 
-		box.setTranslateX(150.0);
-		box.setTranslateY(30.0);
-		pane.getChildren().add(box);
+      box.setTranslateX(150.0);
+      box.setTranslateY(30.0);
+      pane.getChildren().add(box);
 
+      scene = new Scene(pane);
+      // applico i css
+      scene.getStylesheets().add("css/mainCss.css");
 
-		scene = new Scene(pane);
-		//applico i css
-		scene.getStylesheets().add("css/mainCss.css");
-
-		this.stage.setScene(scene);
-		this.stage.setResizable(false);
-		this.stage.show();
-	}
+      this.stage.setScene(scene);
+      this.stage.setResizable(false);
+      this.stage.show();
+   }
 }

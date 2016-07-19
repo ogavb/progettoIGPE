@@ -3,29 +3,29 @@ package core;
 import gui.panels.OutputMediator;
 
 public class AzioneMovimento extends AzioneAstratta {
-	//Questo valore determina il movimento di un numero casuale di caselle:
-	//		true 	== avanti
-	//		false	== indietro
-	private Boolean direzione;
+   // Questo valore determina il movimento di un numero casuale di caselle:
+   // true == avanti
+   // false == indietro
+   private Boolean direzione;
 
-	public AzioneMovimento( GameManagerAstratta gm, Boolean direzione ){
+   public AzioneMovimento(GameManagerAstratta gm, Boolean direzione) {
 
-		super(gm);
-		//ATTENZIONE bisogna mettere non "true" ma "direzione"
-		this.direzione = direzione;
-		//ATTENZIONE TODO
-	}
+      super(gm);
+      // ATTENZIONE bisogna mettere non "true" ma "direzione"
+      this.direzione = direzione;
+      // ATTENZIONE TODO
+   }
 
-	public void esegui( Giocatore g ) {
+   public void esegui(Giocatore g) {
 
-		OutputMediator.println(g.getNome() + " rilancia i dadi");
+      OutputMediator.println(g.getNome() + " rilancia i dadi");
 
-		if(g.getOrdineDiPartenza() == 0)
-			gm.getGestore().setGiocatoreAttuale(gm.getGestore().size()-1);
-		else
-			gm.getGestore().setGiocatoreAttuale(g.getOrdineDiPartenza()-1);
+      if (g.getOrdineDiPartenza() == 0)
+         gm.getGestore().setGiocatoreAttuale(gm.getGestore().size() - 1);
+      else
+         gm.getGestore().setGiocatoreAttuale(g.getOrdineDiPartenza() - 1);
 
-		gm.setDirezione(direzione);
+      gm.setDirezione(direzione);
 
-	}
+   }
 }

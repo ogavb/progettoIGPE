@@ -8,30 +8,31 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.FlowPane;
 
-public class MyPaneTavola extends FlowPane{
+public class MyPaneTavola extends FlowPane {
 
-	private String nomeCasella;
+   private String nomeCasella;
 
-	public MyPaneTavola(String nomeCasella,Image immagineCasella) {
-		this.setNomeCasella(nomeCasella);
-		this.setBackGround(immagineCasella);
-	}
+   public MyPaneTavola(String nomeCasella, Image immagineCasella) {
+      this.setNomeCasella(nomeCasella);
+      this.setBackGround(immagineCasella);
+   }
 
-	public MyPaneTavola(){}
+   public MyPaneTavola() {
+   }
 
-	public void setBackGround(Image image){
-		BackgroundSize bs = new BackgroundSize(80, 60, true, true, true, false);
-		this.setBackground(new Background(new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, bs)));
-	}
+   public void setBackGround(Image image) {
+      BackgroundSize bs = new BackgroundSize(80, 60, true, true, true, false);
+      this.setBackground(new Background(
+            new BackgroundImage(image, BackgroundRepeat.NO_REPEAT,
+                  BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, bs)));
+   }
 
+   public String getNomeCasella() {
+      return nomeCasella;
+   }
 
-
-	public String getNomeCasella() {
-		return nomeCasella;
-	}
-
-	public void setNomeCasella(String nomeCasella) {
-		this.nomeCasella = nomeCasella;
-	}
+   public void setNomeCasella(String nomeCasella) {
+      this.nomeCasella = nomeCasella;
+   }
 
 }

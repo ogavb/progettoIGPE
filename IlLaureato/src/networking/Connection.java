@@ -1,7 +1,7 @@
 package networking;
 
 import java.net.Socket;
-//import java.net.UnknownHostException;
+// import java.net.UnknownHostException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.Condition;
@@ -18,157 +18,169 @@ import java.io.PrintWriter;
 
 public class Connection implements Runnable {
 
-	private Socket clientSocket;
-	private int Id;
-	private String nomeGiocatore;
-	private List<String> send;
+   private Socket clientSocket;
+   private int Id;
+   private String nomeGiocatore;
+   private List<String> send;
 
-	private Lock lock;
-	private Condition condition;
+   private Lock lock;
+   private Condition condition;
 
-    //private boolean Stop=false;
-    private boolean StopRecive=false;
-    private boolean StopSend=false;
-	Connection(Socket clientSocket){
-		this.clientSocket = clientSocket;
+   // private boolean Stop=false;
+   private boolean StopRecive = false;
+   private boolean StopSend = false;
 
-		this.send=new CopyOnWriteArrayList<String>();
-		this.Id = -1;
+   Connection(Socket clientSocket) {
+      this.clientSocket = clientSocket;
 
-		this.lock = new ReentrantLock();
-		this.condition = this.lock.newCondition();
-		//int id=-1;
-		//send.add("asadsad");
-		//this.send.add("#END#");
+      this.send = new CopyOnWriteArrayList<String>();
+      this.Id = -1;
 
-	}
-	public int getId(){
-		return this.Id;
-	}
-	public void setId(int id){
-		this.Id=id;
-	}
+      this.lock = new ReentrantLock();
+      this.condition = this.lock.newCondition();
+      // int id=-1;
+      // send.add("asadsad");
+      // this.send.add("#END#");
 
-	public String getNomeGiocatore() {
-		return nomeGiocatore;
-	}
-	public void setNomeGiocatore(String nomeGiocatore) {
-		this.nomeGiocatore = nomeGiocatore;
-	}
+   }
 
-	private Socket getSocket(){
-		return this.clientSocket;
-	}
-	public void insertMessage(String request){
-		lock.lock();
-		send.add(request);
-		condition.signalAll();
-		lock.unlock();
-	}
-	Connection getThis(){
-		return this;
-	}
-	@Override
-	public void run() {
+   public int getId() {
+      return this.Id;
+   }
 
-		new Thread(){
-			@Override
-			public void run() {
-				PrintWriter out;
-				try {
-					out=new PrintWriter(getSocket().getOutputStream());
-					try {
-						sleep(100);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					while(!StopSend){
+   public void setId(int id) {
+      this.Id = id;
+   }
 
-						lock.lock();
+   public String getNomeGiocatore() {
+      return nomeGiocatore;
+   }
 
-						while(send.isEmpty())
-							try {
-								condition.await();
-							} catch (InterruptedException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
+   public void setNomeGiocatore(String nomeGiocatore) {
+      this.nomeGiocatore = nomeGiocatore;
+   }
 
-						lock.unlock();
+   private Socket getSocket() {
+      return this.clientSocket;
+   }
 
-						if(!send.isEmpty()){
-							String message=send.get(0);
-							System.out.println("send - "+message);
-							if(message.equals("#END#"))
-							{
-								try {
-									sleep(100);
-								} catch (InterruptedException e) {
-									e.printStackTrace();
-								}
+   public void insertMessage(String request) {
+      lock.lock();
+      send.add(request);
+      condition.signalAll();
+      lock.unlock();
+   }
 
-							}
-							out.println(message);
-							if(message.equals("#END#")){
-								StopSend=true;
+   Connection getThis() {
+      return this;
+   }
 
+   @Override
+   public void run() {
 
-							}
-							send.remove(0);
-							out.flush();
-							System.out.println("message send "+message);
-						}
-					}
-					System.out.println("StoppedSend");
-					try {
-						sleep(3000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					out.close();
-					GestoreMatch.getInstance().removeUsers(getThis());
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+      new Thread() {
+         @Override
+         public void run() {
+            PrintWriter out;
+            try {
+               out = new PrintWriter(getSocket().getOutputStream());
+               try {
+                  sleep(100);
+               }
+               catch (InterruptedException e) {
+                  e.printStackTrace();
+               }
+               while (!StopSend) {
 
-			}
-        }.start();
-        new Thread(){
-			@Override//1socket
-			public void run() {
-				//PrintWriter out;
-				BufferedReader in;
-				try {
-					in=new BufferedReader(new InputStreamReader(getSocket().getInputStream()));
-					try {
-						sleep(100);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					while(!StopRecive){
-						String S=in.readLine();
-						System.out.println("_>"+S);
-						if(S!=null){
-							RequestManager.getInstance().addRequest(new Pair<Connection,String>(getThis(),S));
-						}
-						if(S==null|| S.equals("#END#")){//TODO prova
-							StopRecive=true;
-							RequestManager.getInstance().addRequest(new Pair<Connection,String>(getThis(),S));
-							//send.add("#END#");
+                  lock.lock();
 
-						}
-					}
-					System.out.println("Stoppedrecive");
-					in.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-        }.start();
+                  while (send.isEmpty())
+                     try {
+                        condition.await();
+                     }
+                     catch (InterruptedException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                     }
 
+                  lock.unlock();
 
+                  if (!send.isEmpty()) {
+                     String message = send.get(0);
+                     System.out.println("send - " + message);
+                     if (message.equals("#END#")) {
+                        try {
+                           sleep(100);
+                        }
+                        catch (InterruptedException e) {
+                           e.printStackTrace();
+                        }
 
+                     }
+                     out.println(message);
+                     if (message.equals("#END#")) {
+                        StopSend = true;
 
-	}
+                     }
+                     send.remove(0);
+                     out.flush();
+                     System.out.println("message send " + message);
+                  }
+               }
+               System.out.println("StoppedSend");
+               try {
+                  sleep(3000);
+               }
+               catch (InterruptedException e) {
+                  e.printStackTrace();
+               }
+               out.close();
+               GestoreMatch.getInstance().removeUsers(getThis());
+            }
+            catch (IOException e) {
+               e.printStackTrace();
+            }
+
+         }
+      }.start();
+      new Thread() {
+         @Override // 1socket
+         public void run() {
+            // PrintWriter out;
+            BufferedReader in;
+            try {
+               in = new BufferedReader(
+                     new InputStreamReader(getSocket().getInputStream()));
+               try {
+                  sleep(100);
+               }
+               catch (InterruptedException e) {
+                  e.printStackTrace();
+               }
+               while (!StopRecive) {
+                  String S = in.readLine();
+                  System.out.println("_>" + S);
+                  if (S != null) {
+                     RequestManager.getInstance().addRequest(
+                           new Pair<Connection, String>(getThis(), S));
+                  }
+                  if (S == null || S.equals("#END#")) {// TODO prova
+                     StopRecive = true;
+                     RequestManager.getInstance().addRequest(
+                           new Pair<Connection, String>(getThis(), S));
+                     // send.add("#END#");
+
+                  }
+               }
+               System.out.println("Stoppedrecive");
+               in.close();
+            }
+            catch (IOException e) {
+               e.printStackTrace();
+            }
+         }
+      }.start();
+
+   }
 
 }

@@ -1,6 +1,5 @@
 package networking;
 
-
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -10,268 +9,279 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import javafx.util.Pair;
 
-
 public class RequestManager extends Thread {
 
-	static RequestManager Instance;
+   static RequestManager Instance;
 
-	private Lock lock;
-	private Condition condition;
+   private Lock lock;
+   private Condition condition;
 
+   public static RequestManager getInstance() {
+      if (Instance == null)
+         Instance = new RequestManager();
+      return Instance;
+   }
 
-	public static RequestManager getInstance() {
-		if (Instance == null)
-			Instance = new RequestManager();
-		return Instance;
-	}
+   private List<Pair<Connection, String>> requestIn;
 
+   private boolean stopped;
 
-	private List<Pair<Connection, String>> requestIn;
+   private RequestManager() {
 
-	private boolean stopped;
+      stopped = false;
+      requestIn = new CopyOnWriteArrayList<Pair<Connection, String>>();
+      lock = new ReentrantLock();
+      condition = lock.newCondition();
+      this.start();
+   }
 
-	private RequestManager() {
+   public void close(boolean stopped) {
+      lock.lock();
+      this.stopped = stopped;
+      condition.signalAll();
+      lock.unlock();
+   }
 
-		stopped = false;
-		requestIn = new CopyOnWriteArrayList<Pair<Connection, String>>();
-		lock = new ReentrantLock();
-		condition = lock.newCondition();
-		this.start();
-	}
+   public void addRequest(Pair<Connection, String> request) {
+      lock.lock();
+      requestIn.add(request);
+      condition.signalAll();
+      lock.unlock();
+   }
 
-	public void close(boolean stopped){
-		lock.lock();
-		this.stopped = stopped;
-		condition.signalAll();
-		lock.unlock();
-	}
+   private String execute(String request) {
+      // (IDRequest##body)
+      System.out.println(request);
 
-	public void addRequest(Pair<Connection, String> request) {
-		lock.lock();
-		requestIn.add(request);
-		condition.signalAll();
-		lock.unlock();
-	}
+      if (request == null || request.equals("#END#")) {// lopp di chiusura
+         return "#END#";
+      }
+      else if (request.equals("#END_ALL#")) {
 
-	private String execute(String request) {
-		// (IDRequest##body)
-		System.out.println(request);
+         System.out.println("endAll");
+         GestoreMatch.getInstance().notifyAll("#END#");
+         Match m = GestoreMatch.getInstance()
+               .findForId(requestIn.get(0).getKey().getId());
+         GestoreMatch.getInstance().removeMatch(m);
+         return null;
 
-		if(request==null||request.equals("#END#")){//lopp di chiusura
-			return "#END#";
-		}
-		else if(request.equals("#END_ALL#")){
+      }
+      String r[] = request.split("##");
 
-			System.out.println("endAll");
-			GestoreMatch.getInstance().notifyAll("#END#");
-			Match m=GestoreMatch.getInstance().findForId(requestIn.get(0).getKey().getId());
-			GestoreMatch.getInstance().removeMatch(m);
-			return null;
+      switch (Integer.parseInt(r[0])) {
 
-		}
-		String r[] = request.split("##");
+         case 0: {// crea partita (numPersone)
+            Connection c = requestIn.get(0).getKey();
+            if (c.getId() != -1) {
+               return "0#2";// già connesso su una partita
+            }
+            if (r.length > 1) {
+               String s = r[1];
+               int val = Integer.parseInt(s);
 
-		switch (Integer.parseInt(r[0])) {
+               int id = GestoreMatch.getInstance().getProgressiveId(val, c);
+               System.out.println("Partita " + id);
+               System.out.println("Matchs :");
+               GestoreMatch.getInstance().stampa();
+               c.setId(id);
 
-		case 0:{//crea partita   (numPersone)
-			Connection c=requestIn.get(0).getKey();
-			if(c.getId()!=-1){
-				return  "0#2";//già connesso su una partita
-			}
-			if(r.length>1){
-				String s=r[1];
-				int val=Integer.parseInt(s);
+               return "0#0";// ok
 
-				int id=GestoreMatch.getInstance().getProgressiveId(val, c);
-				System.out.println("Partita " + id);
-				System.out.println("Matchs :");
-				GestoreMatch.getInstance().stampa();
-				c.setId(id);
+            }
+            else {
+               return "0#1";// non correttamente avviata.
+            }
+         }
 
-				return "0#0";//ok
+         case 1: {// partecipa partita (idPartita)
+            Connection c = requestIn.get(0).getKey();
+            if (c.getId() != -1) {
+               return "1#2";// già connesso su una partita
+            }
+            if (r.length > 1) {
 
-			}else{
-				return "0#1";//non correttamente avviata.
-			}
-		}
+               int id = Integer.parseInt(r[1]);
 
-		case 1:{//partecipa partita (idPartita)
-			Connection c=requestIn.get(0).getKey();
-			if(c.getId()!=-1){
-				return  "1#2";//già connesso su una partita
-			}
-			if(r.length>1){
+               Match m = GestoreMatch.getInstance().findForId(id);
 
-				int id=Integer.parseInt(r[1]);
+               if (m == null) {
+                  return "1#1";// non esiste la partita con id id
+               }
 
-				Match m=GestoreMatch.getInstance().findForId(id);
+               else if (m.addPlayer(c)) {// ok
 
+                  c.setId(id);
 
-				if(m==null){
-					return  "1#1";//non esiste la partita con id id
-				}
+                  GestoreMatch.getInstance().notifyAll(
+                        "1#4#" + GestoreMatch.getInstance().toString());
 
-				else if(m.addPlayer(c)){//ok
+                  return "1#0";// ok
 
-					c.setId(id);
+               }
+               else {
 
-					GestoreMatch.getInstance().notifyAll("1#4#"+GestoreMatch.getInstance().toString());
+                  System.out.println("Partita piena");
+                  return "1#3";// partita piena
+               }
+            }
+            break;
+         }
+         case 2: // ping
+            return "CIAODASERVER";
 
-					return "1#0";//ok
+         case 3:
+            // 3##corpo ["3"]["corpo"]
+            if (r.length > 1) {
 
-				}else{
+               Match m = GestoreMatch.getInstance()
+                     .findForId(requestIn.get(0).getKey().getId());
+               m.add(r[1]);
+               if (m != null) {
+                  Iterator<String> is = m.getNamePlayers().iterator();
+                  StringBuilder namePlayers = new StringBuilder();
 
-					System.out.println("Partita piena");
-					return "1#3";//partita piena
-				}
-			}
-			break;
-		}
-		case 2: //ping
-			return "CIAODASERVER";
+                  while (is.hasNext()) {
+                     String namePlayer = is.next();
+                     namePlayers.append(namePlayer + ",");
+                  }
 
-		case 3:
-			//3##corpo    ["3"]["corpo"]
-			if(r.length>1){
+                  m.notifyAll("3#" + namePlayers.toString());
+               }
 
-				Match m=GestoreMatch.getInstance().findForId(requestIn.get(0).getKey().getId());
-				m.add(r[1]);
-				if(m!=null){
-					Iterator<String> is = m.getNamePlayers().iterator();
-					StringBuilder namePlayers = new StringBuilder();
+            }
+            break;
+         case 4:
+            // 4##...
+            return "4#" + GestoreMatch.getInstance().toString();
 
-					while(is.hasNext()){
-						String namePlayer = is.next();
-						namePlayers.append(namePlayer+",");
-					}
+         case 5:
+            // 5##avviaPartita
+            Match m = GestoreMatch.getInstance()
+                  .findForId(requestIn.get(0).getKey().getId());
+            if (m != null) {
+               m.notifyAll("5#" + r[1]);
+            }
 
-					m.notifyAll("3#"+namePlayers.toString());
-				}
+            break;
 
-			}
-			break;
-		case 4:
-			//4##...
-			return "4#"+GestoreMatch.getInstance().toString();
+         case 6:
+            // 6##nome giocatore
+            Match m1 = GestoreMatch.getInstance()
+                  .findForId(requestIn.get(0).getKey().getId());
+            m1.remove(r[1]);
+            if (m1 != null) {
+               Iterator<String> is = m1.getNamePlayers().iterator();
+               StringBuilder namePlayers = new StringBuilder();
 
-		case 5:
-			//5##avviaPartita
-			Match m=GestoreMatch.getInstance().findForId(requestIn.get(0).getKey().getId());
-			if(m!=null){
-				m.notifyAll("5#" + r[1]);
-			}
+               while (is.hasNext()) {
+                  String namePlayer = is.next();
+                  namePlayers.append(namePlayer + ",");
+               }
 
-			break;
+               m1.notifyAll("6#" + namePlayers.toString());
+            }
 
-		case 6:
-			//6##nome giocatore
-			Match m1=GestoreMatch.getInstance().findForId(requestIn.get(0).getKey().getId());
-			m1.remove(r[1]);
-			if(m1!=null){
-				Iterator<String> is = m1.getNamePlayers().iterator();
-				StringBuilder namePlayers = new StringBuilder();
+            break;
 
-				while(is.hasNext()){
-					String namePlayer = is.next();
-					namePlayers.append(namePlayer+",");
-				}
+         case 7:
+            // 7##
+            Match m2 = GestoreMatch.getInstance()
+                  .findForId(requestIn.get(0).getKey().getId());
+            m2.remove(requestIn.get(0).getKey());
+            requestIn.get(0).getKey().setId(-1);
+            GestoreMatch.getInstance()
+                  .notifyAll("7#" + GestoreMatch.getInstance().toString());
 
-				m1.notifyAll("6#"+namePlayers.toString());
-			}
+            break;
 
-			break;
+         case 8:
+            // 8##
+            GestoreMatch.getInstance()
+                  .notifyAll("8#" + GestoreMatch.getInstance().toString());
+            break;
 
-		case 7:
-			//7##
-			Match m2=GestoreMatch.getInstance().findForId(requestIn.get(0).getKey().getId());
-			m2.remove(requestIn.get(0).getKey());
-			requestIn.get(0).getKey().setId(-1);
-			GestoreMatch.getInstance().notifyAll("7#"+GestoreMatch.getInstance().toString());
+         case 9:
+            // 9##
+            System.err.println("ID: " + requestIn.get(0).getKey().getId());
+            Match m3 = GestoreMatch.getInstance()
+                  .findForId(requestIn.get(0).getKey().getId());
+            m3.notifyAll("#END_MATCH#");
+            GestoreMatch.getInstance().removeMatch(m3);
+            break;
 
-			break;
+         case 10:
+            // 10##nomeGiocatore
+            requestIn.get(0).getKey().setNomeGiocatore(r[1]);
+            System.err.println("Connessione settata");
+            break;
 
-		case 8:
-			//8##
-			GestoreMatch.getInstance().notifyAll("8#"+GestoreMatch.getInstance().toString());
-			break;
+         case 11:
+            // 11##numeroCaseRequestManagerClient#notifica a tutti nel match
+            Match m4 = GestoreMatch.getInstance()
+                  .findForId(requestIn.get(0).getKey().getId());
+            m4.notifyAll(r[1]);
+            break;
 
-		case 9:
-			//9##
-			System.err.println("ID: "+requestIn.get(0).getKey().getId());
-			Match m3=GestoreMatch.getInstance().findForId(requestIn.get(0).getKey().getId());
-			m3.notifyAll("#END_MATCH#");
-			GestoreMatch.getInstance().removeMatch(m3);
-			break;
+         case 12:
+            // 12##numeroCaseRequestManagerClient#notifica a tutti nel match
+            // tranne il player che ha mandato la richiesta
+            Match m5 = GestoreMatch.getInstance()
+                  .findForId(requestIn.get(0).getKey().getId());
+            m5.notifyAllExcept(requestIn.get(0).getKey().getNomeGiocatore(),
+                  r[1]);
+            break;
 
-		case 10:
-			//10##nomeGiocatore
-			requestIn.get(0).getKey().setNomeGiocatore(r[1]);
-			System.err.println("Connessione settata");
-			break;
+         case 13:
+            // 13##nomeGiocatore##numeroCaseRequestManagerClient#richiesta
+            // (notidica solo al player con nome nomeGiocatore)
+            Match m6 = GestoreMatch.getInstance()
+                  .findForId(requestIn.get(0).getKey().getId());
+            m6.notifyToPlayerName(r[1], r[2]);
+            break;
 
-		case 11:
-			//11##numeroCaseRequestManagerClient#notifica a tutti nel match
-			Match m4=GestoreMatch.getInstance().findForId(requestIn.get(0).getKey().getId());
-			m4.notifyAll(r[1]);
-			break;
+         case 14:
+      }// endswitch
 
-		case 12:
-			//12##numeroCaseRequestManagerClient#notifica a tutti nel match tranne il player che ha mandato la richiesta
-			Match m5=GestoreMatch.getInstance().findForId(requestIn.get(0).getKey().getId());
-			m5.notifyAllExcept(requestIn.get(0).getKey().getNomeGiocatore(), r[1]);
-			break;
+      return null;
 
-		case 13:
-			//13##nomeGiocatore##numeroCaseRequestManagerClient#richiesta (notidica solo al player con nome nomeGiocatore)
-			Match m6=GestoreMatch.getInstance().findForId(requestIn.get(0).getKey().getId());
-			m6.notifyToPlayerName(r[1], r[2]);
-			break;
-	
-		case 14:
-		}// endswitch
-		
-			
-		return null;
-	
-	}
+   }
 
+   @Override
+   public void run() {
+      while (!stopped) {
 
-	@Override
-	public void run() {
-		while (!stopped) {
+         lock.lock();
 
-			lock.lock();
+         while (this.requestIn.isEmpty() && !stopped)
+            try {
+               condition.await();
+            }
+            catch (InterruptedException e1) {
+               // TODO Auto-generated catch block
+               e1.printStackTrace();
+            }
 
-			while(this.requestIn.isEmpty() && !stopped)
-				try {
-					condition.await();
-				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+         lock.unlock();
 
-			lock.unlock();
+         if (!this.requestIn.isEmpty()) {
+            String requestOut = this.execute(requestIn.get(0).getValue());
+            System.out.println("reqout" + requestOut);
+            if (requestOut != null) {// prende la connection e gli invia la
+               // risposta
 
-			if (!this.requestIn.isEmpty()) {
-				String requestOut = this.execute(requestIn.get(0).getValue());
-				System.out.println("reqout" + requestOut);
-				if (requestOut != null) {// prende la connection e gli invia la
-											// risposta
+               requestIn.get(0).getKey().insertMessage(requestOut);
+            }
+            requestIn.remove(0);
+         }
+         try {
+            sleep(10);
+         }
+         catch (InterruptedException e) {
 
+            e.printStackTrace();
+         }
 
-
-					requestIn.get(0).getKey().insertMessage(requestOut);
-				}
-				requestIn.remove(0);
-			}
-			try {
-				sleep(10);
-			} catch (InterruptedException e) {
-
-				e.printStackTrace();
-			}
-
-		}
-	}
+      }
+   }
 
 }

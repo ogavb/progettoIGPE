@@ -10,26 +10,29 @@ import javafx.scene.layout.VBox;
 
 public class PaneAnno extends Pane {
 
-	private VBox boxElementi;
-	private HBox boxFuochi;
-	private TextArea frase;
+   private VBox boxElementi;
+   private HBox boxFuochi;
+   private TextArea frase;
 
-	public PaneAnno() {
-		this.setWidth (400.0);
-		this.setHeight(400.0);
-		this.getStylesheets().add("css/textArea.css");
+   public PaneAnno() {
+      this.setWidth(400.0);
+      this.setHeight(400.0);
+      this.getStylesheets().add("css/textArea.css");
 
-		boxElementi = new VBox(20.0);
-		boxFuochi   = new HBox(20.0);
+      boxElementi = new VBox(20.0);
+      boxFuochi = new HBox(20.0);
 
-		frase = new TextArea();
-		frase.setText("Complimenti hai passato un altro anno\n SENZA LAUREARTI..AUGURI!!!");
+      frase = new TextArea();
+      frase.setText(
+            "Complimenti hai passato un altro anno\n SENZA LAUREARTI..AUGURI!!!");
 
-		boxFuochi.getChildren().add(new ImageView(new Image("file:icone/fuochi.gif")));
-		boxFuochi.getChildren().add(new ImageView(new Image("file:icone/fuochi3.gif")));
+      boxFuochi.getChildren()
+            .add(new ImageView(new Image("file:icone/fuochi.gif")));
+      boxFuochi.getChildren()
+            .add(new ImageView(new Image("file:icone/fuochi3.gif")));
 
-		boxElementi.getChildren().addAll(boxFuochi,frase);
-		getChildren().add(boxElementi);
-	}
+      boxElementi.getChildren().addAll(boxFuochi, frase);
+      getChildren().add(boxElementi);
+   }
 
 }

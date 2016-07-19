@@ -4,14 +4,15 @@ import networking.GameManagerNetwork;
 
 public class AzioneNulla extends AzioneAstratta {
 
-	public AzioneNulla(GameManagerAstratta gm) {
+   public AzioneNulla(GameManagerAstratta gm) {
 
-		super(gm);
-	}
+      super(gm);
+   }
 
-	public void esegui( Giocatore g ) {
-		if( gm instanceof GameManagerNetwork && !((GameManagerNetwork)gm).isRequestActive())
-			((GameManagerNetwork)gm).setYourRound(false);
-	}
+   public void esegui(Giocatore g) {
+      if (gm instanceof GameManagerNetwork
+            && !((GameManagerNetwork) gm).isRequestActive())
+         ((GameManagerNetwork) gm).setYourRound(false);
+   }
 
 }

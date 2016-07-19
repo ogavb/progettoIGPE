@@ -3,125 +3,122 @@ package networking;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-
 public class GestoreMatch {
 
-	private static GestoreMatch instance;
-	private static List<Match> matchs;
-	private List<Connection> users;
+   private static GestoreMatch instance;
+   private static List<Match> matchs;
+   private List<Connection> users;
 
-	public static GestoreMatch getInstance(){
-		if(instance == null)
-			instance = new GestoreMatch();
-		return instance;
-	}
+   public static GestoreMatch getInstance() {
+      if (instance == null)
+         instance = new GestoreMatch();
+      return instance;
+   }
 
+   private GestoreMatch() {
+      matchs = new CopyOnWriteArrayList<Match>();
+      users = new CopyOnWriteArrayList<Connection>();
+   }
 
-	private GestoreMatch(){
-		matchs=new CopyOnWriteArrayList<Match>();
-		users=new CopyOnWriteArrayList<Connection>();
-	}
+   public void removeMatch(Match m) {
+      matchs.remove(m);
+   }
 
-	public void removeMatch(Match m){
-		matchs.remove(m);
-	}
+   public List<Match> getMatchs() {
+      return matchs;
+   }
 
-	public List<Match> getMatchs(){
-		return matchs;
-	}
+   public List<Connection> getNameUsers() {
+      return users;
+   }
 
-	public List<Connection> getNameUsers(){
-		return users;
-	}
+   public void addUsers(Connection c) {
+      users.add(c);
+   }
 
-	public void addUsers(Connection c){
-		users.add(c);
-	}
+   public void removeUsers(Connection c) {
+      users.remove(c);
+   }
 
-	public void removeUsers(Connection c){
-		users.remove(c);
-	}
+   public synchronized int getProgressiveId(int numberPlayer, Connection c) {
 
-	public synchronized int getProgressiveId(int numberPlayer,Connection c){
+      Match temp = null;
+      int i = 0;
+      boolean find = false;
+      do {
+         i = i + 1;
+         if (findForId(i) == null) {
+            temp = new Match(i, numberPlayer, c);
+            matchs.add(temp);
+            find = true;
+         }
 
-		Match temp=null;
-		int i=0;
-		boolean find=false;
-		do{
-			i = i + 1;
-			if(findForId(i)==null){
-				temp=new Match(i, numberPlayer, c);
-				matchs.add(temp);
-				find=true;
-			}
+      } while (!find);
 
-		}while(!find);
+      return i;
+   }
 
+   @Override
+   public String toString() { // id,maxpers,ncollegati/id,maxpers,ncollegati
+      String tmp = "";
+      boolean first = false;
+      for (Match m : matchs) {
+         if (!first) {
+            first = true;
+         }
+         else {
+            tmp += "/";
+         }
+         tmp += m.toString();
 
-		return i;
-	}
-	@Override
-	public String toString(){   //   id,maxpers,ncollegati/id,maxpers,ncollegati
-		String tmp="";
-		boolean first=false;
-		for(Match m:matchs){
-			if(!first){
-				first=true;
-			}else{
-				tmp+="/";
-			}
-			tmp+=m.toString();
+      }
 
-		}
+      return tmp;
 
-		return tmp;
+   }
 
+   public void stampa() {
+      System.out.print("[");
+      for (Match m : matchs) {
+         System.out.print(m.getIdMatch() + ", ");
+      }
+      System.out.println("]");
+   }
 
-	}
+   public Match findForId(int id) {
+      for (Match m : matchs) {
+         if (id == m.getIdMatch()) {
+            System.err.println("HO TROVATO IL MATCH");
+            return m;
+         }
+      }
+      return null;
+   }
 
-	public void stampa(){
-		System.out.print("[");
-		for(Match m:matchs){
-			System.out.print(m.getIdMatch() + ", ");
-		}
-		System.out.println("]");
-	}
+   public void notifyAll(String message) {
 
-	public Match findForId(int id){
-		for(Match m:matchs){
-			if(id==m.getIdMatch()){
-				System.err.println("HO TROVATO IL MATCH");
-				return m;
-			}
-		}
-		return null;
-	}
+      for (Connection c : users) {
 
-	public void notifyAll(String message){
+         c.insertMessage(message);
 
-		for(Connection c:users){
+      }
 
-			c.insertMessage(message);
+   }
 
-		}
+   public void notifyAllUserInMatch(String message) {
 
-	}
-	public void notifyAllUserInMatch(String message){
+      for (Match m : matchs) {
 
-		for(Match m:matchs){
+         m.notifyAll(message);
 
-			m.notifyAll(message);
+      }
 
-		}
+   }
 
-	}
+   // si vuole modellare una classe per gestire i match e di tipo singleton
+   // al fine di gestire lan e network
+   // list match
 
-	//si vuole modellare una classe per gestire i match e di tipo singleton
-	//al fine di gestire lan e network
-	//list match
-
-	//Match findForId(int id){}
-
-
+   // Match findForId(int id){}
 
 }

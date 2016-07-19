@@ -2,20 +2,20 @@ package core;
 
 import gui.panels.OutputMediator;
 
-public class CasellaBiblioteca extends CasellaAstratta{
+public class CasellaBiblioteca extends CasellaAstratta {
 
-	public CasellaBiblioteca( AzioneAstratta azione, String nome ){
+   public CasellaBiblioteca(AzioneAstratta azione, String nome) {
 
-		super( azione, nome );
-	}
+      super(azione, nome);
+   }
 
-	public void action( Giocatore g ){
+   public void action(Giocatore g) {
 
-		/*
-		 * fa avanzare il giocatore di tot caselle
-		 */
-		OutputMediator.println( "Sei in biblioteca! ");
-		azione.esegui(g);
-	}
+      /*
+       * fa avanzare il giocatore di tot caselle
+       */
+      OutputMediator.println("Sei in biblioteca! ");
+      azione.esegui(g);
+   }
 
 }

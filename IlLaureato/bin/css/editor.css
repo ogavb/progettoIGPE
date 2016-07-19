@@ -12,38 +12,38 @@ Rectangle{
 }
 
 Button{
-	-fx-min-width: 150px ;
-	-fx-min-height: 30px ;
-	-fx-pref-width: 150px ;
-	-fx-pref-height: 30px ;
-	-fx-background-color: linear-gradient(rgb(22, 179, 184) 5%, rgb(189, 51, 42) 100%) rgb(22, 179, 184);
-	-fx-background-radius: 30;
-	-fx-border-radius: 30%;
-	-fx-background-insets: 0;
+	-fx-min-width: 150.0px ;
+	-fx-min-height: 30.0px ;
+	-fx-pref-width: 150.0px ;
+	-fx-pref-height: 30.0px ;
+	-fx-background-color: linear-gradient(rgb(22.0, 179.0, 184.0) 5.0%, rgb(189.0, 51.0, 42.0) 100.0%) rgb(22.0, 179.0, 184.0);
+	-fx-background-radius: 30.0;
+	-fx-border-radius: 30.0%;
+	-fx-background-insets: 0.0;
 	-fx-text-fill: white;
-	-fx-font-size: 15;
+	-fx-font-size: 15.0;
 
 }
 
 Button:hover {
-	-fx-min-width: 150px ;
-	-fx-min-height: 40px ;
-	-fx-pref-width: 150px ;
-	-fx-pref-height: 40px ;
-    -fx-background-color: linear-gradient(rgb(30,140,150) 10%,  rgb(189, 51, 42) 100%) rgb(22, 179, 184);
-	-fx-background-radius: 30;
-	-fx-border-radius: 30%;
-	-fx-background-insets: 0;
+	-fx-min-width: 150.0px ;
+	-fx-min-height: 40.0px ;
+	-fx-pref-width: 150.0px ;
+	-fx-pref-height: 40.0px ;
+    -fx-background-color: linear-gradient(rgb(30.0,140.0,150.0) 10.0%,  rgb(189.0, 51.0, 42.0) 100.0%) rgb(22.0, 179.0, 184.0);
+	-fx-background-radius: 30.0;
+	-fx-border-radius: 30.0%;
+	-fx-background-insets: 0.0;
 	-fx-text-fill: white;
- 	-fx-font-size: 17;
+ 	-fx-font-size: 17.0;
 }
 
 
 #btn_etg {
-	-fx-min-width: 80px ;
-	-fx-min-height: 40px ;
-	-fx-pref-width: 80px ;
-	-fx-pref-height: 40px ;
+	-fx-min-width: 80.0px ;
+	-fx-min-height: 40.0px ;
+	-fx-pref-width: 80.0px ;
+	-fx-pref-height: 40.0px ;
 }
 
 #menuVBox{

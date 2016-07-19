@@ -16,228 +16,234 @@ import networking.RequestManagerClient;
 
 public class FinestraCreaOPartecipaPartita {
 
-	private Stage primaryStage;
-	private Scene scene;
-	private Pane mainPane;
+   private Stage primaryStage;
+   private Scene scene;
+   private Pane mainPane;
 
-	private Button creaPartita;
-	private Button partecipaPartita;
+   private Button creaPartita;
+   private Button partecipaPartita;
 
-	private Client client;
-	private MultiThreadedServer server;
-	private RequestManagerClient rmc;
-	private LockManager lockManager;
+   private Client client;
+   private MultiThreadedServer server;
+   private RequestManagerClient rmc;
+   private LockManager lockManager;
 
-	private String nomeGiocatore;
+   private String nomeGiocatore;
 
+   public FinestraCreaOPartecipaPartita(Stage stage) {
 
-	public FinestraCreaOPartecipaPartita(Stage stage) {
+      lockManager = new LockManager();
+      nomeGiocatore = nomeRandom((int) ((Math.random() * 10) + 1));
 
-		lockManager = new LockManager();
-		nomeGiocatore = nomeRandom(( int )( ( Math.random() * 10 ) + 1 ));
+      primaryStage = stage;
+      mainPane = new Pane();
+      mainPane.setPrefWidth(300);
+      mainPane.setPrefHeight(150);
 
-		primaryStage = stage;
-		mainPane = new Pane();
-		mainPane.setPrefWidth(300);
-		mainPane.setPrefHeight(150);
+      creaPartita = new Button("CREA PARTITA");
+      partecipaPartita = new Button("PARTECIPA");
 
-		creaPartita = new Button("CREA PARTITA");
-		partecipaPartita = new Button("PARTECIPA");
+      creaPartita.setPrefSize(160, 40);
+      partecipaPartita.setPrefSize(160, 40);
 
-		creaPartita.setPrefSize(160, 40);
-		partecipaPartita.setPrefSize(160, 40);
+      creaPartita.setTranslateX(75);
+      creaPartita.setTranslateY(25);
 
-		creaPartita.setTranslateX(75);
-		creaPartita.setTranslateY(25);
+      partecipaPartita.setTranslateX(75);
+      partecipaPartita.setTranslateY(75);
 
-		partecipaPartita.setTranslateX(75);
-		partecipaPartita.setTranslateY(75);
+      mainPane.getChildren().add(creaPartita);
+      mainPane.getChildren().add(partecipaPartita);
 
-		mainPane.getChildren().add(creaPartita);
-	    mainPane.getChildren().add(partecipaPartita);
+      scene = new Scene(mainPane);
+      scene.getStylesheets().add("css/mainCss.css");
+      primaryStage.setScene(scene);
+      primaryStage.show();
 
-	    scene = new Scene(mainPane);
-	    scene.getStylesheets().add("css/mainCss.css");
-		primaryStage.setScene(scene);
-		primaryStage.show();
+      creaPartita.setOnMouseReleased(event -> {
 
+         primaryStage.hide();
+         int giocatoriNum = 0;
+         String numeroGiocatori = null;
 
-		creaPartita.setOnMouseReleased(event -> {
+         SchermataNuovaPartitaMultiPlayer sm = null;
 
-			primaryStage.hide();
-			int giocatoriNum = 0;
-			String numeroGiocatori = null;
+         FinestraCreaPartita fm = new FinestraCreaPartita();
+         fm.showAndWait();
 
-			SchermataNuovaPartitaMultiPlayer sm = null;
+         if (fm.getIpServer() == null)
+            primaryStage.show();
 
-			FinestraCreaPartita fm = new FinestraCreaPartita();
-			fm.showAndWait();
+         if (fm.getIpServer() != null) {
 
-			if(fm.getIpServer() == null )
-				primaryStage.show();
+            if (fm.getIpServer().equals("")) {
 
+               giocatoriNum = fm.getNumGiocatori();
 
-			if(fm.getIpServer() != null){
+               numeroGiocatori = "0##" + String.valueOf(giocatoriNum);
 
-				if(fm.getIpServer().equals("")){
+               server = new MultiThreadedServer(4444);
+               new Thread(server).start();
 
-					giocatoriNum = fm.getNumGiocatori();
+               try {
+                  client = new Client("127.0.0.1", 4444);
+               }
+               catch (Exception e) {
+                  e.printStackTrace();
+               }
 
-					numeroGiocatori = "0##" + String.valueOf(giocatoriNum);
+               rmc = new RequestManagerClient(client);
+               sm = new SchermataNuovaPartitaMultiPlayer(false, client, rmc);
+               rmc.setSchermataNuovaPartitaMultiPlayer(sm);
 
-					server = new MultiThreadedServer(4444);
-					new Thread(server).start();
+               try {
+                  sm.setServer(server);
+               }
+               catch (Exception e) {
+                  // TODO Auto-generated catch block
+                  e.printStackTrace();
+               }
 
-					try {
-						client = new Client("127.0.0.1",4444);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+            }
+            else {
+               giocatoriNum = fm.getNumGiocatori();
 
-					rmc = new RequestManagerClient(client);
-					sm = new SchermataNuovaPartitaMultiPlayer(false,client,rmc);
-					rmc.setSchermataNuovaPartitaMultiPlayer(sm);
+               numeroGiocatori = "0##" + String.valueOf(giocatoriNum);
 
-					try {
-						sm.setServer(server);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+               try {
+                  client = new Client(fm.getIpServer(), 4444);
+               }
+               catch (Exception e) {
+                  Alert alert = new Alert(AlertType.ERROR);
+                  alert.setHeaderText("Nessun server trovato");
+                  alert.showAndWait();
+                  return;
+               }
 
-				}
-				else{
-					giocatoriNum = fm.getNumGiocatori();
+               rmc = new RequestManagerClient(client);
+               sm = new SchermataNuovaPartitaMultiPlayer(true, client, rmc);
+               rmc.setSchermataNuovaPartitaMultiPlayer(sm);
 
-					numeroGiocatori = "0##" + String.valueOf(giocatoriNum);
+            }
 
-					try {
-						client = new Client(fm.getIpServer(),4444);
-					} catch (Exception e) {
-						Alert alert = new Alert(AlertType.ERROR);
-			    		alert.setHeaderText("Nessun server trovato");
-			    		alert.showAndWait();
-			    		return;
-					}
+            client.addRequest(numeroGiocatori);
 
-					rmc = new RequestManagerClient(client);
-					sm = new SchermataNuovaPartitaMultiPlayer(true,client,rmc);
-					rmc.setSchermataNuovaPartitaMultiPlayer(sm);
+            try {
+               lockManager.attendiZero();
+            }
+            catch (Exception e1) {
+               // TODO Auto-generated catch block
+               e1.printStackTrace();
+            }
 
-				}
+            Parent root = sm.show(primaryStage, giocatoriNum, nomeGiocatore);
 
-				client.addRequest(numeroGiocatori);
+            client.setNomeGiocatore(nomeGiocatore);
+            client.addRequest("3##" + nomeGiocatore);
+            client.addRequest("10##" + nomeGiocatore);
 
-				try {
-					lockManager.attendiZero();
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+            try {
+               lockManager.attendiTre();
+            }
+            catch (Exception e1) {
+               // TODO Auto-generated catch block
+               e1.printStackTrace();
+            }
 
-				Parent root = sm.show(primaryStage,giocatoriNum,nomeGiocatore);
+            client.addRequest("8##" + "notifica aggiunta match");
 
-				client.setNomeGiocatore(nomeGiocatore);
-				client.addRequest("3##"+nomeGiocatore);
-				client.addRequest("10##"+nomeGiocatore);
+            try {
+               lockManager.attendiOtto();
+            }
+            catch (Exception e) {
+               // TODO Auto-generated catch block
+               e.printStackTrace();
+            }
 
-				try {
-					lockManager.attendiTre();
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+            Scene scene = new Scene(root);
+            primaryStage.setScene(scene);
+            primaryStage.show();
 
-				client.addRequest("8##"+"notifica aggiunta match");
+         }
 
-				try {
-					lockManager.attendiOtto();
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+      });
 
-			    Scene scene = new Scene(root);
-			    primaryStage.setScene(scene);
-			    primaryStage.show();
+      partecipaPartita.setOnMouseReleased(event -> {
 
-		}
+         boolean ok = false;
 
-		});
+         do {
+            primaryStage.hide();
+            FinestraPartecipaPartita fpp = new FinestraPartecipaPartita();
 
-		partecipaPartita.setOnMouseReleased(event -> {
+            fpp.showAndWait();
 
-			boolean ok = false;
+            if (fpp.getIpServer() == null)
+               primaryStage.show();
 
-			do{
-				primaryStage.hide();
-				FinestraPartecipaPartita fpp = new FinestraPartecipaPartita();
+            if (!fpp.getIpServer().equals("")) {
+               try {
+                  client = new Client(fpp.getIpServer(), 4444);
+                  rmc = new RequestManagerClient(client);
+                  client.addRequest("4##mostraPartite");
+                  ok = true;
+               }
+               catch (Exception e) {
+                  Alert alert = new Alert(AlertType.ERROR);
+                  alert.setHeaderText("Nessun server trovato");
+                  alert.showAndWait();
+                  return;
+               }
+            }
+            else {
+               Alert alert = new Alert(AlertType.INFORMATION);
+               alert.setHeaderText("Inserisci IP del server");
+               alert.showAndWait();
+            }
 
-				fpp.showAndWait();
+         } while (!ok);
 
-				if(fpp.getIpServer() == null)
-				 primaryStage.show();
+         try {
+            lockManager.attendiQuattro();
+         }
+         catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+         }
 
-				if(!fpp.getIpServer().equals("")){
-					try {
-						client = new Client(fpp.getIpServer(),4444);
-						rmc = new RequestManagerClient(client);
-						client.addRequest("4##mostraPartite");
-						ok = true;
-					} catch (Exception e) {
-						Alert alert = new Alert(AlertType.ERROR);
-			    		alert.setHeaderText("Nessun server trovato");
-			    		alert.showAndWait();
-			    		return;
-					}
-				}
-				else{
-					Alert alert = new Alert(AlertType.INFORMATION);
-		    		alert.setHeaderText("Inserisci IP del server");
-		    		alert.showAndWait();
-				}
+         client.setNomeGiocatore(nomeGiocatore);
+         client.addRequest("10##" + nomeGiocatore);
 
-			}while(!ok);
+         FinestraMultiPlayer fm = new FinestraMultiPlayer(primaryStage, client,
+               nomeGiocatore, rmc);
+         rmc.setFinsetraMultiplayer(fm);
+         Parent root = fm.show(primaryStage, rmc.getMatchs());
+         Scene scene = new Scene(root);
+         primaryStage.setScene(scene);
+         primaryStage.show();
 
-			try {
-				lockManager.attendiQuattro();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+      });
 
-			client.setNomeGiocatore(nomeGiocatore);
-			client.addRequest("10##"+nomeGiocatore);
+   }
 
-			FinestraMultiPlayer fm = new FinestraMultiPlayer(primaryStage,client,nomeGiocatore,rmc);
-			rmc.setFinsetraMultiplayer(fm);
-	    	Parent root = fm.show(primaryStage,rmc.getMatchs());
-	    	Scene scene = new Scene(root);
-	    	primaryStage.setScene(scene);
-	    	primaryStage.show();
+   public String getNomeGiocatore() {
+      return this.nomeGiocatore;
+   }
 
-		});
+   public void setNomeGiocatore(String nomeGiocatore) {
+      this.nomeGiocatore = nomeGiocatore;
+   }
 
-	}
+   private String nomeRandom(int length) {
+      Random rnd = new Random();
+      char[] arr = new char[length];
 
-	public String getNomeGiocatore(){
-		return this.nomeGiocatore;
-	}
+      for (int i = 0; i < length; i++) {
+         int n = rnd.nextInt(36);
+         arr[i] = (char) (n < 10 ? '0' + n : 'a' + n - 10);
+      }
 
-	public void setNomeGiocatore(String nomeGiocatore){
-		this.nomeGiocatore = nomeGiocatore;
-	}
-
-	private String nomeRandom (int length) {
-		Random rnd = new Random ();
-		char[] arr = new char[length];
-
-		for (int i=0; i<length; i++) {
-			int n = rnd.nextInt (36);
-			arr[i] = (char) (n < 10 ? '0'+n : 'a'+n-10);
-		}
-
-		return new String (arr);
-	}
+      return new String(arr);
+   }
 
 }

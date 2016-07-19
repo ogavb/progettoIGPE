@@ -2,17 +2,17 @@ package core;
 
 import gui.panels.OutputMediator;
 
-public class CasellaCus extends CasellaAstratta{
+public class CasellaCus extends CasellaAstratta {
 
-	public CasellaCus( AzioneAstratta azione, String nome ){
+   public CasellaCus(AzioneAstratta azione, String nome) {
 
-		super( azione, nome );
-	}
+      super(azione, nome);
+   }
 
-	public void action( Giocatore g ){
+   public void action(Giocatore g) {
 
-		OutputMediator.println( "Sei al cus! ");
-		azione.esegui(g);
-	}
+      OutputMediator.println("Sei al cus! ");
+      azione.esegui(g);
+   }
 
 }

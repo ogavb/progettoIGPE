@@ -4,31 +4,32 @@ import networking.GameManagerNetwork;
 
 public class AzioneFermaTurno extends AzioneAstratta {
 
-	private int numTurni;
+   private int numTurni;
 
-	public AzioneFermaTurno( GameManagerAstratta gm, int numTurni ) {
+   public AzioneFermaTurno(GameManagerAstratta gm, int numTurni) {
 
-		super(gm);
+      super(gm);
 
-		this.numTurni = numTurni;
-	}
+      this.numTurni = numTurni;
+   }
 
-	public void esegui( Giocatore g ) {
+   public void esegui(Giocatore g) {
 
-		gm.getGestore().modificaTurni( g, numTurni );
-		if( gm instanceof GameManagerNetwork && !((GameManagerNetwork)gm).isRequestActive())
-			((GameManagerNetwork)gm).setYourRound(false);
+      gm.getGestore().modificaTurni(g, numTurni);
+      if (gm instanceof GameManagerNetwork
+            && !((GameManagerNetwork) gm).isRequestActive())
+         ((GameManagerNetwork) gm).setYourRound(false);
 
-	}
+   }
 
-	public int getNumTurni() {
+   public int getNumTurni() {
 
-		return numTurni;
-	}
+      return numTurni;
+   }
 
-	public void setNumTurni( int numTurni ) {
+   public void setNumTurni(int numTurni) {
 
-		this.numTurni = numTurni;
-	}
+      this.numTurni = numTurni;
+   }
 
 }

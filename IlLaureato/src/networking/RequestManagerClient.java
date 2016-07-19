@@ -23,477 +23,493 @@ import model.MatchTableView;
 import networking.panels.FinestraMultiPlayer;
 import networking.panels.SchermataNuovaPartitaMultiPlayer;
 
-public class RequestManagerClient extends Thread{
+public class RequestManagerClient extends Thread {
 
-	private FinestraMultiPlayer fm;
+   private FinestraMultiPlayer fm;
 
-	private SchermataNuovaPartitaMultiPlayer sm;
+   private SchermataNuovaPartitaMultiPlayer sm;
 
-	private SchermataTavolaDiGioco stg;
+   private SchermataTavolaDiGioco stg;
 
-	private LockManager lockManager;
+   private LockManager lockManager;
 
-	private GameManagerNetwork gm;
-	private String nomeConfigurazione;
+   private GameManagerNetwork gm;
+   private String nomeConfigurazione;
 
-	protected static Lock lock;
-	protected static Condition condition;
+   protected static Lock lock;
+   protected static Condition condition;
 
-	private boolean stopped;
+   private boolean stopped;
 
-	private Client client;
+   private Client client;
 
-	private String[] matchs;
+   private String[] matchs;
 
-	public RequestManagerClient(Client client){
+   public RequestManagerClient(Client client) {
 
-		this.client = client;
+      this.client = client;
 
-		this.lockManager = new LockManager();
+      this.lockManager = new LockManager();
 
-		RequestManagerClient.lock = new ReentrantLock();
-		RequestManagerClient.condition = lock.newCondition();
+      RequestManagerClient.lock = new ReentrantLock();
+      RequestManagerClient.condition = lock.newCondition();
 
-		this.stopped = false;
+      this.stopped = false;
 
-		this.start();
+      this.start();
 
-	}
+   }
 
-	public GameManagerNetwork getGameManagerNetwork(){
-		return this.gm;
-	}
+   public GameManagerNetwork getGameManagerNetwork() {
+      return this.gm;
+   }
 
-	public void setGameManagerNetwork(GameManagerAstratta gm){
-		this.gm = (GameManagerNetwork) gm;
-	}
+   public void setGameManagerNetwork(GameManagerAstratta gm) {
+      this.gm = (GameManagerNetwork) gm;
+   }
 
-	public FinestraMultiPlayer getFinestraMultiPlayer(){
-		return this.fm;
-	}
+   public FinestraMultiPlayer getFinestraMultiPlayer() {
+      return this.fm;
+   }
 
-	public SchermataNuovaPartitaMultiPlayer getSchermataNuovaPartitaMultiPlayer(){
-		return this.sm;
-	}
+   public SchermataNuovaPartitaMultiPlayer getSchermataNuovaPartitaMultiPlayer() {
+      return this.sm;
+   }
 
-	public void setFinsetraMultiplayer(FinestraMultiPlayer fm){
-		this.fm = fm;
-	}
+   public void setFinsetraMultiplayer(FinestraMultiPlayer fm) {
+      this.fm = fm;
+   }
 
-	public void setSchermataNuovaPartitaMultiPlayer(SchermataNuovaPartitaMultiPlayer sm){
-		this.sm = sm;
-	}
+   public void setSchermataNuovaPartitaMultiPlayer(
+         SchermataNuovaPartitaMultiPlayer sm) {
+      this.sm = sm;
+   }
 
-	public void setNomeConfigurazione(String nomeCOnfigurazione){
-		this.nomeConfigurazione = nomeCOnfigurazione;
-	}
+   public void setNomeConfigurazione(String nomeCOnfigurazione) {
+      this.nomeConfigurazione = nomeCOnfigurazione;
+   }
 
-	public String[] getMatchs(){
-		return this.matchs;
-	}
+   public String[] getMatchs() {
+      return this.matchs;
+   }
 
-	@Override
-	public void run(){
+   @Override
+   public void run() {
 
-		while(!stopped){
+      while (!stopped) {
 
-			lock.lock();
+         lock.lock();
 
-			String messaggio = client.popRequest();
+         String messaggio = client.popRequest();
 
-			while(messaggio == null)
-				try {
-					condition.await();
-					messaggio = client.popRequest();
-				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+         while (messaggio == null)
+            try {
+               condition.await();
+               messaggio = client.popRequest();
+            }
+            catch (InterruptedException e1) {
+               // TODO Auto-generated catch block
+               e1.printStackTrace();
+            }
 
-			lock.unlock();
+         lock.unlock();
 
-			if(messaggio != null){
+         if (messaggio != null) {
 
-				if(messaggio.equals("#END#") || messaggio.equals("null")){
-					stopped = true;
+            if (messaggio.equals("#END#") || messaggio.equals("null")) {
+               stopped = true;
 
-					if(fm != null){
-						System.err.println("ENTRATO NEL FM");
-						Platform.runLater(new Runnable() {
+               if (fm != null) {
+                  System.err.println("ENTRATO NEL FM");
+                  Platform.runLater(new Runnable() {
 
-							@Override
-							public void run() {
-								System.err.println("FM.CLOSE()");
-								fm.close();
-							}
-						});
+                     @Override
+                     public void run() {
+                        System.err.println("FM.CLOSE()");
+                        fm.close();
+                     }
+                  });
 
-					}
-					if( sm != null){
-						System.err.println("ENTRATO NEL SM");
-						Platform.runLater(new Runnable() {
+               }
+               if (sm != null) {
+                  System.err.println("ENTRATO NEL SM");
+                  Platform.runLater(new Runnable() {
 
-							@Override
-							public void run() {
-								System.err.println("SM.CLOSE()");
-								sm.close();
-							}
-						});
-						lockManager.riprendiEndAll();
-					}
+                     @Override
+                     public void run() {
+                        System.err.println("SM.CLOSE()");
+                        sm.close();
+                     }
+                  });
+                  lockManager.riprendiEndAll();
+               }
 
-					Platform.runLater(new Runnable() {
+               Platform.runLater(new Runnable() {
 
-						@Override
-						public void run() {
-							Alert alert = new Alert(AlertType.ERROR);
-				    		alert.setHeaderText("Caduta connessione con il server");
-				    		alert.showAndWait();
-						}
-					});
+                  @Override
+                  public void run() {
+                     Alert alert = new Alert(AlertType.ERROR);
+                     alert.setHeaderText("Caduta connessione con il server");
+                     alert.showAndWait();
+                  }
+               });
 
-					System.out.println("REQUEST MANAGER CLIENT SPENTO");
+               System.out.println("REQUEST MANAGER CLIENT SPENTO");
 
-				}
+            }
 
-				else if(messaggio.equals("#END_MATCH#")){
+            else if (messaggio.equals("#END_MATCH#")) {
 
-					if( sm != null){
-						System.err.println("ENTRATO NEL SM");
-						Platform.runLater(new Runnable() {
+               if (sm != null) {
+                  System.err.println("ENTRATO NEL SM");
+                  Platform.runLater(new Runnable() {
 
-							@Override
-							public void run() {
-								System.err.println("SM.CLOSE()");
-								sm.close();
-							}
-						});
-						lockManager.riprendiEndMatch();
-					}
+                     @Override
+                     public void run() {
+                        System.err.println("SM.CLOSE()");
+                        sm.close();
+                     }
+                  });
+                  lockManager.riprendiEndMatch();
+               }
 
-				}
+            }
 
-				System.out.println();
-				String r[] = messaggio.split("#");
+            System.out.println();
+            String r[] = messaggio.split("#");
 
-				switch(r[0]){
+            switch (r[0]) {
 
-				case "0":{
+               case "0": {
 
-					lockManager.riprendiZero();
-					break;
-				}
+                  lockManager.riprendiZero();
+                  break;
+               }
 
-				case "1":{
+               case "1": {
 
-					switch(r[1]){
-					case "0":{
+                  switch (r[1]) {
+                     case "0": {
 
-						System.out.println("Registrazione effettuata");
+                        System.out.println("Registrazione effettuata");
 
-//						lockManager.riprendi();
-						break;
+// lockManager.riprendi();
+                        break;
 
-					}
+                     }
 
-					case "1":{
+                     case "1": {
 
-						System.out.println("Non esiste la partita");
-//						lockManager.riprendi();
-						break;
+                        System.out.println("Non esiste la partita");
+// lockManager.riprendi();
+                        break;
 
-					}
+                     }
 
-					case "2":{
+                     case "2": {
 
-						System.out.println("Gia connesso alla partita");
-//						lockManager.riprendi();
-						break;
+                        System.out.println("Gia connesso alla partita");
+// lockManager.riprendi();
+                        break;
 
-					}
+                     }
 
-					case "3":{
+                     case "3": {
 
-						System.out.println("Partita piena");
-//						lockManager.riprendi();
-						break;
+                        System.out.println("Partita piena");
+// lockManager.riprendi();
+                        break;
 
-					}
+                     }
 
-					case "4":{
+                     case "4": {
 
-						// Devo dire se non sono nella finestra FINESTRA_MULTIPLAYER
-						// non devo aggiornare la tabella della partita altrimenti si
+                        // Devo dire se non sono nella finestra
+                        // FINESTRA_MULTIPLAYER
+                        // non devo aggiornare la tabella della partita
+                        // altrimenti si
 
-						if(fm != null){
+                        if (fm != null) {
 
-							TableView<MatchTableView> tableMatchs = fm.getTableMatchs();
+                           TableView<MatchTableView> tableMatchs = fm
+                                 .getTableMatchs();
 
+                           String[] matchs = r[2].split("/");
 
-							String [] matchs = r[2].split("/");
+                           System.out.print("case 1#4 " + r[2] + " ");
 
-							System.out.print("case 1#4 " + r[2]  + " ");
+                           List<MatchTableView> tmp = new ArrayList<>();
+                           String match[] = null;
+                           for (String s : matchs) {
+                              match = s.split(",");
+                              System.out.println("STAMPA S  " + s);
+                              tmp.add(new MatchTableView(
+                                    Integer.parseInt(match[0]),
+                                    Integer.parseInt(match[1]),
+                                    Integer.parseInt(match[2])));
 
+                           }
 
+                           tableMatchs.getItems().clear();
+                           tableMatchs.getItems().addAll(tmp);
 
+                        }
+                        else
+                           System.out.println("Finestra Multiplayer è null");
 
-							List<MatchTableView> tmp = new ArrayList<>();
-						    String match[] = null;
-							for(String s : matchs){
-								match = s.split(",");
-								System.out.println("STAMPA S  "+s);
-								tmp.add(new MatchTableView(Integer.parseInt(match[0]), Integer.parseInt(match[1]), Integer.parseInt(match[2])));
+                        lockManager.riprendiUnoQuattro();
 
-							}
+                        break;
 
-							tableMatchs.getItems().clear();
-							tableMatchs.getItems().addAll(tmp);
+                     }
 
-						}
-						else
-							System.out.println("Finestra Multiplayer è null");
+                  }
 
-						lockManager.riprendiUnoQuattro();
+// lockManager.riprendi();
 
-						break;
+                  break;
 
-					}
+               }
 
-					}
+               case "3": {
 
-//					lockManager.riprendi();
+                  String[] r1 = r[1].split(",");
 
-					break;
+                  sm.setNomeGiocatore(r1);
 
-				}
+                  lockManager.riprendiTre();
 
-				case "3":{
+                  break;
 
-					String [] r1 = r[1].split(",");
+               }
 
-					sm.setNomeGiocatore(r1);
+               case "4": {
 
-					lockManager.riprendiTre();
+                  matchs = r[1].split("/");
 
-					break;
+                  for (int i = 0; i < matchs.length; i++) {
+                     System.out.println("case 4 : " + matchs[i]);
+                  }
 
-				}
+                  lockManager.riprendiQuattro();
 
-				case "4":{
+                  break;
+               }
 
-					matchs = r[1].split("/");
+               case "5": {
+                  Platform.runLater(new Runnable() {
 
-					for(int i = 0; i < matchs.length; i++){
-						System.out.println("case 4 : " + matchs[i]);
-					}
+                     @Override
+                     public void run() {
+                        String r1[] = r[1].split("/");
+                        String r2[] = r1[1].split(",");
+                        String r3[] = null;
 
-					lockManager.riprendiQuattro();
+                        int numeroGiocatori = Integer.parseInt(r1[2]);
 
-					break;
-				}
+                        Giocatore[] giocatori = new Giocatore[r2.length];
+                        for (int i = 0; i < giocatori.length; i++) {
+                           r3 = r2[i].split("\\(");
+                           giocatori[i] = new Giocatore(r3[0]);
+                           giocatori[i].setColor(Integer.parseInt(r3[1]));
+                           giocatori[i]
+                                 .setOrdineDiPartenza(Integer.parseInt(r3[2]));
+                        }
+                        try {
+                           sm.initGameManager(giocatori, numeroGiocatori,
+                                 r1[0]);
+                        }
+                        catch (SQLException e1) {
+                           e1.printStackTrace();
+                        }
 
-				case "5":{
-					Platform.runLater(new Runnable() {
+                        sm.getGameManager().setOrdinaGiocatori(giocatori);
+                        try {
+                           sm.hide();
+                           stg = new SchermataTavolaDiGioco(
+                                 sm.getGameManager());
+                        }
+                        catch (Exception e) {
+                           e.printStackTrace();
+                        }
 
-						@Override
-						public void run() {
-							String r1[] = r[1].split("/");
-							String r2[] = r1[1].split(",");
-							String r3[] = null;
+                        sm.getGameManager().start();
+                     }
+                  });
 
-							int numeroGiocatori = Integer.parseInt(r1[2]);
+                  lockManager.riprendiCinque();
 
-							Giocatore[] giocatori = new Giocatore[r2.length];
-							for(int i = 0; i < giocatori.length; i++){
-								r3 = r2[i].split("\\(");
-								giocatori[i] = new Giocatore(r3[0]);
-								giocatori[i].setColor(Integer.parseInt(r3[1]));
-								giocatori[i].setOrdineDiPartenza(Integer.parseInt(r3[2]));
-							}
-							try {
-								sm.initGameManager(giocatori, numeroGiocatori, r1[0]);
-							} catch (SQLException e1) {
-								e1.printStackTrace();
-							}
+                  break;
 
-						sm.getGameManager().setOrdinaGiocatori(giocatori);
-	    				try {
-	    					sm.hide();
-							stg = new SchermataTavolaDiGioco(sm.getGameManager());
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
+               }
 
-	    				sm.getGameManager().start();
-						}
-					});
+               case "6": {
 
+                  if (r.length > 1) {
 
+                     String[] r1 = r[1].split(",");
 
-					lockManager.riprendiCinque();
+                     sm.setNomeGiocatore(r1);
 
-					break;
+                  }
 
-				}
+                  lockManager.riprendiSei();
 
-				case "6":{
+                  break;
 
-					if(r.length > 1){
+               }
 
-						String [] r1 = r[1].split(",");
+               case "7": {
 
-						sm.setNomeGiocatore(r1);
+                  if (fm != null) {
 
-					}
+                     TableView<MatchTableView> tableMatchs = fm
+                           .getTableMatchs();
 
-					lockManager.riprendiSei();
+                     String[] matchs = r[1].split("/");
 
-					break;
+                     System.out.print("case 7 " + r[1] + " ");
 
-				}
+                     List<MatchTableView> tmp = new ArrayList<>();
+                     String match[] = null;
+                     for (String s : matchs) {
+                        match = s.split(",");
+                        tmp.add(new MatchTableView(Integer.parseInt(match[0]),
+                              Integer.parseInt(match[1]),
+                              Integer.parseInt(match[2])));
 
-				case "7":{
+                     }
 
-					if(fm != null){
+                     tableMatchs.getItems().clear();
+                     tableMatchs.getItems().addAll(tmp);
 
-						TableView<MatchTableView> tableMatchs = fm.getTableMatchs();
+                  }
 
-						String [] matchs = r[1].split("/");
+                  lockManager.riprendiSette();
 
-						System.out.print("case 7 " + r[1]  + " ");
+                  break;
 
-						List<MatchTableView> tmp = new ArrayList<>();
-					    String match[] = null;
-						for(String s : matchs){
-							match = s.split(",");
-							tmp.add(new MatchTableView(Integer.parseInt(match[0]), Integer.parseInt(match[1]), Integer.parseInt(match[2])));
+               }
 
-						}
+               case "8": {
 
-						tableMatchs.getItems().clear();
-						tableMatchs.getItems().addAll(tmp);
+                  if (fm != null) {
 
+                     TableView<MatchTableView> tableMatchs = fm
+                           .getTableMatchs();
 
-					}
+                     String[] matchs = r[1].split("/");
 
-					lockManager.riprendiSette();
+                     System.out.print("case 8# " + r[1] + " ");
 
-					break;
+                     List<MatchTableView> tmp = new ArrayList<>();
+                     String match[] = null;
+                     for (String s : matchs) {
+                        match = s.split(",");
+                        System.out.println("STAMPA S  " + s);
+                        tmp.add(new MatchTableView(Integer.parseInt(match[0]),
+                              Integer.parseInt(match[1]),
+                              Integer.parseInt(match[2])));
 
-				}
+                     }
 
-				case "8":{
+                     tableMatchs.getItems().clear();
+                     tableMatchs.getItems().addAll(tmp);
 
-					if(fm != null){
+                  }
+                  else
+                     System.out.println("Finestra Multiplayer è null");
 
-						TableView<MatchTableView> tableMatchs = fm.getTableMatchs();
+                  lockManager.riprendiOtto();
 
+                  break;
 
-						String [] matchs = r[1].split("/");
+               }
 
-						System.out.print("case 8# " + r[1]  + " ");
+               case "9": {
 
+                  System.err.println("ENTRATO NEL CASO 9");
 
+                  if (fm != null) {
+                     System.err.println("ENTRATO NEL FM");
+                     fm.close();
 
+                  }
+                  else if (sm != null) {
+                     System.err.println("ENTRATO NEL SM");
+                     sm.close();
+                  }
 
-						List<MatchTableView> tmp = new ArrayList<>();
-					    String match[] = null;
-						for(String s : matchs){
-							match = s.split(",");
-							System.out.println("STAMPA S  "+s);
-							tmp.add(new MatchTableView(Integer.parseInt(match[0]), Integer.parseInt(match[1]), Integer.parseInt(match[2])));
+                  break;
 
-						}
+               }
 
-						tableMatchs.getItems().clear();
-						tableMatchs.getItems().addAll(tmp);
+               case "10": {
 
-					}
-					else
-						System.out.println("Finestra Multiplayer è null");
+                  System.err.println("CAMBIO TURNO");
 
-					lockManager.riprendiOtto();
+                  ((GameManagerNetwork) sm.getGameManager()).setYourRound(true);
+                  System.err.println(
+                        "TEST " + ((GameManagerNetwork) sm.getGameManager())
+                              .isYourRound());
 
-					break;
+                  break;
+               }
 
-				}
+               case "11": {
 
-				case "9":{
+                  Platform.runLater(new Runnable() {
 
-					System.err.println("ENTRATO NEL CASO 9");
+                     @Override
+                     public void run() {
+                        // Richiesta animazione dado
+                        ((GameManagerNetwork) sm.getGameManager())
+                              .setRequestActive(true);
+                        stg.getPannelloDado().animazione(Integer.parseInt(r[1]),
+                              false);
+                     }
+                  });
 
-					if(fm != null){
-						System.err.println("ENTRATO NEL FM");
-						fm.close();
+                  // ((GameManagerNetwork)
+                  // sm.getGameManager()).getGestore().next();
 
-					}
-					else if( sm != null){
-						System.err.println("ENTRATO NEL SM");
-						sm.close();
-					}
+                  break;
+               }
 
-					break;
+               case "12": {
 
-				}
+                  String[] r1 = r[1].split(",");
 
-				case "10":{
+                  Platform.runLater(new Runnable() {
+                     @Override
+                     public void run() {
+                        for (Giocatore g : ((GameManagerNetwork) sm
+                              .getGameManager()).getGestore().getGiocatori()) {
+                           if (g.getNome().equals(r1[0])) {
+                              g.setRisultatoDado(Integer.parseInt(r1[6]));
+                              System.err.println("L'HO TROVATO"
+                                    + " risultato dado giocatore g : "
+                                    + g.getRisultatoDado());
+                              ((GameManagerNetwork) sm.getGameManager())
+                                    .notificaAlgiocatore(2, g);
+                              break;
+                           }
+                        }
+                     }
+                  });
+                  break;
+               }
+               case "13":
+                  stg.getPannelloTavola().getPD().addOn(r[1]);
+                  break;
 
-					System.err.println("CAMBIO TURNO");
+               case "14":
+                  String[] r1 = r[2].split(",");
+                  break;
 
-					((GameManagerNetwork) sm.getGameManager()).setYourRound(true);
-					System.err.println("TEST "+((GameManagerNetwork) sm.getGameManager()).isYourRound());
-
-					break;
-				}
-
-				case "11":{
-
-					Platform.runLater(new Runnable() {
-
-						@Override
-						public void run() {
-							//Richiesta animazione dado
-							((GameManagerNetwork) sm.getGameManager()).setRequestActive(true);
-							stg.getPannelloDado().animazione(Integer.parseInt(r[1]),false);
-						}
-					});
-
-					//((GameManagerNetwork) sm.getGameManager()).getGestore().next();
-
-					break;
-				}
-
-				case "12":{
-
-					String [] r1 = r[1].split(",");
-
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							for(Giocatore g : ((GameManagerNetwork) sm.getGameManager()).getGestore().getGiocatori()){
-								if(g.getNome().equals(r1[0])){
-									g.setRisultatoDado(Integer.parseInt(r1[6]));
-									System.err.println("L'HO TROVATO"
-											+ " risultato dado giocatore g : "+g.getRisultatoDado());
-									((GameManagerNetwork) sm.getGameManager()).notificaAlgiocatore(2, g);
-									break;
-									}
-								}
-							}
-						});
-					break;
-					}
-				case "13":
-					stg.getPannelloTavola().getPD().addOn(r[1]);
-					break;
-
-				case "14":
-					String [] r1 = r[2].split(",");
-					break;
-
-			}
-		}
-	}
-	}
+            }
+         }
+      }
+   }
 
 }
