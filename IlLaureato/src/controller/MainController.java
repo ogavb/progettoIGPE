@@ -253,3 +253,20 @@ public class MainController extends Pane implements Initializable {
    }
 
 }
+
+/* Codice eliminato da MainView.fxml
+<HBox onMouseClicked="#option" onMouseEntered="#enterMouse" onMouseExited="#exitMouse">
+<ImageView fx:id="optionContainer">
+   <image>
+      <Image url="@../img/Opzioni.png" />
+   </image>
+</ImageView>
+</HBox>
+<HBox onMouseEntered="#enterMouse" onMouseExited="#exitMouse">
+   <ImageView fx:id="creditsContainer">
+      <image>
+         <Image url="@../img/Crediti.png" />
+      </image>
+   </ImageView>
+</HBox>
+*/
