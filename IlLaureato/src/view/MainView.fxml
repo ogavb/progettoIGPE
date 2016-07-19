@@ -39,7 +39,7 @@
 					</image>
 				</ImageView>
 			</HBox>
-			<HBox onMouseEntered="#enterMouse" onMouseExited="#exitMouse">
+			<HBox onMouseReleased="#loadGame" onMouseEntered="#enterMouse" onMouseExited="#exitMouse">
 				<ImageView fx:id="loadGameContainer">
 					<image>
 						<Image url="@../img/Carica%20Partita.png" />

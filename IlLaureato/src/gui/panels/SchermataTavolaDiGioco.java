@@ -8,21 +8,17 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Optional;
 
-import core.GameManager;
 import core.GameManagerAstratta;
 import core.Giocatore;
 import core.Stato;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
-import javafx.geometry.Pos;
-import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Label;
@@ -31,13 +27,13 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.ToolBar;
 import javafx.scene.control.Tooltip;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -306,6 +302,13 @@ public class SchermataTavolaDiGioco implements Observer {
             };
 
             File[] files = f.listFiles(textFilter);
+            if(files.length == 0){
+               Alert alert = new Alert(AlertType.INFORMATION);
+               alert.setTitle("Informazione");
+               alert.setHeaderText("Nessun partita salvata");
+               alert.showAndWait();
+               return;
+            }
             List<String> choices = new ArrayList<String>();
             for (File file : files) {
                choices.add(file.getName());

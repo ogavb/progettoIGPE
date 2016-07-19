@@ -1,11 +1,20 @@
 package controller;
 
+import java.util.List;
+import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
+import core.GameManager;
+import core.Giocatore;
 import gui.panels.SceltaEditor;
 import gui.panels.SchermataNuovaPartita;
+import gui.panels.SchermataTavolaDiGioco;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -14,6 +23,9 @@ import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
@@ -69,7 +81,8 @@ public class MainController extends Pane implements Initializable {
    private Image editorEffect;
 /*   private Image optionEffect;
    private Image creditsEffect;
-*/   private Image exitEffect;
+*/ private Image exitEffect;
+   private GameManager gm ;
 
    public MainController(Stage stage) throws IOException {
       this.stage = stage;
@@ -128,7 +141,57 @@ public class MainController extends Pane implements Initializable {
 
    @FXML
    private void loadGame(MouseEvent e) {
-      // TODO
+      gm =new GameManager();
+      Giocatore [] giocatori = new Giocatore[0];
+      try {
+         gm.init(giocatori, 0, "Default");
+      } catch (SQLException e2) {
+         // TODO Auto-generated catch block
+         e2.printStackTrace();
+      }
+
+      File f = new File("."); // current directory
+
+      FilenameFilter textFilter = new FilenameFilter() {
+         public boolean accept(File dir, String name) {
+            String lowercaseName = name.toLowerCase();
+            if (lowercaseName.endsWith(".fap")) {
+               return true;
+            } else {
+               return false;
+            }
+         }
+      };
+
+      File[] files = f.listFiles(textFilter);
+
+      if(files.length == 0){
+         Alert alert = new Alert(AlertType.INFORMATION);
+         alert.setTitle("Informazione");
+         alert.setHeaderText("Nessun partita salvata");
+         alert.showAndWait();
+         return;
+      }
+
+      List<String> choices = new ArrayList<String>();
+      for (File file : files) {
+         choices.add(file.getName());
+      }
+      ChoiceDialog<String> dialog = new ChoiceDialog<String>(choices.get(0), choices);
+      dialog.setTitle("Carica partita");
+      dialog.setContentText("Seleziona la partita");
+
+      Optional<String> result = dialog.showAndWait();
+
+      gm.caricaPartita(result.get());
+
+      try {
+         new SchermataTavolaDiGioco(gm);
+      } catch (Exception e1) {
+         // TODO Auto-generated catch block
+         e1.printStackTrace();
+      }
+
    }
 
    @FXML
